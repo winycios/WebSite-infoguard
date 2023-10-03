@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Tela de Login Responsiva</title>
+    <title>Cadastro</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
@@ -34,7 +34,7 @@
                     </div>
                     <div class="input-box">
                         <span>CPF</span>
-                        <input type="text" id="input_cpf" placeholder="Sem Pontuação">
+                        <input type="text" id="input_cpf" placeholder="000.000.000-00" maxlength="14" onkeyup="mascaraCpf(this)">
                     </div>
                 </div>
 
@@ -45,7 +45,7 @@
 
                 <div class="input-box">
                     <span>Telefone</span>
-                    <input type="text" id="input_telefone" placeholder="(dd) 9 **** ****">
+                    <input type="text" id="input_telefone" placeholder="(dd) 9 **** ****" maxlength="14" onkeyup="mascaraTelefone(this)" >
                 </div>
 
                 <div class="input-box">
@@ -61,7 +61,7 @@
 
                     <div class="input-box">
                         <span>CNPJ</span>
-                        <input type="text" id="input_cnpj" placeholder="Sem Pontuação">
+                        <input type="text" id="input_cnpj" placeholder="00.000.000/0000-00" maxlength="18" onkeyup="mascaraCnpj(this)">
                     </div>
                 </div>
                 <div class="input-box">
@@ -96,6 +96,38 @@
                 console.log(`#ERRO: ${resposta}`);
             });
     }
+
+    function mascaraCpf(input_cpf){
+        var cpfFormatado = input_cpf.value;
+    cpfFormatado=cpfFormatado.replace(/\D/g,"")                    //Remove tudo o que não é dígito
+    cpfFormatado=cpfFormatado.replace(/(\d{3})(\d)/,"$1.$2")       //Coloca um ponto entre o terceiro e o quarto dígitos
+    cpfFormatado=cpfFormatado.replace(/(\d{3})(\d)/,"$1.$2")       //Coloca um ponto entre o terceiro e o quarto dígitos
+                                                                   //de novo (para o segundo bloco de números)
+    cpfFormatado=cpfFormatado.replace(/(\d{3})(\d{1,2})$/,"$1-$2") //Coloca um hífen entre o terceiro e o quarto dígitos
+    input_cpf.value = cpfFormatado; 
+    }   
+
+
+    function mascaraTelefone(input_telefone){
+        var telefoneFormatado = input_telefone.value;
+    telefoneFormatado=telefoneFormatado.replace(/\D/g,"")                    
+    telefoneFormatado=telefoneFormatado.replace(/(\d{0})(\d)/,"$1($2")       
+    telefoneFormatado=telefoneFormatado.replace(/(\d{2})(\d)/,"$1)$2")
+    telefoneFormatado=telefoneFormatado.replace(/(\d{5})(\d)/,"$1-$2")
+    input_telefone.value = telefoneFormatado; 
+    }   
+
+
+    function mascaraCnpj(input_cnpj){
+       var cnpjFormatado = input_cnpj.value;
+    cnpjFormatado=cnpjFormatado.replace(/\D/g,"")                           //Remove tudo o que não é dígito
+    cnpjFormatado=cnpjFormatado.replace(/^(\d{2})(\d)/,"$1.$2")             //Coloca ponto entre o segundo e o terceiro dígitos
+    cnpjFormatado=cnpjFormatado.replace(/^(\d{2})\.(\d{3})(\d)/,"$1.$2.$3") //Coloca ponto entre o quinto e o sexto dígitos
+    cnpjFormatado=cnpjFormatado.replace(/\.(\d{3})(\d)/,".$1/$2")           //Coloca uma barra entre o oitavo e o nono dígitos
+    cnpjFormatado=cnpjFormatado.replace(/(\d{4})(\d)/,"$1-$2")              //Coloca um hífen depois do bloco de quatro dígitos
+    input_cnpj.value = cnpjFormatado;
+    }
+
 
     // cadastrar usuario
     function cadastrar() {

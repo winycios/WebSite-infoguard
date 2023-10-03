@@ -31,7 +31,7 @@
                 <div>
                     <div class="input-box">
                         <span>CPF</span>
-                        <input type="texte" id="cpf_input" placeholder="111.111.111-11">
+                        <input type="texte" id="cpf_input" placeholder="111.111.111-11" maxlength="14" onkeyup="mascaraCpf(this)">
                     </div>
 
                     <div class="input-box">
@@ -89,14 +89,22 @@
 
 
 <script>
-
+function mascaraCpf(cpf_input){
+        var cpfFormatado = cpf_input.value;
+    cpfFormatado=cpfFormatado.replace(/\D/g,"")                    //Remove tudo o que não é dígito
+    cpfFormatado=cpfFormatado.replace(/(\d{3})(\d)/,"$1.$2")       //Coloca um ponto entre o terceiro e o quarto dígitos
+    cpfFormatado=cpfFormatado.replace(/(\d{3})(\d)/,"$1.$2")       //Coloca um ponto entre o terceiro e o quarto dígitos
+                                                                   //de novo (para o segundo bloco de números)
+    cpfFormatado=cpfFormatado.replace(/(\d{3})(\d{1,2})$/,"$1-$2") //Coloca um hífen entre o terceiro e o quarto dígitos
+    cpf_input.value = cpfFormatado; 
+    }   
 
     function entrar() {
 
         var cpfVar = cpf_input.value;
         var senhaVar = senha_input.value;
 
-        if (cpfVar == "" || senhaVar == "") {
+        if (cpfVar == "" || senhaVar == "" || cpfVar < 11) {
 
             box.style.display = "block";
             alertar.innerHTML = `  
