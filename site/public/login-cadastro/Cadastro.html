@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tela de Login Responsiva</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <link rel="stylesheet" href="./Assets/css/style.css">
+    <link rel="stylesheet" href="./Assets/css/Alert.css">
+</head>
+
+<body>
+    <div class="box-alert" id="box">
+        <div id="alertar"></div>
+    </div>
+
+    <div class="container-login">
+        <div class="img-box">
+            <img src="./Assets/images/Posts-amico.png" alt="">
+        </div>
+
+        <div class="content-box">
+            <div class="form-box">
+                <h2 class="position">Cadastro</h2>
+
+                <div class="dual">
+                    <div class="input-box">
+                        <span>Nome</span>
+                        <input type="text" id="input_name" placeholder="Primeiro nome">
+                    </div>
+                    <div class="input-box">
+                        <span>CPF</span>
+                        <input type="text" id="input_cpf" placeholder="Sem Pontuação">
+                    </div>
+                </div>
+
+                <div class="input-box">
+                    <span>Senha</span>
+                    <input type="password" id="input_senha" placeholder="password">
+                </div>
+
+                <div class="input-box">
+                    <span>Telefone</span>
+                    <input type="text" id="input_telefone" placeholder="(dd) 9 **** ****">
+                </div>
+
+                <div class="input-box">
+                    <span>Cargo</span>
+                    <input type="text" id="input_cargo" placeholder="Ex: Aprendiz">
+                </div>
+
+                <div class="dual">
+                    <div class="input-box">
+                        <span>Organização</span>
+                        <input type="text" id="input_organização" placeholder="Nome">
+                    </div>
+
+                    <div class="input-box">
+                        <span>CNPJ</span>
+                        <input type="text" id="input_cnpj" placeholder="Sem Pontuação">
+                    </div>
+                </div>
+                <div class="input-box">
+                    <input type="submit" onclick="cadastrar()" value="Cadastrar">
+                </div>
+
+                <div class="input-box">
+                    <a href="./Login.html">Voltar</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
+
+<script>
+    // listar todas as empresas
+    function listar() {
+        fetch("/empresas/listar", {
+            method: "GET",
+        })
+            .then(function (resposta) {
+                resposta.json().then((empresas) => {
+                    empresas.forEach((empresa) => {
+                        listaEmpresas.innerHTML += `<option value='${empresa.id}'>${empresa.cnpj}</option>`;
+                    });
+                });
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+    }
+
+    // cadastrar usuario
+    function cadastrar() {
+
+        //Recupere o valor da nova input pelo nome do id
+        // Agora vá para o método fetch logo abaixo
+        var nomeVar = input_name.value;
+        var senhaVar = input_senha.value;
+        var cpfVar = input_cpf.value;
+        var telefoneVar = input_telefone.value;
+        var cargoVar = input_cargo.value;
+        var organizacaoVar = input_organização.value;
+        var cnpjVar = input_cnpj.value;
+
+        if (
+            nomeVar == "" ||
+            senhaVar == "" ||
+            cpfVar == "" ||
+            telefoneVar == "" ||
+            cargoVar == "" ||
+            organizacaoVar == ""
+
+        ) {
+            box.style.display = "block";
+            alertar.innerHTML = `  
+            <div class="wrapper">
+                <div class="toast error">
+                    <div class="container-1">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="container-2">
+                        <p>ERRO</p>
+                        <p>Campos invalidos</p>
+                    </div>
+                </div>
+            </div>`;
+
+            setTimeout(function () {
+                box.style.display = "none";
+            }, 1500);
+            return false;
+
+        } else { }
+
+        // Enviando o valor da nova input
+        fetch("/usuarios/cadastrar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                nomeServer: nomeVar,
+                senhaServer: senhaVar,
+                cpfServer: cpfVar,
+                telefoneServer: telefoneVar,
+                cargoServer: cargoVar,
+                organizacaoServer: organizacaoVar,
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+                    box.style.display = "block";
+                    alertar.innerHTML = `  
+             <div class="wrapper">
+                <div class="toast success">
+                    <div class="container-1">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="container-2">
+                        <p>Success</p>
+                        <p>Your changes are saved successfully</p>
+                    </div>  
+                </div>
+            </div>`;
+
+                    setTimeout(function () {
+                        window.location = "Login.html";
+                        box.style.display = "none";
+                    }, 1500);
+
+                } else {
+                    throw "Houve um erro ao tentar realizar o cadastro!";
+
+                    box.style.display = "block";
+                    alertar.innerHTML = `  
+            <div class="wrapper">
+                <div class="toast error">
+                    <div class="container-1">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="container-2">
+                        <p>ERRO</p>
+                        <p>Houve um erro ao tentar realizar o cadastro!, tente novamente mais tarde</p>
+                    </div>
+                </div>
+            </div>`;
+
+                    setTimeout(function () {
+                        box.style.display = "none";
+                    }, 1500);
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+
+        return false;
+    }
+</script>

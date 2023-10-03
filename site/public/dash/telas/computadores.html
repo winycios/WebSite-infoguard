@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="PT-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUPERVISION - COMPUTADORES</title>
+
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+
+    <link rel="stylesheet" href="../Assets/css/style.css">
+    <link rel="stylesheet" href="../Assets/css/dropdown_telas.css">
+    <link rel="stylesheet" href="../Assets/css/alert_box.css">
+
+</head>
+
+<body>
+    <div class="app-container">
+        <div class="app-header">
+            <div class="app-header-left">
+                <span class="app-icon"></span>
+                <p class="app-name">SUPERVISI<span style="color: var(--color-yellow);">ON</span></p>
+                <div class="search-wrapper">
+                    <input class="search-input" id="valorTela" list="telas" type="search" placeholder="Pesquisar">
+                    <button onclick="pesquisarTelasPath()" class="buttonValor">
+                        <span style="color: var(--main-color);" class="material-symbols-outlined">
+                            search
+                        </span>
+                    </button>
+
+                    <datalist id="telas">
+                        <option value="Tela inicial"></option>
+                        <option value="Desktops"></option>
+                        <option value="Chamados"></option>
+                        <option value="Usuário"></option>
+                    </datalist>
+                </div>
+            </div>
+            <div class="app-header-right">
+                <button class="mode-switch" title="Switch Theme">
+                    <span class="material-symbols-outlined moon">
+                        brightness_5
+                    </span>
+                </button>
+                <button class="profile-btn">
+                    <img src="../Assets/images/user.png" />
+                    <span>Winyc alves.</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- sidebar -->
+        <div class="app-content">
+            <div class="app-sidebar">
+                <a href="../index.html" class="app-sidebar-link">
+                    <span class="material-symbols-outlined">
+                        home
+                    </span>
+                </a>
+                <a href="./computadores.html" class="app-sidebar-link active">
+                    <span class="material-symbols-outlined">
+                        screen_search_desktop
+                    </span>
+                </a>
+                <a href="" class="app-sidebar-link">
+                    <span class="material-symbols-outlined">
+                        quick_reference
+                    </span>
+                </a>
+
+                <!-- dropdown -->
+                <div class="dropdown">
+                    <input type="checkbox" id="dropdown">
+                    <label class="dropdown__face" for="dropdown">
+                        <span class="material-symbols-outlined app-sidebar-link active">
+                            settings
+                        </span>
+                    </label>
+
+                    <ul class="dropdown__items">
+                        <a href="#modal" role="button" class="link">
+                            <li>Criar</li>
+                        </a>
+                        <a href="#modal" role="button" class="link">
+                            <li>Alterar</li>
+                        </a>
+                        <a for="check" onclick="check.checked = true;" role="button" class="link">
+                            <li>Finalizar</li>
+                        </a>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- card principal -->
+            <div class="box">
+                <div class="projects-section" style="flex: 1">
+                    <div class="projects-section-header">
+                        <p>EQUIPE</span> : <span id="pc">Desktops</span></p>
+
+                        <!-- Dropdown de computadores -->
+                        <div class="select">
+                            <select id="selectEquipe1">
+                                <option selected disabled>Desktops</option>
+                                <option value="PC 1">PC 1</option>
+                                <option value="PC 2">PC 2</option>
+                                <option value="PC 3">PC 3</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- card graficos -->
+                    <div class="project-boxes jsGridView">
+                        <div class="project-box-wrapper">
+                            <canvas id="barTemp"></canvas>
+                            <canvas id="barFreq"></canvas>
+                            <canvas id="lineRede"></canvas>
+                            <canvas id="barAux"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- message section -->
+                <div class="projects-section" style="flex: 1; margin-left: 34px">
+                    <div class="projects-section-header">
+                        <p>EQUIPE </span> : <span id="pc2">Desktops</span></p>
+                        <div class="select">
+                            <select id="selectEquipe2">
+                                <option selected disabled>Desktops</option>
+                                <option value="PC 1">PC 1</option>
+                                <option value="PC 2">PC 2</option>
+                                <option value="PC 3">PC 3</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- card graficos -->
+                    <div class="project-boxes jsGridView">
+                        <div class="project-box-wrapper">
+                            <canvas id="barTemp_eq2"></canvas>
+                            <canvas id="barFreq_eq2"></canvas>
+                            <canvas id="lineRede_eq2"></canvas>
+                            <canvas id="barAux_eq2"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-wrapper" id="modal">
+        <div class="modal-body card">
+            <div class="details-modal">
+                <a href="#" role="button" aria-label="close this modal" class="details-modal-close">
+                    <span class="material-symbols-outlined">
+                        close
+                    </span>
+                </a>
+                <div class="details-modal-title">
+                    <h2>CRIAÇÃO DE EVENTO</h2>
+                </div>
+                <div class="details-modal-content">
+                    <div class="wrapper">
+                        <div class="form">
+                            <div class="input-box">
+                                <label>EQUIPE 1 :</label>
+                                <select>
+                                    <option selected disabled>Desktops</option>
+                                    <option value="1">Americano</option>
+                                    <option value="2">Latte</option>
+                                    <option value="3">Green Tea</option>
+                                </select>
+                            </div>
+                            <div class="input-box">
+                                <label>EQUIPE 2 :</label>
+                                <select>
+                                    <option selected disabled>Desktops</option>
+                                    <option value="1">Americano</option>
+                                    <option value="2">Latte</option>
+                                    <option value="3">Green Tea</option>
+                                </select>
+                            </div>
+                            <div class="input-box">
+                                <label>EVENTO :</label>
+                                <input type="text" placeholder="Digite o nome do evento" required>
+                            </div>
+                            <div class="input-box button">
+                                <input type="Submit" value="Registrar evento">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alerta -->
+    <div>
+        <input type="checkbox" id="check">
+        <div class="background"></div>
+        <div class="alert_box">
+            <div class="icon">
+                <span class="material-symbols-outlined">
+                    close
+                </span>
+            </div>
+            <header>Confirmar</header>
+            <p>Deseja realmente finalizar esse evento ?</p>
+            <div class="btns">
+                <label class="confirm" for="check">Cancelar</label>
+                <label class="cancel" for="check" onclick="check_confirm.checked = true">Sim, finalizar!</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- confirmação -->
+    <div>
+        <input type="checkbox" id="check_confirm">
+        <div class="background"></div>
+        <div class="alert_box">
+            <div class="icon">
+                <span class="material-symbols-outlined" style="color: #26f267; border: 3px solid #26f267;">
+                    check
+                </span>
+            </div>
+            <header>Perfeito</header>
+            <p>Ação concluída com sucesso</p>
+            <div class="btns">
+                <label class="confirm" for="check_confirm">Fechar</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/uglify-js@3.17.4/tools/node.min.js "></script> -->
+    <!-- partial -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="../Assets/js/script.js"></script>
+    <script src="./charts/computadores_eq1.js"></script>
+    <script src="./charts/computadores_eq2.js"></script>
+</body>
+
+</html>

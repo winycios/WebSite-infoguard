@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login</title>
+
+    <script src="../js/sessao.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="./Assets/css/style.css">
+    <link rel="stylesheet" href="./Assets/css/Alert.css">
+</head>
+
+<body>
+    <!-- Alerta -->
+    <div class="box-alert" id="box">
+        <div id="alertar"></div>
+    </div>
+
+    <div class="container-login">
+        <div class="img-box">
+            <img src="./Assets/images/Login-amico.png" alt="">
+        </div>
+
+        <div class="content-box">
+            <div class="form-box">
+                <h2>Login</h2>
+                <div>
+                    <div class="input-box">
+                        <span>CPF</span>
+                        <input type="texte" id="cpf_input" placeholder="111.111.111-11">
+                    </div>
+
+                    <div class="input-box">
+                        <span>Password</span>
+                        <input type="password" id="senha_input" placeholder="password">
+                    </div>
+
+                    <div class="remember">
+                        <a href="#">Esqueceu a senha?</a>
+                    </div>
+
+                    <div class="input-box">
+                        <input type="submit" onclick="entrar()" value="Entrar">
+                    </div>
+
+                    <div class="input-box">
+                        <a href="./Cadastro.html">Não tem uma conta?</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- alertas 
+        ----------------- acerto ---------------
+   <div class="wrapper">
+    <div class="toast success">
+        <div class="container-1">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="container-2">
+            <p>Success</p>
+            <p>Your changes are saved successfully</p>
+        </div>
+        <button>&times;</button>
+    </div>
+</div>
+
+-------------------- erro ------------------
+ <div class="wrapper">
+    <div class="toast error">
+        <div class="container-1">
+            <i class="fas fa-times-circle"></i>
+        </div>
+        <div class="container-2">
+            <p>Error</p>
+            <p>Error has occured while saving changes.</p>
+        </div>
+        <button>&times;</button>
+    </div>
+    </div> -->
+</body>
+
+</html>
+
+
+<script>
+
+
+    function entrar() {
+
+        var cpfVar = cpf_input.value;
+        var senhaVar = senha_input.value;
+
+        if (cpfVar == "" || senhaVar == "") {
+
+            box.style.display = "block";
+            alertar.innerHTML = `  
+            <div class="wrapper">
+                <div class="toast error">
+                    <div class="container-1">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="container-2">
+                        <p>ERRO</p>
+                        <p>Campos invalidos</p>
+                    </div>
+                </div>
+            </div>`;
+
+            setTimeout(function () {
+                box.style.display = "none";
+            }, 1500);
+            return false;
+
+        } else {
+            box.style.display = "block";
+            alertar.innerHTML = `  
+            <div class="wrapper">
+                <div class="toast success">
+                    <div class="container-1">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="container-2">
+                        <p>Success</p>
+                        <p>Your changes are saved successfully</p>
+                    </div>  
+                </div>
+            </div>`;
+        }
+
+        console.log("FORM cpf: ", cpfVar);
+        console.log("FORM SENHA: ", senhaVar);
+
+        fetch("/usuarios/autenticar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                cpfServer: cpfVar,
+                senhaServer: senhaVar
+            })
+        }).then(function (resposta) {
+            console.log("ESTOU NO THEN DO entrar()!")
+
+            if (resposta.ok) {
+                console.log(resposta);
+
+                resposta.json().then(json => {
+                    console.log(json);
+                    console.log(JSON.stringify(json));
+                    sessionStorage.CPF_USUARIO = json.cpf;
+                    sessionStorage.NOME_USUARIO = json.nome;
+                    sessionStorage.ID_USUARIO = json.id;
+                   // sessionStorage.AQUARIOS = JSON.stringify(json.aquarios)
+
+                    setTimeout(function () {
+                        window.location = "../dash/index.html";
+                    }, 1500);
+
+                });
+
+            } else {
+
+
+                resposta.text().then(texto => {
+                    console.error(texto);
+                });
+
+                box.style.display = "block";
+                alertar.innerHTML = `  
+            <div class="wrapper">
+                <div class="toast error">
+                    <div class="container-1">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="container-2">
+                        <p>ERRO</p>
+                        <p>Usuário não encontrado</p>
+                </div>
+            </div>`;
+
+                setTimeout(function () {
+                    box.style.display = "none";
+                }, 1500);
+            }
+
+        }).catch(function (erro) {
+            console.log(erro);
+        })
+
+        return false;
+    }
+
+</script>

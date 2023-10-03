@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="PT-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SUPERVISION - INICIAL</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script src="../js/sessao.js"></script>
+
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+
+  <link rel="stylesheet" href="./Assets/css/style.css">
+
+</head>
+
+<body onload="validarSessao()">
+  <div class="app-container">
+    <div class="app-header">
+      <div class="app-header-left">
+        <span class="app-icon"></span>
+        <p class="app-name">SUPERVISI<span style="color: var(--color-yellow);">ON</span></p>
+        <div class="search-wrapper">
+          <input class="search-input" id="valorTela" list="telas" type="search" placeholder="Pesquisar">
+          <button onclick="pesquisarTelasIndex()" class="buttonValor">
+            <span style="color: var(--main-color);" class="material-symbols-outlined">
+              search
+            </span>
+          </button>
+
+          <datalist id="telas">
+            <option value="Tela inicial"></option>
+            <option value="computadores"></option>
+            <option value="Chamados"></option>
+            <a href="style.css">
+              <option value="Usuário"></option>
+            </a>
+          </datalist>
+        </div>
+      </div>
+      <div class="app-header-right">
+        <button class="mode-switch" title="Switch Theme">
+          <span class="material-symbols-outlined moon">
+            brightness_5
+          </span>
+        </button>
+        </button>
+        <button class="profile-btn">
+          <img src="./Assets/images/user.png" />
+          <span id="b_usuario"></span>
+        </button>
+      </div>
+      </button>
+    </div>
+
+    <!-- sidebar -->
+    <div class="app-content">
+      <div class="app-sidebar">
+        <a href="./index.html" class="app-sidebar-link active">
+          <span class="material-symbols-outlined">
+            home
+          </span>
+        </a>
+        <a href="./telas/computadores.html" class="app-sidebar-link">
+          <span class="material-symbols-outlined">
+            screen_search_desktop
+          </span>
+        </a>
+        <a href="" class="app-sidebar-link">
+          <span class="material-symbols-outlined">
+            quick_reference
+          </span>
+        </a>
+        <a href="" onclick="limparSessao()" class="app-sidebar-link">
+          <span class="material-symbols-outlined">
+            logout
+            </span>
+        </a>
+      </div>
+
+      <!-- card principal -->
+      <div class="box">
+        <div class="projects-section">
+          <div class="projects-section-header">
+            <p>DA<span style="color: var(--color-yellow);">DOS</span></p>
+            <p class="time" id="time"></p>
+          </div>
+          <div class="projects-section-line">
+            <div class="projects-status">
+              <div class="item-status">
+                <span class="status-number">Organização</span>
+                <span class="status-type">PIPIPI POPOPO</span>
+              </div>
+              <div class="item-status">
+                <span class="status-number">Evento</span>
+                <span class="status-type">CS</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- card graficos -->
+          <div class="project-boxes jsGridView">
+            <div class="project-box-wrapper">
+              <canvas id="barTemp"></canvas>
+              <canvas id="barFreq"></canvas>
+              <canvas id="lineRede"></canvas>
+              <canvas id="barOco"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- message section -->
+        <div class="messages-section">
+          <div class="projects-section-header">
+            <p style="text-transform: uppercase;">Chama<span style="color: var(--color-yellow);">dos</span></p>
+          </div>
+          <div class="messages">
+            <div class="message-box">
+              <img src="./Assets/images/user.png" alt="profile image">
+              <div class="message-content">
+                <div class="message-header">
+                  <div class="name">USER </div>
+                  <div class="star-checkbox">
+                  </div>
+                </div>
+                <p class="message-line">
+                  Teste de mensagem
+                </p>
+                <p class="message-line time">
+                  Status
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="messages">
+            <div class="message-box">
+              <img src="./Assets/images/user.png" alt="profile image">
+              <div class="message-content">
+                <div class="message-header">
+                  <div class="name">USER </div>
+                  <div class="star-checkbox">
+                  </div>
+                </div>
+                <p class="message-line">
+                  Teste de mensagem
+                </p>
+                <p class="message-line time">
+                  Status
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="messages">
+            <div class="message-box">
+              <img src="./Assets/images/user.png" alt="profile image">
+              <div class="message-content">
+                <div class="message-header">
+                  <div class="name">USER </div>
+                  <div class="star-checkbox">
+                  </div>
+                </div>
+                <p class="message-line">
+                  Teste de mensagem
+                </p>
+                <p class="message-line time">
+                  Status
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="messages">
+            <div class="message-box">
+              <img src="./Assets/images/user.png" alt="profile image">
+              <div class="message-content">
+                <div class="message-header">
+                  <div class="name">USER </div>
+                  <div class="star-checkbox">
+                  </div>
+                </div>
+                <p class="message-line">
+                  Teste de mensagem
+                </p>
+                <p class="message-line time">
+                  Status
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- partial -->
+  <script src="./Assets/js/script.js"></script>
+  <script src="./Assets/js/charts_inicial.js"></script>
+</body>
+
+</html>
+
+<script>
+  var data = document.getElementById("time");
+  // data atual 
+  var mes = new Array("janeiro", "fevereiro", "março", "abril", "maio", "junho", "agosto", "outubro", "novembro", "dezembro");
+  var now = new Date;
+
+
+  data.innerHTML = `${mes[now.getMonth()]}, ${now.getDate()}`;
+
+
+  // mudar as telas
+  function pesquisarTelasIndex() {
+    // Seleciona o elemento input
+    var inputTela = document.getElementById("valorTela");
+
+
+    switch (inputTela.value.toLowerCase()) {
+      case "tela inicial":
+        window.location.href = `./index.html`;
+        break;
+
+      case "desktops":
+      case "computadores":
+        window.location.href = `./telas/computadores.html`;
+        break;
+
+      default:
+        break;
+    }
+  }
+</script>

@@ -1,0 +1,272 @@
+select {
+    /* Reset Select */
+    appearance: none;
+    outline: 10px red;
+    border: 0;
+    border-bottom: 1px solid var(--main-color);
+    box-shadow: none;
+    flex: 1;
+    padding: 0 1em;
+    color: var(--main-color);
+    background-color: var(--projects-section);
+    background-image: none;
+    cursor: pointer;
+}
+
+/* Remove IE arrow */
+select::-ms-expand {
+    display: none;
+}
+
+/* Custom Select wrapper */
+.select {
+    position: relative;
+    display: flex;
+    width: 10em;
+    height: 3em;
+    border-radius: .25em;
+    overflow: hidden;
+}
+
+select option {
+
+    background: var(--projects-section);
+    color: var(--main-color);
+}
+
+
+/* Arrow */
+.select::after {
+    content: '\25BC';
+    border-bottom: 1px solid var(--main-color);
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 1em;
+    transition: .25s all ease;
+    pointer-events: none;
+}
+
+/* Transition */
+.select:hover::after {
+    color: #f39c12;
+}
+
+/* drop down crud*/
+.dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    filter: url(#goo);
+}
+
+.dropdown__face {
+    background-color: var(--app-container);
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 25px;
+}
+
+.dropdown__items {
+    background-color: var(--app-container);
+    padding: 20px;
+    border-radius: 25px;
+    color: var(--link-color);
+}
+
+.link{
+
+    color: var(--link-color);
+    transition: all 0.4s cubic-bezier(0.93, 0.88, 0.1, 0.8);
+}
+.dropdown__items {
+    margin: 0;
+    position: absolute;
+    left: 50px;
+    width: 100%;
+    list-style: none;
+    list-style-type: none;
+    display: flex;
+    justify-content: space-between;
+    visibility: hidden;
+    z-index: -1;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.93, 0.88, 0.1, 0.8);
+}
+
+.link:hover{
+
+    color: #ffcc00;
+
+}
+
+.dropdown input {
+    display: none;
+}
+
+.dropdown input:checked~.dropdown__items {
+    visibility: visible;
+    opacity: 1;
+    width: 230px;
+}
+
+@media screen and (max-width: 520px) {
+
+    .dropdown__items {
+
+        top: 90%;
+        left: -150px;
+    }
+}
+
+/* modal */
+
+.card {
+    background: var(--projects-section);
+    border-top-right-radius: 16px;
+    border-bottom-left-radius: 16px;
+    box-shadow: -20px 20px 35px 1px rgba(10, 49, 86, 0.18);
+    display: flex;
+    flex-direction: column;
+    padding: 32px;
+    margin: 40px;
+    max-width: 400px;
+    width: 100%;
+}
+
+.modal-wrapper {
+    align-items: center;
+    background: rgba(0, 0, 0, 0.7);
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+}
+
+#modal {
+    opacity: 0;
+    transition: opacity 0.25s ease-in-out;
+    visibility: hidden;
+}
+
+#modal:target {
+    opacity: 1;
+    visibility: visible;
+}
+
+#modal:target .modal-body {
+    opacity: 1;
+    transform: translateY(1);
+}
+
+#modal .modal-body {
+    max-width: 500px;
+    opacity: 0;
+    transition: opacity 0.25s ease-in-out;
+    width: 100%;
+    z-index: 1;
+}
+
+
+.details-modal .details-modal-close {
+    color: var(--color-yellow);
+    display: flex;
+    margin-bottom: -20px;
+    cursor: pointer;
+    justify-content: flex-end;
+}
+
+.details-modal .details-modal-close svg {
+    display: block;
+}
+
+.details-modal .details-modal-title {
+    position: relative;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--link-color);
+}
+
+.details-modal .details-modal-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 28px;
+    border-radius: 12px;
+    background: var(--color-yellow);
+}
+
+.details-modal .details-modal-content {
+    border-top: 1px solid #e0e0e0;
+    pointer-events: all;
+    overflow: auto;
+}
+
+/* .form */
+
+.details-modal-content .wrapper {
+    max-width: 100%;
+    width: 100%;
+}
+
+
+.details-modal-content .wrapper .form .input-box {
+    height: 52px;
+    margin: 18px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.form .input-box select,
+.form .input-box input {
+    height: 100%;
+    width: 100%;
+    outline: none;
+    padding: 0 15px;
+    background: var(--projects-section);
+    font-size: 17px;
+    font-weight: 400;
+    color: var(--link-color);
+    border: 1.5px solid #C7BEBE;
+    border-bottom-width: 2.5px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.form .input-box input::placeholder{
+
+    color: var(--link-color);
+}
+
+
+.form .input-box label{
+
+    color: var(--link-color);
+}
+.input-box select:focus,
+.input-box input:focus,
+.input-box input:valid {
+    border-color: var(--color-yellow);
+}
+
+
+.input-box.button input {
+    color: #fff;
+    letter-spacing: 1px;
+    border: none;
+    background: var(--color-yellow);
+    cursor: pointer;
+}
+
+.input-box.button input:hover {
+    background: none;
+    border: 2px solid var(--color-yellow);
+}
