@@ -12,4 +12,8 @@ router.post("/autenticar", function (req, res) {
     usuarioController.autenticar(req, res);
 });
 
+router.post("/renovarSenha", function (req, res) {
+    usuarioController.renovarSenha(req, res);
+});
+
 module.exports = router;

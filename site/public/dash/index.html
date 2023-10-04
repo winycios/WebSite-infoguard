@@ -18,7 +18,7 @@
 
 </head>
 
-<body onload="validarSessao()">
+<body onload="validarTelaInicial()">
   <div class="app-container">
     <div class="app-header">
       <div class="app-header-left">
@@ -35,10 +35,9 @@
           <datalist id="telas">
             <option value="Tela inicial"></option>
             <option value="computadores"></option>
+            <option value="Desktops"></option>
             <option value="Chamados"></option>
-            <a href="style.css">
-              <option value="Usuário"></option>
-            </a>
+            <option value="Usuário"></option>
           </datalist>
         </div>
       </div>
@@ -78,7 +77,7 @@
         <a href="" onclick="limparSessao()" class="app-sidebar-link">
           <span class="material-symbols-outlined">
             logout
-            </span>
+          </span>
         </a>
       </div>
 
@@ -93,7 +92,7 @@
             <div class="projects-status">
               <div class="item-status">
                 <span class="status-number">Organização</span>
-                <span class="status-type">PIPIPI POPOPO</span>
+                <span class="status-type" id="b_org"></span>
               </div>
               <div class="item-status">
                 <span class="status-number">Evento</span>

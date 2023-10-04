@@ -149,23 +149,23 @@ select option {
     top: 0;
 }
 
-#modal {
+.modal {
     opacity: 0;
     transition: opacity 0.25s ease-in-out;
     visibility: hidden;
 }
 
-#modal:target {
+.modal:target {
     opacity: 1;
     visibility: visible;
 }
 
-#modal:target .modal-body {
+.modal:target .modal-body {
     opacity: 1;
     transform: translateY(1);
 }
 
-#modal .modal-body {
+.modal .modal-body {
     max-width: 500px;
     opacity: 0;
     transition: opacity 0.25s ease-in-out;
@@ -241,10 +241,6 @@ select option {
     transition: all 0.3s ease;
 }
 
-.form .input-box input::placeholder{
-
-    color: var(--link-color);
-}
 
 
 .form .input-box label{
@@ -268,5 +264,6 @@ select option {
 
 .input-box.button input:hover {
     background: none;
+    color: var(--color-yellow);
     border: 2px solid var(--color-yellow);
 }

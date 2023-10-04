@@ -332,6 +332,7 @@ a {
 
 .projects-status {
   display: flex;
+  gap: 10px;
 }
 
 .item-status {

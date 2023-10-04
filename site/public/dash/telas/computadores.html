@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SUPERVISION - COMPUTADORES</title>
 
+    <script src="../../js/sessao.js"></script>
 
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
@@ -17,7 +18,7 @@
 
 </head>
 
-<body>
+<body onload="validarSessao() , pegarCnpj(), listar()">
     <div class="app-container">
         <div class="app-header">
             <div class="app-header-left">
@@ -33,6 +34,7 @@
 
                     <datalist id="telas">
                         <option value="Tela inicial"></option>
+                        <option value="computadores"></option>
                         <option value="Desktops"></option>
                         <option value="Chamados"></option>
                         <option value="Usuário"></option>
@@ -47,7 +49,7 @@
                 </button>
                 <button class="profile-btn">
                     <img src="../Assets/images/user.png" />
-                    <span>Winyc alves.</span>
+                    <span id="b_usuario"></span>
                 </button>
             </div>
         </div>
@@ -84,7 +86,7 @@
                         <a href="#modal" role="button" class="link">
                             <li>Criar</li>
                         </a>
-                        <a href="#modal" role="button" class="link">
+                        <a href="#atualizarModal" role="button" class="link">
                             <li>Alterar</li>
                         </a>
                         <a for="check" onclick="check.checked = true;" role="button" class="link">
@@ -92,21 +94,24 @@
                         </a>
                     </ul>
                 </div>
+                <a href="" onclick="limparSessaoTelas()" class="app-sidebar-link">
+                    <span class="material-symbols-outlined">
+                        logout
+                    </span>
+                </a>
             </div>
 
             <!-- card principal -->
             <div class="box">
                 <div class="projects-section" style="flex: 1">
+                    <span class="status-number">EVENTO : <span id="nome"></span></span>
                     <div class="projects-section-header">
-                        <p>EQUIPE</span> : <span id="pc">Desktops</span></p>
+                        <p><span id="eq1">EQUIPE</span> : <span id="pc">Desktops</span></p>
 
                         <!-- Dropdown de computadores -->
                         <div class="select">
                             <select id="selectEquipe1">
                                 <option selected disabled>Desktops</option>
-                                <option value="PC 1">PC 1</option>
-                                <option value="PC 2">PC 2</option>
-                                <option value="PC 3">PC 3</option>
                             </select>
                         </div>
                     </div>
@@ -125,13 +130,10 @@
                 <!-- message section -->
                 <div class="projects-section" style="flex: 1; margin-left: 34px">
                     <div class="projects-section-header">
-                        <p>EQUIPE </span> : <span id="pc2">Desktops</span></p>
+                        <p><span id="eq2">EQUIPE</span> : <span id="pc2">Desktops</span></p>
                         <div class="select">
                             <select id="selectEquipe2">
                                 <option selected disabled>Desktops</option>
-                                <option value="PC 1">PC 1</option>
-                                <option value="PC 2">PC 2</option>
-                                <option value="PC 3">PC 3</option>
                             </select>
                         </div>
                     </div>
@@ -151,7 +153,7 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal-wrapper" id="modal">
+    <div class="modal-wrapper modal" id="modal">
         <div class="modal-body card">
             <div class="details-modal">
                 <a href="#" role="button" aria-label="close this modal" class="details-modal-close">
@@ -167,28 +169,65 @@
                         <div class="form">
                             <div class="input-box">
                                 <label>EQUIPE 1 :</label>
-                                <select>
-                                    <option selected disabled>Desktops</option>
-                                    <option value="1">Americano</option>
-                                    <option value="2">Latte</option>
-                                    <option value="3">Green Tea</option>
-                                </select>
+                                <input type="text" id="input_equipe1" placeholder="Digite o nome da equipe" required>
                             </div>
                             <div class="input-box">
                                 <label>EQUIPE 2 :</label>
-                                <select>
-                                    <option selected disabled>Desktops</option>
-                                    <option value="1">Americano</option>
-                                    <option value="2">Latte</option>
-                                    <option value="3">Green Tea</option>
-                                </select>
+                                <input type="text" id="input_equipe2" placeholder="Digite o nome da equipe" required>
                             </div>
                             <div class="input-box">
                                 <label>EVENTO :</label>
-                                <input type="text" placeholder="Digite o nome do evento" required>
+                                <input type="text" id="input_evento" placeholder="Digite o nome do evento" required>
+                            </div>
+                            <div class="input-box">
+                                <label>DESKTOPS POR EQUIPE :</label>
+                                <select id="select_qtd">
+                                    <option selected disabled>selecione</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
                             </div>
                             <div class="input-box button">
-                                <input type="Submit" value="Registrar evento">
+                                <input type="Submit" onclick="cadastrarEvento()" value="Registrar evento">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-wrapper modal" id="atualizarModal">
+        <div class="modal-body card">
+            <div class="details-modal">
+                <a href="#" role="button" aria-label="close this modal" class="details-modal-close">
+                    <span class="material-symbols-outlined">
+                        close
+                    </span>
+                </a>
+                <div class="details-modal-title">
+                    <h2>ATUALIZAÇÃO DE DADOS</h2>
+                </div>
+                <div class="details-modal-content">
+                    <div class="wrapper">
+                        <div class="form">
+                            <div class="input-box">
+                                <label>EQUIPE 1 :</label>
+                                <input type="text" id="at_input_equipe1" placeholder="" required>
+                            </div>
+                            <div class="input-box">
+                                <label>EQUIPE 2 :</label>
+                                <input type="text" id="at_input_equipe2" placeholder="" required>
+                            </div>
+                            <div class="input-box">
+                                <label>EVENTO :</label>
+                                <input type="text" id="at_input_evento" placeholder="" required>
+                            </div>
+                            </div>
+                            <div class="input-box button">
+                                <input type="Submit" value="Atualizar evento">
                             </div>
                         </div>
                     </div>
@@ -211,12 +250,12 @@
             <p>Deseja realmente finalizar esse evento ?</p>
             <div class="btns">
                 <label class="confirm" for="check">Cancelar</label>
-                <label class="cancel" for="check" onclick="check_confirm.checked = true">Sim, finalizar!</label>
+                <label class="cancel" for="check" onclick="finalizar()">Sim, finalizar!</label>
             </div>
         </div>
     </div>
 
-    <!-- confirmação -->
+    <!-- sucesso -->
     <div>
         <input type="checkbox" id="check_confirm">
         <div class="background"></div>
@@ -227,9 +266,27 @@
                 </span>
             </div>
             <header>Perfeito</header>
-            <p>Ação concluída com sucesso</p>
+            <p id="texto_sucesso"></p>
             <div class="btns">
-                <label class="confirm" for="check_confirm">Fechar</label>
+                <label class="confirm">Fechar</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- erro -->
+    <div>
+        <input type="checkbox" id="check_error">
+        <div class="background"></div>
+        <div class="alert_box">
+            <div class="icon">
+                <span class="material-symbols-outlined">
+                    close
+                </span>
+            </div>
+            <header>ERRO</header>
+            <p id="texto_erro"></p>
+            <div class="btns">
+                <label class="confirm">Fechar</label>
             </div>
         </div>
     </div>
@@ -244,3 +301,215 @@
 </body>
 
 </html>
+<script>
+    // cadastrar evento
+    function cadastrarEvento() {
+
+        // Agora vá para o método fetch logo abaixo
+        var cnpjVar = sessionStorage.CNPJ_ORGANIZACAO;
+        var equipe1Var = input_equipe1.value;
+        var equipe2Var = input_equipe2.value;
+        var eventoVar = input_evento.value;
+        var qtdVar = select_qtd.value;
+
+
+        if (equipe1Var == "" || equipe2Var == "" || eventoVar == "" || qtdVar == "") {
+
+            check_error.checked = true;
+            texto_erro.innerHTML = "Campos inválidos";
+
+
+            setTimeout(function () {
+                check_error.checked = false;
+            }, 1500);
+            return false;
+
+        } else {
+
+            // Enviando o valor da nova input
+            fetch("/evento/cadastrar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    // crie um atributo que recebe o valor recuperado aqui
+                    // Agora vá para o arquivo routes/usuario.js
+                    equipe1Server: equipe1Var,
+                    equipe2Server: equipe2Var,
+                    eventoServer: eventoVar,
+                    qtdServer: qtdVar,
+                    cnpjServer: cnpjVar,
+
+                }),
+            })
+                .then(function (resposta) {
+                    console.log("resposta: ", resposta);
+
+                    if (resposta.ok) {
+
+                        check_confirm.checked = true;
+                        texto_sucesso.innerHTML = "Evento Cadastrado !";
+
+
+                        setTimeout(function () {
+                            window.location = "../index.html";
+                            check_confirm.checked = false;
+                        }, 1500);
+
+                    } else {
+                        resposta.json().then(function (data) {
+                            var erro = data.mensagem;
+
+                            check_error.checked = true;
+                            texto_erro.innerHTML = erro;
+
+                            setTimeout(function () {
+                                check_error.checked = false;
+                            }, 1500);
+                        });
+                    }
+                })
+                .catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`);
+                });
+
+            return false;
+        }
+    }
+
+
+    // listar computadores
+    function listar() {
+        var inputEq1 = document.querySelector('#at_input_equipe1');
+        var inputEq2 = document.querySelector('#at_input_equipe2');
+        var inputEvento = document.querySelector('#at_input_evento');
+        fetch(`/evento/plotar_equipe`, {
+            method: "GET", cache: 'no-store'
+        }).then(function (resposta) {
+            resposta.json().then((eventos) => {
+                eventos.forEach((registro) => {
+                    eq1.innerHTML = registro.t1;
+                    eq2.innerHTML = registro.t2;
+                    nome.innerHTML = registro.nome;
+
+                    inputEq1.placeholder = "Equipe atual " + registro.t1;
+                    inputEq2.placeholder = "Equipe atual " +registro.t2;
+                    inputEvento.placeholder = "Evento atual " +registro.nome;
+                });
+            });
+        })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+
+        fetch("/evento/listarPCE1", {
+            method: "GET",
+        })
+            .then(function (resposta) {
+                resposta.json().then((eventos) => {
+                    eventos.forEach((evento) => {
+                        selectEquipe1.innerHTML += `<option value='${evento.e1}'>${evento.e1}</option>`;
+                    });
+                });
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+
+        fetch("/evento/listarPCE2", {
+            method: "GET",
+        })
+            .then(function (resposta) {
+                resposta.json().then((eventos) => {
+                    eventos.forEach((evento) => {
+                        selectEquipe2.innerHTML += `<option value='${evento.e2}'>${evento.e2}</option>`;
+                    });
+                });
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+    }
+
+
+
+
+    function pegarCnpj() {
+        var cnpjVar = sessionStorage.CNPJ_ORGANIZACAO;
+
+        // Retornando a Promise
+        // Enviando o valor da nova input
+        fetch("/evento/pegarCnpj", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                cnpjServer: cnpjVar,
+
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+            })
+            .catch(function (erro) {
+                console.log(`#ERRO: ${erro}`);
+            });
+    }
+
+
+    // finalizar evento
+    function finalizar() {
+        // Agora vá para o método fetch logo abaixo
+        var confirmacao = "Concluido";
+        var cnpjVar = sessionStorage.CNPJ_ORGANIZACAO;
+
+
+        // Enviando o valor da nova input
+        fetch("/evento/finalizar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                confirmacaoServer: confirmacao,
+                cnpjServer: cnpjVar,
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+                if (!resposta.ok) {
+
+                    resposta.json().then(function (data) {
+                        var erro = data.mensagem;
+
+                        check_error.checked = true;
+                        texto_erro.innerHTML = erro;
+
+                        setTimeout(function () {
+                            check_error.checked = false;
+                        }, 1500);
+                    });
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+        check_confirm.checked = true;
+        texto_sucesso.innerHTML = "Evento Finalizado com sucesso !";
+
+        setTimeout(function () {
+            window.location = "computadores.html";
+            check_confirm.checked = false;
+        }, 1500);
+
+
+        return false;
+    }
+
+</script>

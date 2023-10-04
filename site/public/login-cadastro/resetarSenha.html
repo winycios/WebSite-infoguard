@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login</title>
+
+    <script src="../js/sessao.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="./Assets/css/style.css">
+    <link rel="stylesheet" href="./Assets/css/Alert.css">
+</head>
+
+<body>
+    <!-- Alerta -->
+    <div class="box-alert" id="box">
+        <div id="alertar"></div>
+    </div>
+
+    <div class="container-login" style="grid-template-columns: 100%; justify-items: center;">
+
+        <div class="content-box">
+            <div class="form-box">
+                <h2>Resetar a senha</h2>
+                <div>
+                    <div class="input-box">
+                        <span>CPF</span>
+                        <input type="texte" id="input_cpf" placeholder="111.111.111-11" maxlength="14"
+                            onkeyup="mascaraCpf(this)">
+                    </div>
+
+                    <div class="input-box">
+                        <span>Digite sua senha</span>
+                        <input type="password" id="senha_input" placeholder="password">
+                    </div>
+
+                    <div class="input-box">
+                        <span>Digite sua senha novamente</span>
+                        <input type="password" id="senha2_input" placeholder="password">
+                    </div>
+
+                    <div class="remember">
+                        <a href="./Login.html">Login</a>
+                    </div>
+
+                    <div class="input-box">
+                        <input type="submit" onclick="renovar()" value="Atualizar">
+                    </div>
+
+                    <div class="input-box">
+                        <a href="./Cadastro.html">Não tem uma conta?</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+
+
+<script>
+    function mascaraCpf(cpf_input) {
+        var cpfFormatado = cpf_input.value;
+        cpfFormatado = cpfFormatado.replace(/\D/g, "")                    //Remove tudo o que não é dígito
+        cpfFormatado = cpfFormatado.replace(/(\d{3})(\d)/, "$1.$2")       //Coloca um ponto entre o terceiro e o quarto dígitos
+        cpfFormatado = cpfFormatado.replace(/(\d{3})(\d)/, "$1.$2")       //Coloca um ponto entre o terceiro e o quarto dígitos
+        //de novo (para o segundo bloco de números)
+        cpfFormatado = cpfFormatado.replace(/(\d{3})(\d{1,2})$/, "$1-$2") //Coloca um hífen entre o terceiro e o quarto dígitos
+        cpf_input.value = cpfFormatado;
+    }
+
+    function renovar() {
+
+        var cpfVar =  input_cpf.value.replace(/\D/g, "");
+        var senhaVar = senha_input.value;
+        var senhaNovamente = senha2_input.value;
+
+        if (cpfVar == "" || senhaVar == "" || senhaVar == "" || cpfVar < 11) {
+
+            box.style.display = "block";
+            alertar.innerHTML = `  
+            <div class="wrapper">
+                <div class="toast error">
+                    <div class="container-1">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="container-2">
+                        <p>ERRO</p>
+                        <p>Campos invalidos</p>
+                    </div>
+                </div>
+            </div>`;
+
+            setTimeout(function () {
+                box.style.display = "none";
+            }, 1500);
+
+            return false;
+
+        } else if (senhaVar.value != senhaNovamente.value) {
+
+            box.style.display = "block";
+            alertar.innerHTML = `  
+            <div class="wrapper">
+                <div class="toast error">
+                    <div class="container-1">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="container-2">
+                        <p>ERRO</p>
+                        <p>Senhas diferentes</p>
+                    </div>
+                </div>
+            </div>`;
+
+            setTimeout(function () {
+                box.style.display = "none";
+            }, 1500);
+
+            return false;
+        } else {}
+        
+        // Enviando o valor da nova input
+        fetch("/usuarios/renovarSenha", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                senhaServer: senhaVar,
+                cpfServer: cpfVar,
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+                    box.style.display = "block";
+            alertar.innerHTML = `  
+            <div class="wrapper">
+                <div class="toast success">
+                    <div class="container-1">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="container-2">
+                        <p>Success</p>
+                        <p>Senha alterada com sucesso</p>
+                    </div>  
+                </div>
+            </div>`;
+
+                    setTimeout(function () {
+                        window.location = "Login.html";
+                        box.style.display = "none";
+                    }, 1500);
+
+                }   else {
+                        resposta.json().then(function (data) {
+                            var erro = data.mensagem;
+
+                            box.style.display = "block";
+                            alertar.innerHTML = `  
+                            <div class="wrapper">
+                                <div class="toast error">
+                                    <div class="container-1">
+                                        <i class="fas fa-times-circle"></i>
+                                    </div>
+                                    <div class="container-2">
+                                        <p>ERRO</p>
+                                        <p>${erro}</p>
+                                    </div>
+                                </div>
+                            </div>`;
+
+                            setTimeout(function () {
+                                box.style.display = "none";
+                            }, 1500);
+                        });
+                    }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+
+        return false;
+    }
+</script>

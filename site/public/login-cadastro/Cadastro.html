@@ -11,9 +11,11 @@
 
     <link rel="stylesheet" href="./Assets/css/style.css">
     <link rel="stylesheet" href="./Assets/css/Alert.css">
+
+
 </head>
 
-<body>
+<body onload="listar()">
     <div class="box-alert" id="box">
         <div id="alertar"></div>
     </div>
@@ -34,7 +36,8 @@
                     </div>
                     <div class="input-box">
                         <span>CPF</span>
-                        <input type="text" id="input_cpf" placeholder="000.000.000-00" maxlength="14" onkeyup="mascaraCpf(this)">
+                        <input type="text" id="input_cpf" placeholder="000.000.000-00" maxlength="14"
+                            onkeyup="mascaraCpf(this)">
                     </div>
                 </div>
 
@@ -45,23 +48,26 @@
 
                 <div class="input-box">
                     <span>Telefone</span>
-                    <input type="text" id="input_telefone" placeholder="(dd) 9 **** ****" maxlength="14" onkeyup="mascaraTelefone(this)" >
+                    <input type="text" id="input_telefone" placeholder="(dd) 9 **** ****" maxlength="14"
+                        onkeyup="mascaraTelefone(this)">
                 </div>
 
                 <div class="input-box">
                     <span>Cargo</span>
-                    <input type="text" id="input_cargo" placeholder="Ex: Aprendiz">
+                    <select id="select_cargo">
+                        <option value="suporte">Suporte</option>
+                        <option value="Gerente">Gerente</option>
+                    </select>
                 </div>
 
                 <div class="dual">
                     <div class="input-box">
                         <span>Organização</span>
-                        <input type="text" id="input_organização" placeholder="Nome">
-                    </div>
+                        <select id="select_organização">
+                            <option selected disabled>Escolha sua organização</option>
+                        </select>
 
-                    <div class="input-box">
-                        <span>CNPJ</span>
-                        <input type="text" id="input_cnpj" placeholder="00.000.000/0000-00" maxlength="18" onkeyup="mascaraCnpj(this)">
+                        <h6>Não encontrou sua empresa ? <a href="#" onclick="show.checked = true;">clique aqui</a></h6>
                     </div>
                 </div>
                 <div class="input-box">
@@ -73,22 +79,49 @@
                 </div>
             </div>
         </div>
+    </div>
 
+
+    <!-- modal -->
+    <div class="center">
+        <input type="checkbox" id="show">
+        <div class="container">
+            <label for="show" class="close-btn fas fa-times" title="close"></label>
+            <div class="content-box" style="margin: 0;">
+                <div class="form-box">
+                    <h2 class="position">ORNGANIZAÇÃO</h2>
+
+                    <div class="input-box">
+                        <span>Nome</span>
+                        <input type="text" id="input_nameOrg" placeholder="Primeiro nome">
+                    </div>
+                    <div class="input-box">
+                        <span>CNPJ</span>
+                        <input type="text" id="input_cnpj" placeholder="00.000.000/0000-00" maxlength="18"
+                            onkeyup="mascaraCnpj(this)">
+                    </div>
+                    <div class="input-box">
+                        <input type="submit" onclick="cadastrarOrg()" value="Cadastrar">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
+
 
 </html>
 
 <script>
     // listar todas as empresas
     function listar() {
-        fetch("/empresas/listar", {
+        fetch("/organizacao/listar", {
             method: "GET",
         })
             .then(function (resposta) {
-                resposta.json().then((empresas) => {
-                    empresas.forEach((empresa) => {
-                        listaEmpresas.innerHTML += `<option value='${empresa.id}'>${empresa.cnpj}</option>`;
+                resposta.json().then((organizacoes) => {
+                    organizacoes.forEach((organizacao) => {
+                        select_organização.innerHTML += `<option value='${organizacao.cnpj}'>${organizacao.nome}</option>`;
                     });
                 });
             })
@@ -97,50 +130,45 @@
             });
     }
 
-    function mascaraCpf(input_cpf){
+    function mascaraCpf(input_cpf) {
         var cpfFormatado = input_cpf.value;
-    cpfFormatado=cpfFormatado.replace(/\D/g,"")                    //Remove tudo o que não é dígito
-    cpfFormatado=cpfFormatado.replace(/(\d{3})(\d)/,"$1.$2")       //Coloca um ponto entre o terceiro e o quarto dígitos
-    cpfFormatado=cpfFormatado.replace(/(\d{3})(\d)/,"$1.$2")       //Coloca um ponto entre o terceiro e o quarto dígitos
-                                                                   //de novo (para o segundo bloco de números)
-    cpfFormatado=cpfFormatado.replace(/(\d{3})(\d{1,2})$/,"$1-$2") //Coloca um hífen entre o terceiro e o quarto dígitos
-    input_cpf.value = cpfFormatado; 
-    }   
+        cpfFormatado = cpfFormatado.replace(/\D/g, "")
+        cpfFormatado = cpfFormatado.replace(/(\d{3})(\d)/, "$1.$2")
+        cpfFormatado = cpfFormatado.replace(/(\d{3})(\d)/, "$1.$2")
+        cpfFormatado = cpfFormatado.replace(/(\d{3})(\d{1,2})$/, "$1-$2")
+        input_cpf.value = cpfFormatado;
+    }
 
-
-    function mascaraTelefone(input_telefone){
+    function mascaraTelefone(input_telefone) {
         var telefoneFormatado = input_telefone.value;
-    telefoneFormatado=telefoneFormatado.replace(/\D/g,"")                    
-    telefoneFormatado=telefoneFormatado.replace(/(\d{0})(\d)/,"$1($2")       
-    telefoneFormatado=telefoneFormatado.replace(/(\d{2})(\d)/,"$1)$2")
-    telefoneFormatado=telefoneFormatado.replace(/(\d{5})(\d)/,"$1-$2")
-    input_telefone.value = telefoneFormatado; 
-    }   
+        telefoneFormatado = telefoneFormatado.replace(/\D/g, "")
+        telefoneFormatado = telefoneFormatado.replace(/(\d{0})(\d)/, "$1($2")
+        telefoneFormatado = telefoneFormatado.replace(/(\d{2})(\d)/, "$1)$2")
+        telefoneFormatado = telefoneFormatado.replace(/(\d{5})(\d)/, "$1-$2")
+        input_telefone.value = telefoneFormatado;
+    }
 
-
-    function mascaraCnpj(input_cnpj){
-       var cnpjFormatado = input_cnpj.value;
-    cnpjFormatado=cnpjFormatado.replace(/\D/g,"")                           //Remove tudo o que não é dígito
-    cnpjFormatado=cnpjFormatado.replace(/^(\d{2})(\d)/,"$1.$2")             //Coloca ponto entre o segundo e o terceiro dígitos
-    cnpjFormatado=cnpjFormatado.replace(/^(\d{2})\.(\d{3})(\d)/,"$1.$2.$3") //Coloca ponto entre o quinto e o sexto dígitos
-    cnpjFormatado=cnpjFormatado.replace(/\.(\d{3})(\d)/,".$1/$2")           //Coloca uma barra entre o oitavo e o nono dígitos
-    cnpjFormatado=cnpjFormatado.replace(/(\d{4})(\d)/,"$1-$2")              //Coloca um hífen depois do bloco de quatro dígitos
-    input_cnpj.value = cnpjFormatado;
+    function mascaraCnpj(input_cnpj) {
+        var cnpjFormatado = input_cnpj.value;
+        cnpjFormatado = cnpjFormatado.replace(/\D/g, "");
+        cnpjFormatado = cnpjFormatado.replace(/^(\d{2})(\d)/, "$1.$2")
+        cnpjFormatado = cnpjFormatado.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+        cnpjFormatado = cnpjFormatado.replace(/\.(\d{3})(\d)/, ".$1/$2")
+        cnpjFormatado = cnpjFormatado.replace(/(\d{4})(\d)/, "$1-$2")
+        input_cnpj.value = cnpjFormatado;
     }
 
 
     // cadastrar usuario
     function cadastrar() {
 
-        //Recupere o valor da nova input pelo nome do id
         // Agora vá para o método fetch logo abaixo
         var nomeVar = input_name.value;
         var senhaVar = input_senha.value;
-        var cpfVar = input_cpf.value;
-        var telefoneVar = input_telefone.value;
-        var cargoVar = input_cargo.value;
-        var organizacaoVar = input_organização.value;
-        var cnpjVar = input_cnpj.value;
+        var cpfVar = input_cpf.value.replace(/\D/g, "");
+        var telefoneVar = input_telefone.value.replace(/\D/g, "");;
+        var cargoVar = select_cargo.value;
+        var organizacaoVar = select_organização.value;
 
         if (
             nomeVar == "" ||
@@ -148,8 +176,9 @@
             cpfVar == "" ||
             telefoneVar == "" ||
             cargoVar == "" ||
-            organizacaoVar == ""
-
+            organizacaoVar == "" ||
+            cpfVar.length != 11 ||
+            telefoneVar.length != 11
         ) {
             box.style.display = "block";
             alertar.innerHTML = `  
@@ -170,74 +199,175 @@
             }, 1500);
             return false;
 
-        } else { }
-
-        // Enviando o valor da nova input
-        fetch("/usuarios/cadastrar", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                // crie um atributo que recebe o valor recuperado aqui
-                // Agora vá para o arquivo routes/usuario.js
-                nomeServer: nomeVar,
-                senhaServer: senhaVar,
-                cpfServer: cpfVar,
-                telefoneServer: telefoneVar,
-                cargoServer: cargoVar,
-                organizacaoServer: organizacaoVar,
-            }),
-        })
-            .then(function (resposta) {
-                console.log("resposta: ", resposta);
-
-                if (resposta.ok) {
-                    box.style.display = "block";
-                    alertar.innerHTML = `  
-             <div class="wrapper">
-                <div class="toast success">
-                    <div class="container-1">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <div class="container-2">
-                        <p>Success</p>
-                        <p>Your changes are saved successfully</p>
-                    </div>  
-                </div>
-            </div>`;
-
-                    setTimeout(function () {
-                        window.location = "Login.html";
-                        box.style.display = "none";
-                    }, 1500);
-
-                } else {
-                    throw "Houve um erro ao tentar realizar o cadastro!";
-
-                    box.style.display = "block";
-                    alertar.innerHTML = `  
-            <div class="wrapper">
-                <div class="toast error">
-                    <div class="container-1">
-                        <i class="fas fa-times-circle"></i>
-                    </div>
-                    <div class="container-2">
-                        <p>ERRO</p>
-                        <p>Houve um erro ao tentar realizar o cadastro!, tente novamente mais tarde</p>
-                    </div>
-                </div>
-            </div>`;
-
-                    setTimeout(function () {
-                        box.style.display = "none";
-                    }, 1500);
-                }
+        } else {
+            // Enviando o valor da nova input
+            fetch("/usuarios/cadastrar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    // crie um atributo que recebe o valor recuperado aqui
+                    // Agora vá para o arquivo routes/usuario.js
+                    nomeServer: nomeVar,
+                    senhaServer: senhaVar,
+                    cpfServer: cpfVar,
+                    telefoneServer: telefoneVar,
+                    cargoServer: cargoVar,
+                    organizacaoServer: organizacaoVar,
+                }),
             })
-            .catch(function (resposta) {
-                console.log(`#ERRO: ${resposta}`);
-            });
+                .then(function (resposta) {
+                    console.log("resposta: ", resposta);
 
-        return false;
+                    if (resposta.ok) {
+                        box.style.display = "block";
+                        alertar.innerHTML = `  
+                <div class="wrapper">
+                    <div class="toast success">
+                        <div class="container-1">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="container-2">
+                            <p>Sucesso</p>
+                            <p>Cadastro realizado com sucesso</p>
+                        </div>  
+                    </div>
+                </div>`;
+
+                        setTimeout(function () {
+                            window.location = "Login.html";
+                            box.style.display = "none";
+                        }, 1500);
+
+                    }  else {
+                        resposta.json().then(function (data) {
+                            var erro = data.mensagem;
+
+                            box.style.display = "block";
+                            alertar.innerHTML = `  
+                            <div class="wrapper">
+                                <div class="toast error">
+                                    <div class="container-1">
+                                        <i class="fas fa-times-circle"></i>
+                                    </div>
+                                    <div class="container-2">
+                                        <p>ERRO</p>
+                                        <p>${erro}</p>
+                                    </div>
+                                </div>
+                            </div>`;
+
+                            setTimeout(function () {
+                                box.style.display = "none";
+                            }, 1500);
+                        });
+                    }
+                })
+                .catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`);
+                });
+
+            return false;
+        }
+    }
+
+    // cadastrar organizacao
+    function cadastrarOrg() {
+
+        // Agora vá para o método fetch logo abaixo
+        var nomeVar = input_nameOrg.value;
+        var cnpjVar = input_cnpj.value.replace(/\D/g, "");
+
+        console.log(cnpjVar.length);
+        if (nomeVar == "" || cnpjVar == "" || (cnpjVar.length != 14)) {
+            box.style.display = "block";
+            alertar.innerHTML = `  
+    <div class="wrapper">
+        <div class="toast error">
+            <div class="container-1">
+                <i class="fas fa-times-circle"></i>
+            </div>
+            <div class="container-2">
+                <p>ERRO</p>
+                <p>Campos invalidos</p>
+            </div>
+        </div>
+    </div>`;
+
+            setTimeout(function () {
+                box.style.display = "none";
+            }, 1500);
+            return false;
+
+        } else {
+
+            // Enviando o valor da nova input
+            fetch("/organizacao/cadastrar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    // crie um atributo que recebe o valor recuperado aqui
+                    // Agora vá para o arquivo routes/usuario.js
+                    nomeServer: nomeVar,
+                    cnpjServer: cnpjVar,
+                }),
+            })
+                .then(function (resposta) {
+                    console.log("resposta: ", resposta);
+
+                    if (resposta.ok) {
+
+                        box.style.display = "block";
+                        alertar.innerHTML = `  
+                        <div class="wrapper">
+                            <div class="toast success">
+                                <div class="container-1">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="container-2">
+                                    <p>Sucesso</p>
+                                    <p>Cadastro realizado com sucesso</p>
+                                </div>  
+                            </div>
+                        </div>`;
+
+                        setTimeout(function () {
+                            window.location = "Cadastro.html";
+                            box.style.display = "none";
+                        }, 1500);
+
+                    } else {
+                        resposta.json().then(function (data) {
+                            var erro = data.mensagem;
+
+                            box.style.display = "block";
+                            alertar.innerHTML = `  
+                            <div class="wrapper">
+                                <div class="toast error">
+                                    <div class="container-1">
+                                        <i class="fas fa-times-circle"></i>
+                                    </div>
+                                    <div class="container-2">
+                                        <p>ERRO</p>
+                                        <p>${erro}</p>
+                                    </div>
+                                </div>
+                            </div>`;
+
+                            setTimeout(function () {
+                                box.style.display = "none";
+                            }, 1500);
+                        });
+                    }
+                })
+                .catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`);
+                });
+
+            return false;
+        }
     }
 </script>

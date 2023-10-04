@@ -1,5 +1,13 @@
 var usuarioModel = require("../models/usuarioModel");
 
+// Buscar por cpf
+function buscarPorCpf(req, res) {
+    var cpf = req.query.cpf;
+
+    usuarioModel.buscarPorCpf(cpf).then((resultado) => {
+        res.status(200).json(resultado);
+    });
+}
 
 // autenticação de usuario
 function autenticar(req, res) {
@@ -35,9 +43,10 @@ function autenticar(req, res) {
                 }
             );
     }
-
 }
 
+
+// cadastrar usuario
 function cadastrar(req, res) {
     // Crie uma variável que vá recuperar os valores do arquivo cadastro.html
     var nome = req.body.nomeServer;
@@ -62,26 +71,53 @@ function cadastrar(req, res) {
         res.status(400).send("Seu organizacao está undefined!");
     } else {
 
-        // Passe os valores como parâmetro e vá para o arquivo usuarioModel.js
-        usuarioModel.cadastrar(nome, senha, cpf, telefone, cargo, organizacao)
-            .then(
-                function (resultado) {
-                    res.json(resultado);
-                }
-            ).catch(
-                function (erro) {
-                    console.log(erro);
-                    console.log(
-                        "\nHouve um erro ao realizar o cadastro! Erro: ",
-                        erro.sqlMessage
-                    );
-                    res.status(500).json(erro.sqlMessage);
-                }
-            );
+        usuarioModel.buscarPorCpf(cpf).then((resultado) => {
+            if (resultado.length > 0) {
+                // verifica se o usuario já existe
+                res
+                    .status(401)
+                    .json({ mensagem: `O usuario com o cpf ${cpf} já existe` });
+            } else {
+                usuarioModel.cadastrar(nome, senha, cpf, telefone, cargo, organizacao).then((resultado) => {
+                    res.status(201).json(resultado);
+                });
+            }
+        });
+    }
+}
+
+// Trocar senha
+function renovarSenha(req, res) {
+    var cpf = req.body.cpfServer;
+    var senha = req.body.senhaServer;
+
+
+    if (cpf == undefined) {
+        res.status(400).send("Seu cpf está undefined!");
+    } else if (senha == undefined) {
+        res.status(400).send("Sua senha está undefined!");
+    } else {
+        usuarioModel.buscarPorCpf(cpf).then((resultado) => {
+            if (resultado.length > 0) {
+                // verifica se o usuario já existe
+                usuarioModel.renovarSenha(cpf, senha).then((resultado) => {
+                    res.status(201).json(resultado);
+                });
+
+            } else {
+                usuarioModel.renovarSenha(senha, cpf).then((resultado) => {
+                    res
+                        .status(401)
+                        .json({ mensagem: `O usuario com o cpf ${cpf} não existe` });
+                });
+            }
+        });
     }
 }
 
 module.exports = {
     autenticar,
-    cadastrar
+    cadastrar,
+    renovarSenha,
+    buscarPorCpf
 }
