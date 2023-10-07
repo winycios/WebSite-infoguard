@@ -1,0 +1,116 @@
+summary {
+    background-color: var(--projects-section);
+    position: relative;
+    cursor: pointer;
+    padding: 1em 0.5em;
+    list-style: none;
+    width: 100%;
+}
+
+summary::-webkit-details-marker {
+    display: none;
+}
+
+summary:hover {
+    background-color: var(--app-container);
+}
+
+summary div {
+    display: flex;
+    align-items: center;
+}
+
+summary h3 {
+    display: flex;
+    flex-direction: column;
+}
+
+
+summary strong {
+    color: var(--link-color);
+    font-weight: 700;
+}
+
+
+summary span:first-child {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 10px;
+    background-color: #f3e1e1;
+    display: flex;
+    font-size: 40px;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1.25em;
+}
+
+summary span:first-child svg {
+    width: 2.25rem;
+    height: 2.25rem;
+}
+
+summary span:last-child {
+    font-weight: 700;
+    margin-left: auto;
+}
+
+summary:focus {
+    outline: none;
+}
+
+summary .plus {
+    color: #289672;
+}
+
+details {
+    border-bottom: 1px solid var(--link-color);
+}
+
+details[open] {
+    box-shadow: -3px 0 0 var(--link-color);
+}
+
+details:first-of-type {
+    border-top: 1px solid var(--link-color);
+}
+
+details>div {
+    padding: 2em 2em 0;
+    font-size: 0.875em;
+}
+
+dl {
+    color: var(--link-color);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+dl dt {
+    color: var(--link-color);
+    font-weight: 700;
+}
+
+dl div {
+    margin-right: 4em;
+    margin-bottom: 2em;
+}
+
+dl .button {
+
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    font-size: 15px;
+    font-weight: 400;
+    cursor: pointer;
+    line-height: 55px;
+    outline: none;
+    border: none;
+    background: var(--app-container);
+    cursor: pointer;
+    color: var(--link-color);
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}

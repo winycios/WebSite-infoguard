@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="PT-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUPERVISION - COMPUTADORES</title>
+
+    <script src="../../js/sessao.js"></script>
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+
+    <link rel="stylesheet" href="../Assets/css/relatorio.css">
+    <link rel="stylesheet" href="../Assets/css/style.css">
+    <link rel="stylesheet" href="../Assets/css/dropdown_telas.css">
+    <link rel="stylesheet" href="../Assets/css/alert_box.css">
+
+</head>
+
+<body onload="validarSessao()">
+    <div class="app-container">
+        <div class="app-header">
+            <div class="app-header-left">
+                <span class="app-icon"></span>
+                <p class="app-name">SUPERVISI<span style="color: var(--color-yellow);">ON</span></p>
+                <div class="search-wrapper">
+                    <input class="search-input" id="valorTela" list="telas" type="search" placeholder="Pesquisar">
+                    <button onclick="pesquisarTelasPath()" class="buttonValor">
+                        <span style="color: var(--main-color);" class="material-symbols-outlined">
+                            search
+                        </span>
+                    </button>
+
+                    <datalist id="telas">
+                        <option value="Tela inicial"></option>
+                        <option value="Desktops"></option>
+                        <option value="Chamados"></option>
+                        <option value="Usuário"></option>
+                        <option value="Relatório"></option>
+                    </datalist>
+                </div>
+            </div>
+            <div class="app-header-right">
+                <button class="mode-switch" title="Switch Theme">
+                    <span class="material-symbols-outlined moon">
+                        brightness_5
+                    </span>
+                </button>
+                <button class="profile-btn">
+                    <img src="../Assets/images/user.png" />
+                    <span id="b_usuario"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- sidebar -->
+        <div class="app-content">
+            <div class="app-sidebar">
+                <a href="../index.html" class="app-sidebar-link">
+                    <span class="material-symbols-outlined">
+                        home
+                    </span>
+                </a>
+                <a href="./computadores.html" class="app-sidebar-link">
+                    <span class="material-symbols-outlined">
+                        screen_search_desktop
+                    </span>
+                </a>
+                <a href="./relatorio.html" class="app-sidebar-link active">
+                    <span class="material-symbols-outlined">
+                        quick_reference
+                    </span>
+                </a>
+                <a href="./chamados.html" class="app-sidebar-link">
+                    <span class="material-symbols-outlined">
+                        support_agent
+                    </span>
+                </a>
+                <a href="" onclick="limparSessaoTelas()" class="app-sidebar-link">
+                    <span class="material-symbols-outlined">
+                        logout
+                    </span>
+                </a>
+            </div>
+
+            <!-- card principal -->
+            <div class="box">
+                <div class="box-message" style="flex: 1; height: 100%;">
+                    <div class="projects-section">
+                        <div class="projects-section-header">
+                            <p style="text-transform: uppercase;">FUNCIO<span
+                                    style="color: var(--color-yellow);">NÁRIOS</span>
+                            </p>
+                        </div>
+
+                        <!-- card usuarios -->
+                        <div class="project-boxes jsGridView" style="align-items: unset">
+                            <div class="list">
+                                <div class="line">
+                                    <div class="user">
+                                        <div class="profile">
+                                            <span class="material-symbols-outlined">
+                                                account_circle
+                                            </span>
+                                        </div>
+                                        <div class="details">
+                                            <h1 class="name">Winycios alves</h1>
+                                            <h3 class="username">52769059831</h3>
+                                        </div>
+                                    </div>
+                                    <div class="status">
+                                        <span></span>
+                                        <p>Livre</p>
+                                    </div>
+                                    <div class="function">
+                                        <p>Suporte</p>
+                                    </div>
+                                    <div class="phone">
+                                        <p>11984675735</p>
+                                    </div>
+                                    <a href="#modal" role="button" class="material-symbols-outlined settings">
+                                        manage_accounts
+                                    </a>
+                                </div>
+
+                                <div class="line">
+                                    <div class="user">
+                                        <div class="profile">
+                                            <span class="material-symbols-outlined">
+                                                account_circle
+                                            </span>
+                                        </div>
+                                        <div class="details">
+                                            <h1 class="name">Lele gomes</h1>
+                                            <h3 class="username">52769059831</h3>
+                                        </div>
+                                    </div>
+                                    <div class="status">
+                                        <span class="inactive"></span>
+                                        <p>Ocupado</p>
+                                    </div>
+                                    <div class="function">
+                                        <p>Suporte</p>
+                                    </div>
+                                    <div class="phone">
+                                        <p>11984675735</p>
+                                    </div>
+                                    <a href="#modal" role="button" class="material-symbols-outlined settings">
+                                        manage_accounts
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- message section -->
+                <div class="box-message"
+                    style="display: flex; flex-direction: column; gap: 20px; flex: 1; height: 100%;">
+
+                    <div class="projects-section" style="margin-left: 34px;">
+                        <div class="projects-section-header">
+                            <p style="text-transform: uppercase;">COMPUTA<span
+                                    style="color: var(--color-yellow);">DORES</span>
+                            </p>
+                        </div>
+                        <!-- card computadores -->
+                        <div class="project-boxes jsGridView" style="align-items: unset">
+                            <div class="leaderboard__profiles">
+                                <article class="leaderboard__profile">
+                                    <span class="material-symbols-outlined" style="color: var(--color-yellow);">
+                                        devices
+                                    </span>
+                                    <span class="leaderboard__name">MAQUINA 1 PIN</span>
+                                    <span class="material-symbols-outlined leaderboard__success">
+                                        radio_button_checked
+                                    </span>
+                                </article>
+
+                                <article class="leaderboard__profile">
+                                    <span class="material-symbols-outlined" style="color: var(--color-yellow);">
+                                        devices
+                                    </span>
+                                    <span class="leaderboard__name">MAQUINA 2 PIN</span>
+                                    <span class="material-symbols-outlined leaderboard__fail">
+                                        radio_button_checked
+                                    </span>
+                                </article>
+
+                                <article class="leaderboard__profile">
+                                    <span class="material-symbols-outlined" style="color: var(--color-yellow);">
+                                        devices
+                                    </span>
+                                    <span class="leaderboard__name">MAQUINA 1 TOR</span>
+                                    <span class="material-symbols-outlined leaderboard__fail">
+                                        radio_button_checked
+                                    </span>
+                                </article>
+
+                                <article class="leaderboard__profile">
+                                    <span class="material-symbols-outlined" style="color: var(--color-yellow);">
+                                        devices
+                                    </span>
+                                    <span class="leaderboard__name">MAQUINA 1 TOR</span>
+                                    <span class="material-symbols-outlined leaderboard__success">
+                                        radio_button_checked
+                                    </span>
+                                </article>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="projects-section" style="margin-left: 34px;">
+                        <div class="projects-section-header">
+                            <p style="text-transform: uppercase;">CHAMA<span
+                                    style="color: var(--color-yellow);">DOS</span>
+                            </p>
+                        </div>
+
+                        <!-- card chamados -->
+                        <div class="project-boxes jsGridView" style="align-items: unset">
+                            <div class="messages">
+                                <div class="message-box">
+                                    <span class="material-symbols-outlined">
+                                        report
+                                    </span>
+                                    <div class="message-content">
+                                        <div class="message-header">
+                                            <div class="name">CHAMADO 1</div>
+                                            <div class="star-checkbox">
+                                            </div>
+                                        </div>
+                                        <p class="message-line">
+                                            Operador : winyc
+                                        </p>
+                                        <p class="message-line time">
+                                            Concluido
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="messages">
+                                <div class="message-box">
+                                    <span class="material-symbols-outlined">
+                                        report
+                                    </span>
+                                    <div class="message-content">
+                                        <div class="message-header">
+                                            <div class="name">CHAMADO 2</div>
+                                            <div class="star-checkbox">
+                                            </div>
+                                        </div>
+                                        <p class="message-line">
+                                            Operador : none
+                                        </p>
+                                        <p class="message-line time">
+                                            Em andamento
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-wrapper modal" id="modal">
+        <div class="modal-body card">
+            <div class="details-modal">
+                <a href="#" role="button" aria-label="close this modal" class="details-modal-close">
+                    <span class="material-symbols-outlined">
+                        close
+                    </span>
+                </a>
+                <div class="details-modal-title">
+                    <h2>Atualização de dados</h2>
+                </div>
+                <div class="details-modal-content">
+                    <div class="wrapper">
+                        <div class="form">
+                            <div class="input-box">
+                                <label>Nome</label>
+                                <input type="text" placeholder="winyc" required>
+                            </div>
+                            <div class="input-box">
+                                <label>FUNÇÃO :</label>
+                                <select>
+                                    <option selected disabled>Suporte</option>
+                                    <option value="1">Gerência</option>
+                                </select>
+                            </div>
+                            <div class="input-box button">
+                                <input type="Submit" value="Atualizar dados">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alerta -->
+    <div>
+        <input type="checkbox" id="check">
+        <div class="background"></div>
+        <div class="alert_box">
+            <div class="icon">
+                <span class="material-symbols-outlined">
+                    close
+                </span>
+            </div>
+            <header>Confirmar</header>
+            <p>Deseja realmente finalizar esse evento ?</p>
+            <div class="btns">
+                <label class="confirm" for="check">Cancelar</label>
+                <label class="cancel" for="check" onclick="check_confirm.checked = true">Sim, finalizar!</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- confirmação -->
+    <div>
+        <input type="checkbox" id="check_confirm">
+        <div class="background"></div>
+        <div class="alert_box">
+            <div class="icon">
+                <span class="material-symbols-outlined" style="color: #26f267; border: 3px solid #26f267;">
+                    check
+                </span>
+            </div>
+            <header>Perfeito</header>
+            <p>Ação concluída com sucesso</p>
+            <div class="btns">
+                <label class="confirm" for="check_confirm">Fechar</label>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="../Assets/js/script.js"></script>
+</body>
+
+</html>

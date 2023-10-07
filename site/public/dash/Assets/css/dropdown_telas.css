@@ -177,7 +177,6 @@ select option {
 .details-modal .details-modal-close {
     color: var(--color-yellow);
     display: flex;
-    margin-bottom: -20px;
     cursor: pointer;
     justify-content: flex-end;
 }

@@ -67,9 +67,14 @@
                         screen_search_desktop
                     </span>
                 </a>
-                <a href="" class="app-sidebar-link">
+                <a href="./relatorio.html" class="app-sidebar-link">
                     <span class="material-symbols-outlined">
                         quick_reference
+                    </span>
+                </a>
+                <a href="./chamados.html" class="app-sidebar-link">
+                    <span class="material-symbols-outlined">
+                        support_agent
                     </span>
                 </a>
 
@@ -225,7 +230,6 @@
                                 <label>EVENTO :</label>
                                 <input type="text" id="at_input_evento" placeholder="" required>
                             </div>
-                            </div>
                             <div class="input-box button">
                                 <input type="Submit" value="Atualizar evento">
                             </div>
@@ -291,7 +295,6 @@
         </div>
     </div>
 
-    <!-- <script src="https://cdn.jsdelivr.net/npm/uglify-js@3.17.4/tools/node.min.js "></script> -->
     <!-- partial -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -394,8 +397,8 @@
                     nome.innerHTML = registro.nome;
 
                     inputEq1.placeholder = "Equipe atual " + registro.t1;
-                    inputEq2.placeholder = "Equipe atual " +registro.t2;
-                    inputEvento.placeholder = "Evento atual " +registro.nome;
+                    inputEq2.placeholder = "Equipe atual " + registro.t2;
+                    inputEvento.placeholder = "Evento atual " + registro.nome;
                 });
             });
         })

@@ -55,13 +55,13 @@ function desktop(qtd, cnpj) {
                 const promises = [];
                 for (let index = 1; index <= qtd; index++) {
                     promises.push(
-                        database.executar(`insert into tbComputadores (idComputador,fk_idEvento,apelidoComputador) values (null, '${idAtual}' , 'PC${index} E1');`)
+                        database.executar(`insert into tbComputador (idComputador,fk_idEvento,apelidoComputador) values (null, '${idAtual}' , 'PC${index} E1');`)
                     );
                 }
                 // criação dos computadores da equipe 2
                 for (let index = 1; index <= qtd; index++) {
                     promises.push(
-                        database.executar(`insert into tbComputadores (idComputador,fk_idEvento,apelidoComputador) values (null, '${idAtual}' , 'PC${index} E2');`)
+                        database.executar(`insert into tbComputador (idComputador,fk_idEvento,apelidoComputador) values (null, '${idAtual}' , 'PC${index} E2');`)
                     );
                 }
             });
@@ -89,7 +89,7 @@ function plotar_equipe() {
 function listarPCE1() {
     if (globalCnpj == undefined) {
     } else {
-        var query = `select apelidoComputador as 'e1' from tbComputadores c
+        var query = `select apelidoComputador as 'e1' from tbComputador c
         inner join tbEvento o ON c.fk_idEvento = o.idEvento
         where fk_idEvento = (select idEvento from tbEvento where fk_organizacao = ${globalCnpj} ORDER BY idEvento DESC LIMIT 1) 
         AND o.status = "Em andamento" AND apelidoComputador LIKE '%1';`;
@@ -102,7 +102,7 @@ function listarPCE1() {
 function listarPCE2() {
     if (globalCnpj == undefined) {
     } else {
-        var query = `select apelidoComputador as 'e2' from tbComputadores c
+        var query = `select apelidoComputador as 'e2' from tbComputador c
         inner join tbEvento o ON c.fk_idEvento = o.idEvento
         where fk_idEvento = (select idEvento from tbEvento where fk_organizacao = ${globalCnpj} ORDER BY idEvento DESC LIMIT 1) 
         AND o.status = "Em andamento" AND apelidoComputador LIKE '%2';`;

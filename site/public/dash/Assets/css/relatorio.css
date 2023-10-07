@@ -1,0 +1,198 @@
+:root {
+    --app-container: #f3f6fd;
+    --main-color: #1f1c2e;
+    --secondary-color: #4A4A4A;
+    --link-color: #1f1c2e;
+    --color-yellow: #ffcc00;
+    --link-color-hover: #c3cff4;
+    --link-color-active: #fff;
+    --link-color-active-bg: #1f1c2e;
+    --projects-section: #fff;
+    --message-box-hover: #fafcff;
+    --message-box-border: #e9ebf0;
+    --more-list-bg: #fff;
+    --more-list-bg-hover: #f6fbff;
+    --more-list-shadow: rgba(209, 209, 209, 0.4);
+    --button-bg: #1f1c24;
+    --search-area-bg: #fff;
+    --star: #1ff1c2e;
+}
+
+
+/* lista de usuarios */
+.list {
+
+    width: 100%;
+}
+
+.settings {
+
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--link-color);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+.settings:hover{
+
+    color: var(--color-yellow);
+}
+
+.line {
+
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 0.3rem;
+    box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: all 0.3s;
+    flex-wrap: wrap;
+}
+
+.line:hover {
+
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.name {
+
+    font-size: 1rem;
+    color: var(--link-color);
+}
+
+.username {
+
+    font-size: 0.8rem;
+    color: var(--link-color-hover);
+}
+
+.line p {
+
+    font-size: 0.8rem;
+    color: var(--link-color);
+    font-weight: 500;
+}
+
+.user {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile span {
+
+    width: 3.5rem;
+    height: 3.5rem;
+    display: flex;
+    border-radius: 50%;
+    font-size: 30px;
+    color: var(--color-yellow);
+    align-items: center;
+    justify-content: center;
+}
+
+.user .details {
+
+    margin-left: 1.5rem;
+    line-height: 1.3;
+    text-transform: capitalize;
+}
+
+.status {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.status span {
+
+    display: inline-block;
+    width: 0.35rem;
+    height: 0.35rem;
+    border-radius: 50%;
+    background-color: green;
+}
+
+.status p {
+
+    margin-left: 0.5rem;
+}
+
+.status .inactive {
+
+    background-color: red;
+}
+
+
+a {
+
+    text-decoration: none;
+
+}
+
+/* apresentação computadores */
+
+
+
+
+.leaderboard__profiles {
+    background-color: var(--projects-section);
+    border-radius: 0 0 12px 12px;
+    padding: 10px 10px 150px;
+    display: grid;
+    row-gap: 15px;
+}
+
+.leaderboard__profile {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    align-items: center;
+    padding: 10px 30px 10px 10px;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.leaderboard__name {
+    color: #979cb0;
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: 0.64px;
+    margin-left: 12px;
+}
+
+.leaderboard__success {
+    color: #35d8ac;
+    font-weight: 700;
+    font-size: 20px;
+    text-align: right;
+}
+
+.leaderboard__fail {
+    color: #d83535;
+    font-weight: 700;
+    font-size: 20px;
+    text-align: right;
+}
+
+@media screen and (max-width: 500px) {
+
+    .profile {
+        display: none;
+    }
+
+    .phone{
+        display: none;
+    }
+}

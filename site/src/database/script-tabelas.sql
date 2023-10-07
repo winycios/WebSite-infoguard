@@ -32,12 +32,16 @@ status VARCHAR(20),
 FOREIGN KEY (fk_organizacao) REFERENCES tbOrganizacao(cnpj)
 );
     
-CREATE TABLE tbComputadores(
+CREATE TABLE tbComputador(
 
 idComputador INT PRIMARY KEY AUTO_INCREMENT,
 fk_idEvento INT,
 apelidoComputador VARCHAR(50),
 numCpu INT,
+capMaximaCpu INT,
+capMaximaGpu INT,
+capMaximaDisco INT,
+capMaximaRam INT,
 FOREIGN KEY (fk_idEvento) REFERENCES tbEvento(idEvento)
 );
 
@@ -45,9 +49,10 @@ CREATE TABLE tbOcorrencia(
 
 idOcorrencia INT PRIMARY KEY AUTO_INCREMENT,
 fk_idComputador INT,
+fk_cpfOperador CHAR(11),
 status VARCHAR(45),
-operador VARCHAR(100),
-FOREIGN KEY (fk_idComputador) REFERENCES tbComputadores(idComputador)
+FOREIGN KEY (fk_cpfOperador) REFERENCES tbUsuario(cpf),
+FOREIGN KEY (fk_idComputador) REFERENCES tbComputador(idComputador)
 );
 
 CREATE TABLE tbMonitoramento(
@@ -62,8 +67,10 @@ redeLatencia INT,
 redePacote INT,
 disco INT,
 ram INT,
-FOREIGN KEY (fk_idComputador) REFERENCES tbComputadores(idComputador)
+FOREIGN KEY (fk_idComputador) REFERENCES tbComputador(idComputador)
 );
+
+
 create user 'superOn'@'localhost' identified by '123';
 grant all privileges on SuperVisiON.* to 'superOn'@'localhost';
 flush privileges;

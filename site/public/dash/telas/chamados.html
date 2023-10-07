@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="PT-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUPERVISION - COMPUTADORES</title>
+
+    <script src="../../js/sessao.js"></script>
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+    <link rel="stylesheet" href="../Assets/css/chamados.css">
+    <link rel="stylesheet" href="../Assets/css/style.css">
+    <link rel="stylesheet" href="../Assets/css/dropdown_telas.css">
+    <link rel="stylesheet" href="../Assets/css/alert_box.css">
+
+</head>
+
+<body onload="validarSessao()">
+    <div class="app-container">
+        <div class="app-header">
+            <div class="app-header-left">
+                <span class="app-icon"></span>
+                <p class="app-name">SUPERVISI<span style="color: var(--color-yellow);">ON</span></p>
+                <div class="search-wrapper">
+                    <input class="search-input" id="valorTela" list="telas" type="search" placeholder="Pesquisar">
+                    <button onclick="pesquisarTelasPath()" class="buttonValor">
+                        <span style="color: var(--main-color);" class="material-symbols-outlined">
+                            search
+                        </span>
+                    </button>
+
+                    <datalist id="telas">
+                        <option value="Tela inicial"></option>
+                        <option value="Desktops"></option>
+                        <option value="Chamados"></option>
+                        <option value="Usuário"></option>
+                        <option value="Relatório"></option>
+                    </datalist>
+                </div>
+            </div>
+            <div class="app-header-right">
+                <button class="mode-switch" title="Switch Theme">
+                    <span class="material-symbols-outlined moon">
+                        brightness_5
+                    </span>
+                </button>
+                <button class="profile-btn">
+                    <img src="../Assets/images/user.png" />
+                    <span id="b_usuario"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- sidebar -->
+        <div class="app-content">
+            <div class="app-sidebar">
+                <a href="../index.html" class="app-sidebar-link">
+                    <span class="material-symbols-outlined">
+                        home
+                    </span>
+                </a>
+                <a href="./computadores.html" class="app-sidebar-link">
+                    <span class="material-symbols-outlined">
+                        screen_search_desktop
+                    </span>
+                </a>
+                <a href="./relatorio.html" class="app-sidebar-link">
+                    <span class="material-symbols-outlined">
+                        quick_reference
+                    </span>
+                </a>
+                <a href="./chamados.html" class="app-sidebar-link active">
+                    <span class="material-symbols-outlined">
+                        support_agent
+                    </span>
+                </a>
+                <a href="" onclick="limparSessaoTelas()" class="app-sidebar-link">
+                    <span class="material-symbols-outlined">
+                        logout
+                    </span>
+                </a>
+            </div>
+
+            <!-- card principal -->
+            <div class="box">
+                <div class="box-message" style="flex: 1; height: 100%;">
+                    <div class="projects-section">
+                        <div class="projects-section-header">
+                            <p style="text-transform: uppercase;">CHAMA<span
+                                    style="color: var(--color-yellow);">DOS</span>
+                            </p>
+                        </div>
+
+                        <!-- card pendente -->
+                        <div class="project-boxes jsGridView" style="align-items: unset">
+                            <details>
+                                <summary>
+                                    <div>
+                                        <span class="material-symbols-outlined" style="color: red;">
+                                            report
+                                        </span>
+                                        <h3>
+                                            <strong>REPORTE 1</strong>
+                                        </h3>
+                                        <span style="color: red;">EM ABERTO</span>
+                                    </div>
+                                </summary>
+                                <div>
+                                    <dl>
+                                        <div>
+                                            <dt>CPU</dt>
+                                            <h3>Temp. <span>4.27pm</span></h3>
+                                            <h3>Freq. <span>4.27pm</span></h3>
+                                        </div>
+
+                                        <div>
+                                            <dt>GPU</dt>
+                                            <h3>Temp. <span>4.27pm</span></h3>
+                                            <h3>Freq. <span>4.27pm</span></h3>
+                                        </div>
+
+                                        <div>
+                                            <dt>OPERADOR</dt>
+                                            <p>
+                                                <select>
+                                                    <option selected disabled>selecione um operador</option>
+                                                    <option value="1">Americano</option>
+                                                    <option value="2">Latte</option>
+                                                    <option value="3">Green Tea</option>
+                                                </select>
+                                            </p>
+                                            <div class="button">
+                                                <label style="cursor: pointer; text-align: center;"
+                                                    for="check_confirm">Atualizar chamado</label>
+                                            </div>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- message section -->
+                <div class="box-message"
+                    style="display: flex; flex-direction: column; gap: 20px; flex: 1; height: 100%;">
+
+                    <div class="projects-section" style="margin-left: 34px;">
+                        <div class="projects-section-header">
+                            <p style="text-transform: uppercase;">CONCLU<span
+                                    style="color: var(--color-yellow);">ÍDOS</span>
+                            </p>
+                        </div>
+
+                        <!-- card concluido -->
+                        <div class="project-boxes jsGridView" style="align-items: unset">
+                            <details>
+                                <summary>
+                                    <div>
+                                        <span class="material-symbols-outlined" style="color: green;">
+                                            task_alt
+                                        </span>
+                                        <h3>
+                                            <strong>REPORTE 1</strong>
+                                        </h3>
+                                        <span style="color: green;">CONCLUÍDO</span>
+                                    </div>
+                                </summary>
+                                <div>
+                                    <dl>
+                                        <div>
+                                            <dt>CPU</dt>
+                                            <h3>Temp. <span>4.27pm</span></h3>
+                                            <h3>Freq. <span>4.27pm</span></h3>
+                                        </div>
+
+                                        <div>
+                                            <dt>GPU</dt>
+                                            <h3>Temp. <span>4.27pm</span></h3>
+                                            <h3>Freq. <span>4.27pm</span></h3>
+                                        </div>
+
+                                        <div>
+                                            <dt>OPERADOR</dt>
+                                            <p>
+                                            <h3>Winyc</h3>
+                                            </p>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+
+                    <div class="projects-section" style="margin-left: 34px;">
+                        <div class="projects-section-header">
+                            <p style="text-transform: uppercase;">EM<span style="color: var(--color-yellow);">
+                                    ANDAMENTO</span>
+                            </p>
+                        </div>
+
+                        <!-- card andamento -->
+                        <div class="project-boxes jsGridView" style="align-items: unset">
+                            <details>
+                                <summary>
+                                    <div>
+                                        <span class="material-symbols-outlined" style="color: orange;">
+                                            rule_settings
+                                        </span>
+                                        <h3>
+                                            <strong>REPORTE 1</strong>
+                                        </h3>
+                                        <span style="color: orange;">ANDAMENTO</span>
+                                    </div>
+                                </summary>
+                                <div>
+                                    <dl>
+                                        <div>
+                                            <dt>CPU</dt>
+                                            <h3>Temp. <span>4.27pm</span></h3>
+                                            <h3>Freq. <span>4.27pm</span></h3>
+                                        </div>
+
+                                        <div>
+                                            <dt>GPU</dt>
+                                            <h3>Temp. <span>4.27pm</span></h3>
+                                            <h3>Freq. <span>4.27pm</span></h3>
+                                        </div>
+
+                                        <div>
+                                            <dt>OPERADOR</dt>
+                                            <p>
+                                            <h3>Winyc</h3>
+                                            </p>
+                                            <div class="button">
+                                                <label style="cursor: pointer; text-align: center;"
+                                                    for="check_confirm">finalizar</label>
+                                            </div>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Alerta -->
+    <div>
+        <input type="checkbox" id="check">
+        <div class="background"></div>
+        <div class="alert_box">
+            <div class="icon">
+                <span class="material-symbols-outlined">
+                    close
+                </span>
+            </div>
+            <header>Confirmar</header>
+            <p>Deseja realmente finalizar esse evento ?</p>
+            <div class="btns">
+                <label class="confirm" for="check">Cancelar</label>
+                <label class="cancel" for="check" onclick="check_confirm.checked = true">Sim, finalizar!</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- confirmação -->
+    <div>
+        <input type="checkbox" id="check_confirm">
+        <div class="background"></div>
+        <div class="alert_box">
+            <div class="icon">
+                <span class="material-symbols-outlined" style="color: #26f267; border: 3px solid #26f267;">
+                    check
+                </span>
+            </div>
+            <header>Perfeito</header>
+            <p>Ação concluída com sucesso</p>
+            <div class="btns">
+                <label class="confirm" for="check_confirm">Fechar</label>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- partial -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="../Assets/js/script.js"></script>
+</body>
+
+</html>

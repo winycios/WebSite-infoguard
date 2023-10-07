@@ -3,6 +3,8 @@
 
 * {
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 :root {
@@ -22,7 +24,6 @@
   --more-list-shadow: rgba(209, 209, 209, 0.4);
   --button-bg: #1f1c24;
   --search-area-bg: #fff;
-  --star: #1ff1c2e;
 }
 
 .dark:root {
@@ -37,7 +38,6 @@
   --search-area-bg: #1f2937;
   --message-box-hover: #243244;
   --message-box-border: rgba(255, 255, 255, .1);
-  --star: #ffd92c;
   --light-font: rgba(255, 255, 255, .8);
   --more-list-bg: #2f3142;
   --more-list-bg-hover: rgba(195, 207, 244, 0.1);
@@ -396,6 +396,7 @@ a {
   border-top: 1px solid var(--message-box-border);
   padding: 16px;
   display: flex;
+  color: var(--color-yellow);
   align-items: flex-start;
   width: 100%;
 }
@@ -598,7 +599,7 @@ a {
     overflow: auto;
   }
 
-  .projects-section{
+  .projects-section {
 
     margin-left: 0 !important;
   }

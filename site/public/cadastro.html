@@ -52,11 +52,6 @@
       <div class="card card-cadastro">
         <h2>Bem-vindo!</h2>
         <div class="formulario">
-          <!--
-                         Para inserir mais um campo, copie uma das inputs abaixo.
-                         Assim que inserir vá para o script abaixo.
-                     -->
-
           <div class="campo">
             <span>Nome:</span>
             <input id="nome_input" type="text" placeholder="Seu nome" />
@@ -72,7 +67,7 @@
           <div class="campo">
             <span>Empresa:</span>
             <select name="empresas" id="listaEmpresas">
-              <option selected>Selecione uma empresa</option>
+              <option selected value="none">Selecione uma empresa</option>
             </select>
           </div>
           <div class="campo">
@@ -103,6 +98,7 @@
 </html>
 
 <script>
+
   function cadastrar() {
 
     //Recupere o valor da nova input pelo nome do id
@@ -112,6 +108,7 @@
     var senhaVar = senha_input.value;
     var confirmacaoSenhaVar = confirmacao_senha_input.value;
     var empresaVar = listaEmpresas.value
+
     if (
       nomeVar == "" ||
       emailVar == "" ||
