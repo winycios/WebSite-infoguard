@@ -21,7 +21,6 @@
 
 /* lista de usuarios */
 .list {
-
     width: 100%;
 }
 
@@ -38,106 +37,97 @@
     transition: all 0.3s;
 }
 
-.settings:hover{
+.settings:hover {
 
     color: var(--color-yellow);
 }
 
-.line {
-
-    margin-bottom: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem 1rem;
-    border-radius: 0.3rem;
-    box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    transition: all 0.3s;
-    flex-wrap: wrap;
+table {
+    width: 100%;
 }
 
-.line:hover {
-
-    background-color: rgba(0, 0, 0, 0.1);
-}
-
-.name {
-
-    font-size: 1rem;
+table td {
     color: var(--link-color);
+    padding: 10px;
 }
 
-.username {
-
-    font-size: 0.8rem;
-    color: var(--link-color-hover);
+table td {
+    text-align: center;
+    vertical-align: middle;
 }
 
-.line p {
-
-    font-size: 0.8rem;
-    color: var(--link-color);
-    font-weight: 500;
+table td:last-child {
+    font-size: 0.95em;
+    line-height: 1.4;
+    text-align: left;
 }
 
-.user {
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.tr {
+    border: 1px solid var(--color-yellow);
+    border-radius: 10px;
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+    margin: 0.5rem 0;
 }
 
-.profile span {
-
-    width: 3.5rem;
-    height: 3.5rem;
-    display: flex;
-    border-radius: 50%;
-    font-size: 30px;
-    color: var(--color-yellow);
-    align-items: center;
-    justify-content: center;
+table tr:nth-child(2n) {
+    background-color: var(--projects-section);
 }
 
-.user .details {
-
-    margin-left: 1.5rem;
-    line-height: 1.3;
-    text-transform: capitalize;
+table tr:nth-child(2n+1) {
+    background-color: var(--app-container);
 }
 
-.status {
+@media screen and (max-width: 800px) {
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    table,
+    tr,
+    td {
+        display: grid;
+        padding: 10px;
+    }
+
+    tr {
+        padding: 10px 0;
+        position: relative;
+    }
 }
 
-.status span {
+@media screen and (max-width: 500px) {
 
-    display: inline-block;
-    width: 0.35rem;
-    height: 0.35rem;
-    border-radius: 50%;
-    background-color: green;
-}
+    td:first-child {
+        background-color: var(--projects-section);
+        border-bottom: 1px solid var(--app-container);
+        border-radius: 10px 10px 0 0;
+        position: relative;
+        top: 0;
+        transform: translateY(0);
+        width: 100%;
+    }
 
-.status p {
+    td:not(:first-child) {
+        margin: 0;
+        padding: 5px 1em;
+        width: 100%;
+    }
 
-    margin-left: 0.5rem;
-}
+    td:not(:first-child):before {
+        font-size: 0.8em;
+        padding-top: 0.3em;
+        position: relative;
+    }
 
-.status .inactive {
+    td:last-child {
+        padding-bottom: 1rem !important;
+    }
 
-    background-color: red;
-}
-
-
-a {
-
-    text-decoration: none;
-
+    tr {
+        background-color: var(--projects-section) !important;
+        border: 1px solid var(--color-yellow);
+        border-radius: 10px;
+        box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+        margin: 0.5rem 0;
+        padding: 0;
+    }
 }
 
 /* apresentação computadores */
@@ -192,7 +182,7 @@ a {
         display: none;
     }
 
-    .phone{
+    .phone {
         display: none;
     }
 }

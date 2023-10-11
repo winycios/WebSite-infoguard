@@ -77,11 +77,12 @@ select option {
     color: var(--link-color);
 }
 
-.link{
+.link {
 
     color: var(--link-color);
     transition: all 0.4s cubic-bezier(0.93, 0.88, 0.1, 0.8);
 }
+
 .dropdown__items {
     margin: 0;
     position: absolute;
@@ -97,7 +98,7 @@ select option {
     transition: all 0.4s cubic-bezier(0.93, 0.88, 0.1, 0.8);
 }
 
-.link:hover{
+.link:hover {
 
     color: #ffcc00;
 
@@ -242,15 +243,28 @@ select option {
 
 
 
-.form .input-box label{
+.form .input-box label {
 
     color: var(--link-color);
 }
+
 .input-box select:focus,
 .input-box input:focus,
 .input-box input:valid {
     border-color: var(--color-yellow);
 }
+
+.form .input-box label {
+
+    color: var(--link-color);
+}
+
+.form .direction_button {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
 
 
 .input-box.button input {
@@ -265,4 +279,18 @@ select option {
     background: none;
     color: var(--color-yellow);
     border: 2px solid var(--color-yellow);
+}
+
+.input-box.button_exc input {
+    color: #fff;
+    letter-spacing: 1px;
+    border: none;
+    background: #E91E63;
+    cursor: pointer;
+}
+
+.input-box.button_exc input:hover {
+    background: none;
+    color: #E91E63;
+    border: 2px solid #E91E63;
 }

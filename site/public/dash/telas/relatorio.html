@@ -19,7 +19,7 @@
 
 </head>
 
-<body onload="validarSessao()">
+<body onload="validarSessao(), pegarCnpj(), listar()">
     <div class="app-container">
         <div class="app-header">
             <div class="app-header-left">
@@ -88,7 +88,7 @@
             <!-- card principal -->
             <div class="box">
                 <div class="box-message" style="flex: 1; height: 100%;">
-                    <div class="projects-section">
+                    <div class="projects-section project-height">
                         <div class="projects-section-header">
                             <p style="text-transform: uppercase;">FUNCIO<span
                                     style="color: var(--color-yellow);">NÁRIOS</span>
@@ -98,59 +98,9 @@
                         <!-- card usuarios -->
                         <div class="project-boxes jsGridView" style="align-items: unset">
                             <div class="list">
-                                <div class="line">
-                                    <div class="user">
-                                        <div class="profile">
-                                            <span class="material-symbols-outlined">
-                                                account_circle
-                                            </span>
-                                        </div>
-                                        <div class="details">
-                                            <h1 class="name">Winycios alves</h1>
-                                            <h3 class="username">52769059831</h3>
-                                        </div>
-                                    </div>
-                                    <div class="status">
-                                        <span></span>
-                                        <p>Livre</p>
-                                    </div>
-                                    <div class="function">
-                                        <p>Suporte</p>
-                                    </div>
-                                    <div class="phone">
-                                        <p>11984675735</p>
-                                    </div>
-                                    <a href="#modal" role="button" class="material-symbols-outlined settings">
-                                        manage_accounts
-                                    </a>
-                                </div>
-
-                                <div class="line">
-                                    <div class="user">
-                                        <div class="profile">
-                                            <span class="material-symbols-outlined">
-                                                account_circle
-                                            </span>
-                                        </div>
-                                        <div class="details">
-                                            <h1 class="name">Lele gomes</h1>
-                                            <h3 class="username">52769059831</h3>
-                                        </div>
-                                    </div>
-                                    <div class="status">
-                                        <span class="inactive"></span>
-                                        <p>Ocupado</p>
-                                    </div>
-                                    <div class="function">
-                                        <p>Suporte</p>
-                                    </div>
-                                    <div class="phone">
-                                        <p>11984675735</p>
-                                    </div>
-                                    <a href="#modal" role="button" class="material-symbols-outlined settings">
-                                        manage_accounts
-                                    </a>
-                                </div>
+                                <table cellspacing="0">
+                                    <tbody id="usuarios_equipe"></tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -168,46 +118,7 @@
                         </div>
                         <!-- card computadores -->
                         <div class="project-boxes jsGridView" style="align-items: unset">
-                            <div class="leaderboard__profiles">
-                                <article class="leaderboard__profile">
-                                    <span class="material-symbols-outlined" style="color: var(--color-yellow);">
-                                        devices
-                                    </span>
-                                    <span class="leaderboard__name">MAQUINA 1 PIN</span>
-                                    <span class="material-symbols-outlined leaderboard__success">
-                                        radio_button_checked
-                                    </span>
-                                </article>
-
-                                <article class="leaderboard__profile">
-                                    <span class="material-symbols-outlined" style="color: var(--color-yellow);">
-                                        devices
-                                    </span>
-                                    <span class="leaderboard__name">MAQUINA 2 PIN</span>
-                                    <span class="material-symbols-outlined leaderboard__fail">
-                                        radio_button_checked
-                                    </span>
-                                </article>
-
-                                <article class="leaderboard__profile">
-                                    <span class="material-symbols-outlined" style="color: var(--color-yellow);">
-                                        devices
-                                    </span>
-                                    <span class="leaderboard__name">MAQUINA 1 TOR</span>
-                                    <span class="material-symbols-outlined leaderboard__fail">
-                                        radio_button_checked
-                                    </span>
-                                </article>
-
-                                <article class="leaderboard__profile">
-                                    <span class="material-symbols-outlined" style="color: var(--color-yellow);">
-                                        devices
-                                    </span>
-                                    <span class="leaderboard__name">MAQUINA 1 TOR</span>
-                                    <span class="material-symbols-outlined leaderboard__success">
-                                        radio_button_checked
-                                    </span>
-                                </article>
+                            <div class="leaderboard__profiles" id="computadores">
                             </div>
                         </div>
                     </div>
@@ -285,18 +196,24 @@
                     <div class="wrapper">
                         <div class="form">
                             <div class="input-box">
-                                <label>Nome</label>
-                                <input type="text" placeholder="winyc" required>
+                                <label>CPF</label>
+                                <div id="pegar_cpf"></div>
                             </div>
                             <div class="input-box">
                                 <label>FUNÇÃO :</label>
                                 <select>
-                                    <option selected disabled>Suporte</option>
+                                    <option selected>Suporte</option>
                                     <option value="1">Gerência</option>
                                 </select>
                             </div>
-                            <div class="input-box button">
-                                <input type="Submit" value="Atualizar dados">
+                            <div class="direction_button">
+                                <div class="input-box button">
+                                    <input type="Submit" value="Atualizar dados">
+                                </div>
+                                <div class="input-box button_exc">
+                                    <input type="Submit" for="check" onclick="check.checked = true;" role="button"
+                                        value="Excluir usuário">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -316,10 +233,10 @@
                 </span>
             </div>
             <header>Confirmar</header>
-            <p>Deseja realmente finalizar esse evento ?</p>
+            <p>Deseja realmente excluir esse usuário ?</p>
             <div class="btns">
                 <label class="confirm" for="check">Cancelar</label>
-                <label class="cancel" for="check" onclick="check_confirm.checked = true">Sim, finalizar!</label>
+                <label class="cancel" for="check" onclick="excluirUser()">Sim, finalizar!</label>
             </div>
         </div>
     </div>
@@ -335,9 +252,27 @@
                 </span>
             </div>
             <header>Perfeito</header>
-            <p>Ação concluída com sucesso</p>
+            <p id="texto_sucesso"></p>
             <div class="btns">
-                <label class="confirm" for="check_confirm">Fechar</label>
+                <label class="confirm">Fechar</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- erro -->
+    <div>
+        <input type="checkbox" id="check_error">
+        <div class="background"></div>
+        <div class="alert_box">
+            <div class="icon">
+                <span class="material-symbols-outlined">
+                    close
+                </span>
+            </div>
+            <header>ERRO</header>
+            <p id="texto_erro"></p>
+            <div class="btns">
+                <label class="confirm">Fechar</label>
             </div>
         </div>
     </div>
@@ -347,3 +282,153 @@
 </body>
 
 </html>
+
+<script>
+    function excluirUser() {
+        var cpfvar = cpf_usuario.value;
+
+        // Enviando o valor da nova input
+        fetch("/relatorio/excluirUser", {
+            method: "delete",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+
+                cpfServer: cpfvar,
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+                if (!resposta.ok) {
+
+                    resposta.json().then(function (data) {
+                        var erro = data.mensagem;
+
+                        check_error.checked = true;
+                        texto_erro.innerHTML = erro;
+
+                        setTimeout(function () {
+                            check_error.checked = false;
+                        }, 1500);
+                    });
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+        check_confirm.checked = true;
+        texto_sucesso.innerHTML = "Usuário apagado com sucesso !";
+
+        setTimeout(function () {
+            window.location = "relatorio.html";
+            check_confirm.checked = false;
+        }, 1500);
+
+
+        return false;
+    }
+
+    function pegarCnpj() {
+        var cnpjVar = sessionStorage.CNPJ_ORGANIZACAO;
+
+        // Retornando a Promise
+        // Enviando o valor da nova input
+        fetch("/relatorio/pegarCnpj", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                cnpjServer: cnpjVar,
+
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+            })
+            .catch(function (erro) {
+                console.log(`#ERRO: ${erro}`);
+            });
+    }
+
+    // listar usuarios
+    function listar() {
+        var equipe = document.querySelector('#usuarios_equipe');
+        var pcs = document.querySelector('#computadores');
+
+        fetch(`/relatorio/plotar_equipe`, {
+            method: "GET", cache: 'no-store'
+        }).then(function (resposta) {
+            resposta.json().then((eventos) => {
+                eventos.forEach((registro) => {
+                    if (registro.statusServico != "livre") {
+                        equipe.innerHTML += `<tr class="tr">
+                                            <td><span class="material-symbols-outlined settings">
+                                                account_circle
+                                            </span></td>
+                                            <td>${registro.nome}</td>
+                                            <td style="color:red;">${registro.statusServico}</td>
+                                            <td>${registro.cargo}</td>
+                                            <td>${registro.telefone} </td>
+                                            <td> <a href="#modal" role="button" class="material-symbols-outlined settings">
+                                                manage_accounts
+                                            </a></td>
+                                            </tr>
+                      `
+                    } else {
+                        equipe.innerHTML += `<tr class="tr">
+                          <td><span class="material-symbols-outlined settings">
+                                                account_circle
+                                            </span></td>
+                                        <td>${registro.nome}</td>
+                                        <td style="color:green;">${registro.statusServico}</td>
+                                        <td>${registro.cargo}</td>
+                                        <td>${registro.telefone} </td>
+                                        <td> <a href="#modal" role="button" class="material-symbols-outlined settings">
+                                                manage_accounts
+                                            </a></td>
+                                            </tr> `
+                    }
+                    pegar_cpf.innerHTML = `<input type="text" id="cpf_usuario" value="${registro.cpf}" readonly>`;
+                });
+            });
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+        });
+
+        // computadores
+        fetch(`/relatorio/plotar_computadores`, {
+            method: "GET", cache: 'no-store'
+        }).then(function (resposta) {
+            console.log("resposta: ", resposta);
+            if (!resposta.ok) {
+
+                resposta.json().then(function (data) {
+                    var erro = data.mensagem;
+
+                    pcs.innerHTML = erro;
+                });
+            } else {
+                resposta.json().then((eventos) => {
+                    eventos.forEach((registro) => {
+
+                        pcs.innerHTML += `<article class="leaderboard__profile">
+                                    <span class="material-symbols-outlined" style="color: var(--color-yellow);">
+                                        devices
+                                    </span>
+                                    <span class="leaderboard__name">${registro.apelidoComputador}</span>
+                                    <span class="material-symbols-outlined leaderboard__success">
+                                        radio_button_checked
+                                    </span>
+                                </article>`
+                    });
+                });
+            }
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+        });
+    }
+</script>

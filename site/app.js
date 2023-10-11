@@ -8,6 +8,7 @@ var PORTA = process.env.AMBIENTE_PROCESSO == "desenvolvimento" ? 3333 : 8080;
 
 var app = express();
 
+var relatorioRouter = require("./src/routes/relatorio");
 var eventoRouter = require("./src/routes/eventos");
 var usuarioRouter = require("./src/routes/usuarios");
 var organizacaoRouter = require("./src/routes/organizacao");
@@ -18,6 +19,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(cors());
 
+app.use("/relatorio", relatorioRouter);
 app.use("/evento", eventoRouter);
 app.use("/usuarios", usuarioRouter);
 app.use("/organizacao", organizacaoRouter);

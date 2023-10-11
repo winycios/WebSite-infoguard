@@ -64,7 +64,7 @@
                     <div class="input-box">
                         <span>Organização</span>
                         <select id="select_organização">
-                            <option selected disabled>Escolha sua organização</option>
+                            <option selected disabled value="">Escolha sua organização</option>
                         </select>
 
                         <h6>Não encontrou sua empresa ? <a href="#" onclick="show.checked = true;">clique aqui</a></h6>
@@ -158,7 +158,6 @@
         input_cnpj.value = cnpjFormatado;
     }
 
-
     // cadastrar usuario
     function cadastrar() {
 
@@ -240,7 +239,7 @@
                             box.style.display = "none";
                         }, 1500);
 
-                    }  else {
+                    } else {
                         resposta.json().then(function (data) {
                             var erro = data.mensagem;
 

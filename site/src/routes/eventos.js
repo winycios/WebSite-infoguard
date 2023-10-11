@@ -13,7 +13,7 @@ router.post("/pegarCnpj", function (req, res) {
     eventoController.pegarCnpj(req, res);
 });
 
-router.post("/finalizar", function (req, res) {
+router.put("/finalizar", function (req, res) {
     eventoController.finalizar(req, res);
 });
 

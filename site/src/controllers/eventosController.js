@@ -92,7 +92,9 @@ function listarPCE1(req, res) {
         if (resultado.length > 0) {
             res.status(200).json(resultado);
         } else {
-            res.status(204).send("Nenhum resultado encontrado!")
+            res
+            .status(401)
+            .json({ mensagem: `Nenhum evento acontecendo no momento` });
         }
     });
 }
@@ -102,7 +104,9 @@ function listarPCE2(req, res) {
         if (resultado.length > 0) {
             res.status(200).json(resultado);
         } else {
-            res.status(204).send("Nenhum resultado encontrado!")
+            res
+            .status(401)
+            .json({ mensagem: `Nenhum evento acontecendo no momento` });
         }
     });
 }
@@ -113,7 +117,9 @@ function plotar_equipe(req, res) {
         if (resultado.length > 0) {
             res.status(200).json(resultado);
         } else {
-            res.status(204).send("Nenhum resultado encontrado!")
+            res
+            .status(401)
+            .json({ mensagem: `Nenhum evento acontecendo no momento` });
         }
     });
 }
