@@ -12,7 +12,7 @@ function buscarPorCpf(cpf) {
 function autenticar(cpf, senha) {
     console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ", cpf, senha)
     var instrucao = `
-    SELECT cpf, fk_organizacao as 'cnpj', u.nome as 'user', o.nome as 'org' FROM tbUsuario u
+    SELECT cpf, fk_organizacao as 'cnpj', u.nome as 'user', o.nome as 'org',cargo FROM tbUsuario u
         inner join tbOrganizacao o ON u.fk_organizacao = o.cnpj
             WHERE cpf = '${cpf}' AND senha = '${senha}';
     `;

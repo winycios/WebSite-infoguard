@@ -9,6 +9,13 @@ function pegarCnpj(cnpj) {
         resolve(globalCnpj);
     });
 }
+// Atualizar cargo do funcionario
+function updateUser(cpf, cargo) {
+
+    var query = `update tbUsuario set cargo = "${cargo}" where cpf = ${cpf};`;
+
+    return database.executar(query);
+}
 
 // buscar usuarios de uma organização
 function buscarPorUser() {
@@ -57,11 +64,29 @@ function plotar_computadores() {
     }
 }
 
+// plotar computadores
+function plotar_chamado() {
+    if (globalCnpj == undefined) {
+    } else {
+        console.log("select dos chamados");
+        var instrucao = `
+        select c.apelidoComputador, o.status, o.descricao, u.nome, o.hora from tbComputador c 
+        INNER JOIN tbOcorrencia o ON c.idComputador = o.fk_idComputador
+        LEFT JOIN tbUsuario u ON u.cpf = o.fk_cpfOperador where fk_idEvento = (select idEvento from tbEvento where fk_organizacao = ${globalCnpj} AND status = "Em andamento");
+        `;
+
+        console.log("Executando a instrução SQL: \n" + instrucao);
+        return database.executar(instrucao);
+    }
+}
+
 module.exports = {
 
     pegarCnpj,
     plotar_computadores,
+    plotar_chamado,
     plotar_equipe,
     buscarPorUser,
+    updateUser,
     excluirUser
 };

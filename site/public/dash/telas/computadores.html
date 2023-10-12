@@ -67,17 +67,6 @@
                         screen_search_desktop
                     </span>
                 </a>
-                <a href="./relatorio.html" class="app-sidebar-link">
-                    <span class="material-symbols-outlined">
-                        quick_reference
-                    </span>
-                </a>
-                <a href="./chamados.html" class="app-sidebar-link">
-                    <span class="material-symbols-outlined">
-                        support_agent
-                    </span>
-                </a>
-
                 <!-- dropdown -->
                 <div class="dropdown">
                     <input type="checkbox" id="dropdown">
@@ -99,6 +88,13 @@
                         </a>
                     </ul>
                 </div>
+                <span id="cargo"></span>
+                <a href="./chamados.html" class="app-sidebar-link">
+                    <span class="material-symbols-outlined">
+                        support_agent
+                    </span>
+                </a>
+
                 <a href="" onclick="limparSessaoTelas()" class="app-sidebar-link">
                     <span class="material-symbols-outlined">
                         logout
@@ -231,7 +227,7 @@
                                 <input type="text" id="at_input_evento" placeholder="" required>
                             </div>
                             <div class="input-box button">
-                                <input type="Submit" value="Atualizar evento">
+                                <input type="Submit" onclick="updateEvento()" value="Atualizar evento">
                             </div>
                         </div>
                     </div>
@@ -407,6 +403,59 @@
             });
     }
 
+    function updateEvento() {
+        // Agora vá para o método fetch logo abaixo
+        var equipe1Var = at_input_equipe1.value;
+        var equipe2Var = at_input_equipe2.value;
+        var eventoVar = at_input_evento.value;
+        var cnpjVar = sessionStorage.CNPJ_ORGANIZACAO;
+
+        // Enviando o valor da nova input
+        fetch("/evento/updateEvento", {
+            method: "put",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                equipe1Server: equipe1Var,
+                equipe2Server: equipe2Var,
+                eventoServer: eventoVar,
+                cnpjServer: cnpjVar,
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+                if (!resposta.ok) {
+
+                    resposta.json().then(function (data) {
+                        var erro = data.mensagem;
+
+                        check_error.checked = true;
+                        texto_erro.innerHTML = erro;
+
+                        setTimeout(function () {
+                            check_error.checked = false;
+                        }, 1500);
+                    });
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+        check_confirm.checked = true;
+        texto_sucesso.innerHTML = "Evento atualizado com sucesso !";
+
+        setTimeout(function () {
+            window.location = "computadores.html";
+            check_confirm.checked = false;
+        }, 1500);
+
+
+        return false;
+    }
+
 
     // finalizar evento
     function finalizar() {
@@ -476,7 +525,7 @@
                     var erro = data.mensagem;
 
                     desks.forEach(desks => {
-                        desks.innerHTML = erro;
+                        desks.innerHTML = `<p style="color: var(--link-color)">${erro}</p>`;
                     });
                 });
             } else {
@@ -539,5 +588,4 @@
                 console.log(`#ERRO: ${resposta}`);
             });
     }
-
 </script>

@@ -20,6 +20,83 @@ function finalizar(confirm, cnpj) {
     });
 }
 
+// finalizar evento
+function updateEvento(e1, e2, evento, cnpj) {
+    return new Promise((resolve, reject) => {
+        buscarPorEvento(cnpj)
+            .then((response) => {
+                const idAtual = response[0].idEvento;
+                var query = `update tbEvento set time1 = "${e1}", time2 = "${e2}", nome = "${evento}"  where idEvento = ${idAtual};`;
+
+                setTimeout(function () {
+                    trocarNome1(e1, idAtual)
+                    trocarNome2(e2, idAtual)
+                        .then(() => {
+                            database.executar(query)
+                                .then(() => resolve("Evento atualizado com sucesso"))
+                                .catch((error) => reject(error));
+                        })
+                        .catch((error) => reject(error));
+                }, 1000);
+            })
+            .catch((error) => reject(error));
+    });
+}
+
+function trocarNome1(e1, idAtual) {
+    var id = idAtual;
+    return new Promise((resolve, reject) => {
+        database.executar(`SELECT time1 FROM tbEvento WHERE idEvento = ${id};`)
+            .then((rows) => {
+                const time = rows[0].time1;
+
+                database.executar(`SELECT count(apelidoComputador) as "contador" FROM tbComputador WHERE fk_idEvento = ${id} AND apelidoComputador LIKE "%${rows[0].time1}";`)
+                    .then((rows) => {
+                        const timeCount = rows[0].contador;
+
+                        const promises = [];
+                        for (let index = 1; index <= timeCount; index++) {
+                            promises.push(
+                                database.executar(`UPDATE tbComputador SET apelidoComputador = 'PC${index}' ' ${e1}' WHERE apelidoComputador LIKE "PC${index} ${time}" ;`)
+                            );
+                        }
+                        Promise.all(promises)
+                            .then(() => resolve("Nomes trocados com sucesso"))
+                            .catch((error) => reject(error));
+                    })
+                    .catch((error) => reject(error));
+            })
+            .catch((error) => reject(error));
+    });
+}
+
+function trocarNome2(e2, idAtual) {
+    var id = idAtual;
+    return new Promise((resolve, reject) => {
+        database.executar(`SELECT time2 FROM tbEvento WHERE idEvento = ${id};`)
+            .then((rows) => {
+                const time = rows[0].time2;
+
+                database.executar(`SELECT count(apelidoComputador) as "contador" FROM tbComputador WHERE fk_idEvento = ${id} AND apelidoComputador LIKE "%${rows[0].time2}";`)
+                    .then((rows) => {
+                        const timeCount = rows[0].contador;
+
+                        const promises = [];
+                        for (let index = 1; index <= timeCount; index++) {
+                            promises.push(
+                                database.executar(`UPDATE tbComputador SET apelidoComputador = 'PC${index}' ' ${e2}' WHERE apelidoComputador LIKE "PC${index} ${time}" ;`)
+                            );
+                        }
+                        Promise.all(promises)
+                            .then(() => resolve("Nomes trocados com sucesso"))
+                            .catch((error) => reject(error));
+                    })
+                    .catch((error) => reject(error));
+            })
+            .catch((error) => reject(error));
+    });
+}
+
 // cnpj da organização
 function pegarCnpj(cnpj) {
     return new Promise((resolve) => {
@@ -40,11 +117,11 @@ function cadastrar(equipe1, equipe2, evento, qtd, cnpj) {
     console.log("Executando a instrução SQL: \n" + instrucao);
 
     return setTimeout(function () {
-        desktop(qtd, cnpj);
+        desktop(qtd, cnpj, equipe1, equipe2);
     }, 2000), database.executar(instrucao);
 }
 
-function desktop(qtd, cnpj) {
+function desktop(qtd, cnpj, equipe1, equipe2) {
     return new Promise(() => {
         database.executar(`select idEvento as 'id' from tbEvento where fk_organizacao = '${cnpj}' AND status = 'Em andamento';`)
             .then((rows) => {
@@ -55,13 +132,13 @@ function desktop(qtd, cnpj) {
                 const promises = [];
                 for (let index = 1; index <= qtd; index++) {
                     promises.push(
-                        database.executar(`insert into tbComputador (idComputador,fk_idEvento,apelidoComputador) values (null, '${idAtual}' , 'PC${index} E1');`)
+                        database.executar(`insert into tbComputador (idComputador,fk_idEvento,apelidoComputador) values (null, '${idAtual}' , 'PC${index}' ' ${equipe1}');`)
                     );
                 }
                 // criação dos computadores da equipe 2
                 for (let index = 1; index <= qtd; index++) {
                     promises.push(
-                        database.executar(`insert into tbComputador (idComputador,fk_idEvento,apelidoComputador) values (null, '${idAtual}' , 'PC${index} E2');`)
+                        database.executar(`insert into tbComputador (idComputador,fk_idEvento,apelidoComputador) values (null, '${idAtual}' , 'PC${index}' ' ${equipe2}');`)
                     );
                 }
             });
@@ -85,30 +162,54 @@ function plotar_equipe() {
 }
 
 /* listar maquinas*/
-
 function listarPCE1() {
     if (globalCnpj == undefined) {
+        return Promise.reject("CNPJ não definido");
     } else {
-        var query = `select apelidoComputador as 'e1' from tbComputador c
-        inner join tbEvento o ON c.fk_idEvento = o.idEvento
-        where fk_idEvento = (select idEvento from tbEvento where fk_organizacao = ${globalCnpj} ORDER BY idEvento DESC LIMIT 1) 
-        AND o.status = "Em andamento" AND apelidoComputador LIKE '%1';`;
+        return new Promise((resolve, reject) => {
+            database.executar(`SELECT time1 FROM tbEvento WHERE fk_organizacao = ${globalCnpj} AND status = "Em andamento";`)
+                .then((rows) => {
+                    if (rows.length == 0) {
+                        reject("Nenhum evento em andamento encontrado");
+                        return;
+                    }
 
+                    const time = rows[0].time1;
+                    const query = `SELECT apelidoComputador AS 'e1' FROM tbComputador c
+                        INNER JOIN tbEvento o ON c.fk_idEvento = o.idEvento
+                        WHERE fk_idEvento = (SELECT idEvento FROM tbEvento WHERE fk_organizacao = ${globalCnpj} ORDER BY idEvento DESC LIMIT 1) 
+                        AND o.status = "Em andamento" AND apelidoComputador LIKE  '%${time}';`;
 
-        return database.executar(query);
+                    return database.executar(query);
+                })
+                .then((result) => resolve(result))
+                .catch((error) => reject(error));
+        });
     }
 }
+
 
 function listarPCE2() {
     if (globalCnpj == undefined) {
     } else {
-        var query = `select apelidoComputador as 'e2' from tbComputador c
-        inner join tbEvento o ON c.fk_idEvento = o.idEvento
-        where fk_idEvento = (select idEvento from tbEvento where fk_organizacao = ${globalCnpj} ORDER BY idEvento DESC LIMIT 1) 
-        AND o.status = "Em andamento" AND apelidoComputador LIKE '%2';`;
+        return new Promise((resolve, reject) => {
+            database.executar(`select time2 from tbEvento where fk_organizacao = ${globalCnpj} AND status = "Em andamento";`)
+                .then((rows) => {
+                    if (rows.length == 0) {
+                        reject("Nenhum evento em andamento encontrado");
+                        return;
+                    }
+                    const time = rows[0].time2;
+                    var query = `select apelidoComputador as 'e2' from tbComputador c
+            inner join tbEvento o ON c.fk_idEvento = o.idEvento
+            where fk_idEvento = (select idEvento from tbEvento where fk_organizacao = ${globalCnpj} ORDER BY idEvento DESC LIMIT 1) 
+            AND o.status = "Em andamento" AND apelidoComputador LIKE '%${time}';`;
 
-        // Retorna uma Promise que resolve com o resultado da execução do query
-        return database.executar(query);
+                    return database.executar(query);
+                })
+                .then((result) => resolve(result))
+                .catch((error) => reject(error));
+        });
     }
 }
 
@@ -121,5 +222,6 @@ module.exports = {
     finalizar,
     listarPCE2,
     listarPCE1,
+    updateEvento,
     pegarCnpj
 };

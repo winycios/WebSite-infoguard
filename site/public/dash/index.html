@@ -18,7 +18,7 @@
 
 </head>
 
-<body onload="validarTelaInicial()">
+<body onload="validarTelaInicial(), listar(), pegarCnpj()">
   <div class="app-container">
     <div class="app-header">
       <div class="app-header-left">
@@ -69,10 +69,7 @@
             screen_search_desktop
           </span>
         </a>
-        <a href="./telas/relatorio.html" class="app-sidebar-link">
-          <span class="material-symbols-outlined">
-            quick_reference
-          </span>
+        <span id="cargo"></span>
         </a>
         <a href="./telas/chamados.html" class="app-sidebar-link">
           <span class="material-symbols-outlined">
@@ -118,89 +115,7 @@
           <div class="projects-section-header">
             <p style="text-transform: uppercase;">Chama<span style="color: var(--color-yellow);">dos</span></p>
           </div>
-          <div class="messages">
-            <div class="message-box">
-              <span class="material-symbols-outlined">
-                devices
-              </span>
-              <div class="message-content">
-                <div class="message-header">
-                  <div class="name">USER </div>
-                  <div class="star-checkbox">
-                  </div>
-                </div>
-                <p class="message-line">
-                  Teste de mensagem
-                </p>
-                <p class="message-line time">
-                  Status
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div class="messages">
-            <div class="message-box">
-              <span class="material-symbols-outlined">
-                devices
-              </span>
-              <div class="message-content">
-                <div class="message-header">
-                  <div class="name">USER </div>
-                  <div class="star-checkbox">
-                  </div>
-                </div>
-                <p class="message-line">
-                  Teste de mensagem
-                </p>
-                <p class="message-line time">
-                  Status
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div class="messages">
-            <div class="message-box">
-              <span class="material-symbols-outlined">
-                devices
-              </span>
-              <div class="message-content">
-                <div class="message-header">
-                  <div class="name">USER </div>
-                  <div class="star-checkbox">
-                  </div>
-                </div>
-                <p class="message-line">
-                  Teste de mensagem
-                </p>
-                <p class="message-line time">
-                  Status
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div class="messages">
-            <div class="message-box">
-              <span class="material-symbols-outlined">
-                devices
-              </span>
-              <div class="message-content">
-                <div class="message-header">
-                  <div class="name">USER </div>
-                  <div class="star-checkbox">
-                  </div>
-                </div>
-                <p class="message-line">
-                  Teste de mensagem
-                </p>
-                <p class="message-line time">
-                  Status
-                </p>
-              </div>
-            </div>
-          </div>
+          <div id="chamado"></div>
         </div>
       </div>
     </div>
@@ -253,4 +168,148 @@
         break;
     }
   }
+
+
+  function listar() {
+    fetch(`/relatorio/plotar_chamado`, {
+      method: "GET", cache: 'no-store'
+    }).then(function (resposta) {
+      console.log("resposta: ", resposta);
+      if (!resposta.ok) {
+
+        resposta.json().then(function (data) {
+          var erro = data.mensagem;
+
+          chamado.innerHTML = `<p style="color: var(--link-color)">${erro}</p>`;
+        });
+      } else {
+        resposta.json().then((eventos) => {
+          eventos.forEach((registro) => {
+            const dataAtual = new Date(registro.hora);
+            const opcoesDeFormato = {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              hour: 'numeric',
+              minute: 'numeric',
+              second: 'numeric',
+              hour12: false // Usar formato de 24 horas 
+            };
+            const dataFormatada = dataAtual.toLocaleDateString('pt-BR', opcoesDeFormato);
+
+            if (registro.status == "Pendente") {
+              chamado.innerHTML += `<div class="messages">
+                                <div class="message-box">
+                                    <span class="material-symbols-outlined">
+                                        report
+                                    </span>
+                                    <div class="message-content">
+                                        <div class="message-header">
+                                            <div class="name">${registro.apelidoComputador}</div>
+                                            <div class="star-checkbox">
+                                            </div>
+                                        </div>
+                                        <p class="message-line">
+                                            Operador : ${registro.nome}
+                                        </p>
+                                        <p class="message-line">
+                                            Operador : ${registro.descricao}
+                                        </p>
+                                        <p class="message-line time" style="color:red;">
+                                            ${registro.status}
+                                        </p>
+                                        <p class="message-line time">
+                                            ${dataFormatada}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>`
+            } else if (registro.status == "Em andamento") {
+              chamado.innerHTML += `<div class="messages">
+                                <div class="message-box">
+                                    <span class="material-symbols-outlined">
+                                        report
+                                    </span>
+                                    <div class="message-content">
+                                        <div class="message-header">
+                                            <div class="name">${registro.apelidoComputador}</div>
+                                            <div class="star-checkbox">
+                                            </div>
+                                        </div>
+                                        <p class="message-line">
+                                            Operador : ${registro.nome}
+                                        </p>
+                                        <p class="message-line">
+                                            Operador : ${registro.descricao}
+                                        </p>
+                                        <p class="message-line time" style="color: orange">
+                                            ${registro.status}
+                                        </p>
+                                        <p class="message-line time">
+                                            ${dataFormatada}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>`
+            } else {
+              chamado.innerHTML += `<div class="messages">
+                                <div class="message-box">
+                                    <span class="material-symbols-outlined">
+                                        report
+                                    </span>
+                                    <div class="message-content">
+                                        <div class="message-header">
+                                            <div class="name">${registro.apelidoComputador}</div>
+                                            <div class="star-checkbox">
+                                            </div>
+                                        </div>
+                                        <p class="message-line">
+                                            Operador : ${registro.nome}
+                                        </p>
+                                        <p class="message-line">
+                                            Operador : ${registro.descricao}
+                                        </p>
+                                        <p class="message-line time" style="color: green">
+                                            ${registro.status}
+                                        </p>
+                                        <p class="message-line time">
+                                            ${dataFormatada}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>`
+            }
+          });
+        });
+      }
+    }).catch(function (resposta) {
+      console.log(`#ERRO: ${resposta}`);
+    });
+  }
+
+  function pegarCnpj() {
+    var cnpjVar = sessionStorage.CNPJ_ORGANIZACAO;
+
+    // Retornando a Promise
+    // Enviando o valor da nova input
+    fetch("/relatorio/pegarCnpj", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        // crie um atributo que recebe o valor recuperado aqui
+        // Agora vá para o arquivo routes/usuario.js
+        cnpjServer: cnpjVar,
+
+      }),
+    })
+      .then(function (resposta) {
+        console.log("resposta: ", resposta);
+      })
+      .catch(function (erro) {
+        console.log(`#ERRO: ${erro}`);
+      });
+  }
+
 </script>

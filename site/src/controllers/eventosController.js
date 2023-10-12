@@ -76,6 +76,26 @@ function finalizar(req, res) {
     });
 }
 
+function updateEvento(req, res) {
+    // Crie uma variável que vá recuperar os valores
+    var e1 = req.body.equipe1Server;
+    var e2 = req.body.equipe2Server;
+    var evento = req.body.eventoServer;
+    var cnpj = req.body.cnpjServer;
+
+    eventosModel.buscarPorEvento(cnpj).then((resultado) => {
+        if (resultado.length > 0) {
+            // verifica se o usuario já existe
+            eventosModel.updateEvento(e1, e2, evento, cnpj).then((resultado) => {
+                res.status(200).json(resultado);
+            });
+        } else {
+                res
+                .status(401)
+                .json({ mensagem: `Sua organização não tem nenhum evento em andamento` });
+        }
+    });
+}
 // pegar cnpj
 function pegarCnpj(req, res) {
     var cnpj = req.body.cnpjServer;
@@ -87,29 +107,42 @@ function pegarCnpj(req, res) {
 
 // metodos get
 // listar computadores
+// listar computadores
 function listarPCE1(req, res) {
-    eventosModel.listarPCE1().then((resultado) => {
-        if (resultado.length > 0) {
-            res.status(200).json(resultado);
-        } else {
-            res
-            .status(401)
-            .json({ mensagem: `Nenhum evento acontecendo no momento` });
-        }
-    });
+    eventosModel.listarPCE1()
+        .then((resultado) => {
+            if (resultado.length > 0) {
+                res.status(200).json(resultado);
+            } else {
+                res
+                    .status(401)
+                    .json({ mensagem: `Nenhum evento acontecendo no momento` });
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).json({ mensagem: 'Erro ao listar computadores' });
+        });
 }
 
+
 function listarPCE2(req, res) {
-    eventosModel.listarPCE2().then((resultado) => {
-        if (resultado.length > 0) {
-            res.status(200).json(resultado);
-        } else {
-            res
-            .status(401)
-            .json({ mensagem: `Nenhum evento acontecendo no momento` });
-        }
-    });
+    eventosModel.listarPCE2()
+        .then((resultado) => {
+            if (resultado.length > 0) {
+                res.status(200).json(resultado);
+            } else {
+                res
+                    .status(401)
+                    .json({ mensagem: `Nenhum evento acontecendo no momento` });
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).json({ mensagem: 'Erro ao listar computadores' });
+        });
 }
+
 
 /* select das equipes e nome do evento*/
 function plotar_equipe(req, res) {
@@ -129,6 +162,7 @@ module.exports = {
     buscarPorEvento,
     plotar_equipe,
     pegarCnpj,
+    updateEvento,
     listarPCE1,
     listarPCE2,
     finalizar

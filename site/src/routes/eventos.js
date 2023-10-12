@@ -17,6 +17,10 @@ router.put("/finalizar", function (req, res) {
     eventoController.finalizar(req, res);
 });
 
+router.put("/updateEvento", function (req, res) {
+    eventoController.updateEvento(req, res);
+});
+
 // metodos get
 
 //mostrar dados das equipes

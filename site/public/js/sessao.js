@@ -3,7 +3,10 @@ function validarSessao() {
     var cpf = sessionStorage.CPF_USUARIO;
     var nome = sessionStorage.NOME_USUARIO;
     var org = sessionStorage.CNPJ_ORGANIZACAO;
+    var cargoUser = sessionStorage.CARGO_USUARIO;
+    
 
+    var cargo = document.getElementById("cargo");
     var b_usuario = document.getElementById("b_usuario");
 
     if (cpf != null) {
@@ -11,15 +14,25 @@ function validarSessao() {
     } else {
         window.location = "../../login-cadastro/Login.html";
     }
+
+    if (cargoUser == "Gerente") {
+        cargo.innerHTML = ` <a href="./relatorio.html" class="app-sidebar-link">
+        <span class="material-symbols-outlined">
+            quick_reference
+        </span>
+    </a>`
+    }
 }
 
 function validarTelaInicial() {
     var cpf = sessionStorage.CPF_USUARIO;
     var nome = sessionStorage.NOME_USUARIO;
     var org = sessionStorage.NOME_ORGANIZACAO;
+    var cargoUser = sessionStorage.CARGO_USUARIO;
 
     var b_usuario = document.getElementById("b_usuario");
     var b_org = document.getElementById("b_org");
+    var cargo = document.getElementById("cargo");
 
     if (cpf != null) {
         b_usuario.innerHTML = nome;
@@ -27,6 +40,14 @@ function validarTelaInicial() {
 
     } else {
         window.location = "../login-cadastro/Login.html";
+    }
+
+    if (cargoUser == "Gerente") {
+        cargo.innerHTML = ` <a href="./telas/relatorio.html" class="app-sidebar-link">
+        <span class="material-symbols-outlined">
+          quick_reference
+        </span>
+        </a>`
     }
 }
 

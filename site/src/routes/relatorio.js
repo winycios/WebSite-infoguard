@@ -11,6 +11,10 @@ router.post("/pegarCnpj", function (req, res) {
     relatorioController.pegarCnpj(req, res);
 });
 
+
+router.put("/updateUser", function (req, res) {
+    relatorioController.updateUser(req, res);
+});
 // metodos get
 
 //mostrar as pessoas da equipe de suporte
@@ -22,6 +26,8 @@ router.get("/plotar_computadores", function (req, res) {
     relatorioController.plotar_computadores(req, res);
 });
 
-
+router.get("/plotar_chamado", function (req, res) {
+    relatorioController.plotar_chamado(req, res);
+});
 
 module.exports = router;

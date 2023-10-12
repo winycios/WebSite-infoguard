@@ -68,11 +68,7 @@
                         screen_search_desktop
                     </span>
                 </a>
-                <a href="./relatorio.html" class="app-sidebar-link active">
-                    <span class="material-symbols-outlined">
-                        quick_reference
-                    </span>
-                </a>
+                <span id="cargo"></span>
                 <a href="./chamados.html" class="app-sidebar-link">
                     <span class="material-symbols-outlined">
                         support_agent
@@ -131,48 +127,7 @@
                         </div>
 
                         <!-- card chamados -->
-                        <div class="project-boxes jsGridView" style="align-items: unset">
-                            <div class="messages">
-                                <div class="message-box">
-                                    <span class="material-symbols-outlined">
-                                        report
-                                    </span>
-                                    <div class="message-content">
-                                        <div class="message-header">
-                                            <div class="name">CHAMADO 1</div>
-                                            <div class="star-checkbox">
-                                            </div>
-                                        </div>
-                                        <p class="message-line">
-                                            Operador : winyc
-                                        </p>
-                                        <p class="message-line time">
-                                            Concluido
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="messages">
-                                <div class="message-box">
-                                    <span class="material-symbols-outlined">
-                                        report
-                                    </span>
-                                    <div class="message-content">
-                                        <div class="message-header">
-                                            <div class="name">CHAMADO 2</div>
-                                            <div class="star-checkbox">
-                                            </div>
-                                        </div>
-                                        <p class="message-line">
-                                            Operador : none
-                                        </p>
-                                        <p class="message-line time">
-                                            Em andamento
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="project-boxes jsGridView" style="align-items: unset" id="chamado">
                         </div>
                     </div>
                 </div>
@@ -196,19 +151,19 @@
                     <div class="wrapper">
                         <div class="form">
                             <div class="input-box">
-                                <label>CPF</label>
-                                <div id="pegar_cpf"></div>
+                                <label>NOME DO FUNCIONÁRIO</label>
+                                <div id="pegar_nome"></div>
                             </div>
                             <div class="input-box">
                                 <label>FUNÇÃO :</label>
-                                <select>
-                                    <option selected>Suporte</option>
-                                    <option value="1">Gerência</option>
+                                <select id="select_cargo">
+                                    <option selected value="Suporte">Suporte</option>
+                                    <option value="Gerente">Gerência</option>
                                 </select>
                             </div>
                             <div class="direction_button">
                                 <div class="input-box button">
-                                    <input type="Submit" value="Atualizar dados">
+                                    <input type="Submit" onclick="updateUser()" value="Atualizar dados">
                                 </div>
                                 <div class="input-box button_exc">
                                     <input type="Submit" for="check" onclick="check.checked = true;" role="button"
@@ -284,18 +239,32 @@
 </html>
 
 <script>
-    function excluirUser() {
-        var cpfvar = cpf_usuario.value;
+    var nome_usuario;
+    var cpf_usuario;
+    // função que ajuda a pegar o id e nome do usuario selecionado
+    function pegarId(cpf, nome) {
+        cpf_usuario = cpf;
+        nome_usuario = nome;
+
+        pegar_nome.innerHTML = `<input type="text" id="cpf_usuario" placeholder="${nome_usuario}" readonly>`;
+    }
+
+    // atualizar dados
+    function updateUser() {
+        var cpfVar = cpf_usuario;
+        var cargoVar = select_cargo.value;
 
         // Enviando o valor da nova input
-        fetch("/relatorio/excluirUser", {
-            method: "delete",
+        fetch("/relatorio/updateUser", {
+            method: "put",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-
-                cpfServer: cpfvar,
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                cpfServer: cpfVar,
+                cargoServer: cargoVar,
             }),
         })
             .then(function (resposta) {
@@ -314,6 +283,51 @@
                     });
                 }
             })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+        check_confirm.checked = true;
+        texto_sucesso.innerHTML = "Cargo atualizado com sucesso !";
+
+        setTimeout(function () {
+            window.location = "relatorio.html";
+            check_confirm.checked = false;
+        }, 1500);
+
+
+        return false;
+    }
+
+    // excluir funcionario
+    function excluirUser() {
+        var cpfvar = cpf_usuario;
+
+        // Enviando o valor da nova input
+        fetch("/relatorio/excluirUser", {
+            method: "delete",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+
+                cpfServer: cpfvar,
+            }),
+        }).then(function (resposta) {
+            console.log("resposta: ", resposta);
+            if (!resposta.ok) {
+
+                resposta.json().then(function (data) {
+                    var erro = data.mensagem;
+
+                    check_error.checked = true;
+                    texto_erro.innerHTML = erro;
+
+                    setTimeout(function () {
+                        check_error.checked = false;
+                    }, 1500);
+                });
+            }
+        })
             .catch(function (resposta) {
                 console.log(`#ERRO: ${resposta}`);
             });
@@ -356,6 +370,11 @@
 
     // listar usuarios
     function listar() {
+        var cargo = sessionStorage.CARGO_USUARIO;
+
+        if (cargo != "Gerente") {
+            window.location = "../index.html";
+        }
         var equipe = document.querySelector('#usuarios_equipe');
         var pcs = document.querySelector('#computadores');
 
@@ -387,12 +406,11 @@
                                         <td style="color:green;">${registro.statusServico}</td>
                                         <td>${registro.cargo}</td>
                                         <td>${registro.telefone} </td>
-                                        <td> <a href="#modal" role="button" class="material-symbols-outlined settings">
+                                        <td> <a href="#modal" role="button" onclick="pegarId(${registro.cpf}, '${registro.nome}')" class="material-symbols-outlined settings">
                                                 manage_accounts
                                             </a></td>
                                             </tr> `
                     }
-                    pegar_cpf.innerHTML = `<input type="text" id="cpf_usuario" value="${registro.cpf}" readonly>`;
                 });
             });
         }).catch(function (resposta) {
@@ -409,7 +427,7 @@
                 resposta.json().then(function (data) {
                     var erro = data.mensagem;
 
-                    pcs.innerHTML = erro;
+                    pcs.innerHTML = `<p style="color: var(--link-color)">${erro}</p>`;
                 });
             } else {
                 resposta.json().then((eventos) => {
@@ -424,6 +442,122 @@
                                         radio_button_checked
                                     </span>
                                 </article>`
+                    });
+                });
+            }
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+        });
+
+        // computadores
+        fetch(`/relatorio/plotar_chamado`, {
+            method: "GET", cache: 'no-store'
+        }).then(function (resposta) {
+            console.log("resposta: ", resposta);
+            if (!resposta.ok) {
+
+                resposta.json().then(function (data) {
+                    var erro = data.mensagem;
+
+                    chamado.innerHTML = `<p style="color: var(--link-color)">${erro}</p>`;
+                });
+            } else {
+                resposta.json().then((eventos) => {
+                    eventos.forEach((registro) => {
+                        const dataAtual = new Date(registro.hora);
+                        const opcoesDeFormato = {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: 'numeric',
+                            minute: 'numeric',
+                            second: 'numeric',
+                            hour12: false // Usar formato de 24 horas 
+                        };
+                        const dataFormatada = dataAtual.toLocaleDateString('pt-BR', opcoesDeFormato);
+
+                        if (registro.status == "Pendente") {
+                            chamado.innerHTML += `<div class="messages">
+                                <div class="message-box">
+                                    <span class="material-symbols-outlined">
+                                        report
+                                    </span>
+                                    <div class="message-content">
+                                        <div class="message-header">
+                                            <div class="name">${registro.apelidoComputador}</div>
+                                            <div class="star-checkbox">
+                                            </div>
+                                        </div>
+                                        <p class="message-line">
+                                            Operador : ${registro.nome}
+                                        </p>
+                                        <p class="message-line">
+                                            Operador : ${registro.descricao}
+                                        </p>
+                                        <p class="message-line time" style="color:red;">
+                                            ${registro.status}
+                                        </p>
+                                        <p class="message-line time">
+                                            ${dataFormatada}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>`
+                        } else if (registro.status == "Em andamento") {
+                            chamado.innerHTML += `<div class="messages">
+                                <div class="message-box">
+                                    <span class="material-symbols-outlined">
+                                        report
+                                    </span>
+                                    <div class="message-content">
+                                        <div class="message-header">
+                                            <div class="name">${registro.apelidoComputador}</div>
+                                            <div class="star-checkbox">
+                                            </div>
+                                        </div>
+                                        <p class="message-line">
+                                            Operador : ${registro.nome}
+                                        </p>
+                                        <p class="message-line">
+                                            Operador : ${registro.descricao}
+                                        </p>
+                                        <p class="message-line time" style="color: orange">
+                                            ${registro.status}
+                                        </p>
+                                        <p class="message-line time">
+                                            ${dataFormatada}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>`
+                        } else {
+                            chamado.innerHTML += `<div class="messages">
+                                <div class="message-box">
+                                    <span class="material-symbols-outlined">
+                                        report
+                                    </span>
+                                    <div class="message-content">
+                                        <div class="message-header">
+                                            <div class="name">${registro.apelidoComputador}</div>
+                                            <div class="star-checkbox">
+                                            </div>
+                                        </div>
+                                        <p class="message-line">
+                                            Operador : ${registro.nome}
+                                        </p>
+                                        <p class="message-line">
+                                            Operador : ${registro.descricao}
+                                        </p>
+                                        <p class="message-line time" style="color: green">
+                                            ${registro.status}
+                                        </p>
+                                        <p class="message-line time">
+                                            ${dataFormatada}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>`
+                        }
                     });
                 });
             }

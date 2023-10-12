@@ -18,7 +18,6 @@ function buscarPorUser(req, res) {
     });
 }
 
-
 // excluir usuario
 function excluirUser(req, res) {
     // Crie uma variável que vá recuperar os valores
@@ -37,6 +36,17 @@ function excluirUser(req, res) {
             });
 
         }
+    });
+}
+
+// atualizar dados
+function updateUser(req, res) {
+    // Crie uma variável que vá recuperar os valores
+    var cargo = req.body.cargoServer;
+    var cpf = req.body.cpfServer;
+
+    relatorioModel.updateUser(cpf, cargo).then((resultado) => {
+        res.status(200).json(resultado);
     });
 }
 
@@ -65,10 +75,26 @@ function plotar_computadores(req, res) {
     });
 }
 
+
+function plotar_chamado(req, res) {
+    relatorioModel.plotar_chamado().then(function (resultado) {
+        if (resultado.length > 0) {
+            res.status(200).json(resultado);
+        } else {
+            res
+                .status(401)
+                .json({ mensagem: `Nenhum chamado encotrado` });
+        }
+    });
+}
+
+
 module.exports = {
     pegarCnpj,
     excluirUser,
     plotar_computadores,
     buscarPorUser,
-    plotar_equipe
+    updateUser,
+    plotar_equipe,
+    plotar_chamado
 }

@@ -1,4 +1,4 @@
--- Arquivo de apoio, caso você queira criar tabelas como as aqui criadas para a API funcionar.
+	-- Arquivo de apoio, caso você queira criar tabelas como as aqui criadas para a API funcionar.
 CREATE DATABASE SuperVisiON;
 
 USE SuperVisiON;
@@ -8,7 +8,7 @@ CREATE TABLE tbOrganizacao(
 cnpj CHAR(14) PRIMARY KEY,
 nome VARCHAR(100)
 );
-	
+
 CREATE TABLE tbUsuario(
 
 cpf CHAR(11) PRIMARY KEY ,
@@ -20,7 +20,7 @@ cargo VARCHAR(50),
 statusServico VARCHAR(45),
 FOREIGN KEY (fk_organizacao) REFERENCES tbOrganizacao(cnpj)
 );
-	
+
 CREATE TABLE tbEvento(
 
 idEvento INT PRIMARY KEY AUTO_INCREMENT,
@@ -31,7 +31,7 @@ time2 VARCHAR(50),
 status VARCHAR(20),
 FOREIGN KEY (fk_organizacao) REFERENCES tbOrganizacao(cnpj)
 );
-    
+        
 CREATE TABLE tbComputador(
 
 idComputador INT PRIMARY KEY AUTO_INCREMENT,
@@ -45,10 +45,13 @@ capMaximaRam INT,
 FOREIGN KEY (fk_idEvento) REFERENCES tbEvento(idEvento)
 );
 
+
 CREATE TABLE tbOcorrencia(
 
 idOcorrencia INT PRIMARY KEY AUTO_INCREMENT,
+descricao VARCHAR(100),
 fk_idComputador INT,
+hora datetime,
 fk_cpfOperador CHAR(11),
 status VARCHAR(45),
 FOREIGN KEY (fk_cpfOperador) REFERENCES tbUsuario(cpf),
@@ -69,7 +72,6 @@ disco INT,
 ram INT,
 FOREIGN KEY (fk_idComputador) REFERENCES tbComputador(idComputador)
 );
-
 
 create user 'superOn'@'localhost' identified by '123';
 grant all privileges on SuperVisiON.* to 'superOn'@'localhost';
