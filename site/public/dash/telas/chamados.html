@@ -18,7 +18,7 @@
 
 </head>
 
-<body onload="validarSessao()">
+<body onload="validarSessao(), listarChamados()">
     <div class="app-container">
         <div class="app-header">
             <div class="app-header-left">
@@ -91,52 +91,8 @@
                         </div>
 
                         <!-- card pendente -->
-                        <div class="project-boxes jsGridView" style="align-items: unset">
-                            <details>
-                                <summary>
-                                    <div>
-                                        <span class="material-symbols-outlined" style="color: red;">
-                                            report
-                                        </span>
-                                        <h3>
-                                            <strong>REPORTE 1</strong>
-                                        </h3>
-                                        <span style="color: red;">EM ABERTO</span>
-                                    </div>
-                                </summary>
-                                <div>
-                                    <dl>
-                                        <div>
-                                            <dt>CPU</dt>
-                                            <h3>Temp. <span>4.27pm</span></h3>
-                                            <h3>Freq. <span>4.27pm</span></h3>
-                                        </div>
+                        <div id="chamadosPendente" class="project-boxes jsGridView" style="align-items: unset"></div>
 
-                                        <div>
-                                            <dt>GPU</dt>
-                                            <h3>Temp. <span>4.27pm</span></h3>
-                                            <h3>Freq. <span>4.27pm</span></h3>
-                                        </div>
-
-                                        <div>
-                                            <dt>OPERADOR</dt>
-                                            <p>
-                                                <select>
-                                                    <option selected disabled>selecione um operador</option>
-                                                    <option value="1">Americano</option>
-                                                    <option value="2">Latte</option>
-                                                    <option value="3">Green Tea</option>
-                                                </select>
-                                            </p>
-                                            <div class="button">
-                                                <label style="cursor: pointer; text-align: center;"
-                                                    for="check_confirm">Atualizar chamado</label>
-                                            </div>
-                                        </div>
-                                    </dl>
-                                </div>
-                            </details>
-                        </div>
                     </div>
                 </div>
 
@@ -199,47 +155,8 @@
                         </div>
 
                         <!-- card andamento -->
-                        <div class="project-boxes jsGridView" style="align-items: unset">
-                            <details>
-                                <summary>
-                                    <div>
-                                        <span class="material-symbols-outlined" style="color: orange;">
-                                            rule_settings
-                                        </span>
-                                        <h3>
-                                            <strong>REPORTE 1</strong>
-                                        </h3>
-                                        <span style="color: orange;">ANDAMENTO</span>
-                                    </div>
-                                </summary>
-                                <div>
-                                    <dl>
-                                        <div>
-                                            <dt>CPU</dt>
-                                            <h3>Temp. <span>4.27pm</span></h3>
-                                            <h3>Freq. <span>4.27pm</span></h3>
-                                        </div>
+                        <div id="chamadosEmAndamento" class="project-boxes jsGridView" style="align-items: unset"></div>
 
-                                        <div>
-                                            <dt>GPU</dt>
-                                            <h3>Temp. <span>4.27pm</span></h3>
-                                            <h3>Freq. <span>4.27pm</span></h3>
-                                        </div>
-
-                                        <div>
-                                            <dt>OPERADOR</dt>
-                                            <p>
-                                            <h3>Winyc</h3>
-                                            </p>
-                                            <div class="button">
-                                                <label style="cursor: pointer; text-align: center;"
-                                                    for="check_confirm">finalizar</label>
-                                            </div>
-                                        </div>
-                                    </dl>
-                                </div>
-                            </details>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -292,3 +209,121 @@
 </body>
 
 </html>
+<script>
+
+function listarChamados() {
+
+        fetch(`/chamadas/listarChamados`, {
+            method: "GET", cache: 'no-store'
+        }).then(function (resposta) {
+            resposta.json().then((eventos) => {
+                eventos.forEach((registro) => {
+                   
+                    const dataAtual = new Date(registro.hora);
+                        const opcoesDeFormato = {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: 'numeric',
+                            minute: 'numeric',
+                            second: 'numeric',
+                            hour12: false // Usar formato de 24 horas 
+                        };
+                        const dataFormatada = dataAtual.toLocaleDateString('pt-BR', opcoesDeFormato);
+
+
+                    chamadosPendente.innerHTML += `
+                            <details>
+                                <summary>
+                                    <div>
+                                        <span class="material-symbols-outlined" style="color: red;">
+                                            report
+                                        </span>
+                                        <h3>
+                                            <strong>REPORTE</strong>
+                                        </h3>
+                                        <span style="color: red;">${registro.status}</span>
+                                    </div>
+                                </summary>
+                                <div>
+                                    <dl>
+                                        <div>
+                                            <h3>${dataFormatada}</span></h3>
+                                            <br><br>
+                                            <h3>DESCRIÇÃO: ${registro.descricao}</span></h3>
+
+                                        </div>
+
+                                        <div>
+                                            <dt>OPERADOR</dt>
+                                            <p>
+                                                <select>
+                                                    <option selected disabled>selecione um operador</option>
+                                                    <option value="1">Americano</option>
+                                                    <option value="2">Latte</option>
+                                                    <option value="3">Green Tea</option>
+                                                </select>
+                                            </p>
+                                            <div class="button">
+                                                <label style="cursor: pointer; text-align: center;"
+                                                    for="check_confirm">Atualizar chamado</label>
+                                            </div>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </details>
+                            `
+
+
+                            if(registro.status == "Em andamento"){
+
+                            chamadosEmAndamento.innerHTML += `
+                            <details>
+                                <summary>
+                                    <div>
+                                        <span class="material-symbols-outlined" style="color: orange;">
+                                            rule_settings
+                                        </span>
+                                        <h3>
+                                            <strong>REPORTE</strong>
+                                            <h3>
+                                            <strong>REPORTE</strong>
+                                        </h3>
+                                        <span style="color: red;">${registro.status}</span>
+                                    </div>
+                                </summary>
+                                <div>
+                                    <dl>
+                                        <div>
+                                            <h3>${dataFormatada}</span></h3>
+                                            <br><br>
+                                            <h3>DESCRIÇÃO: ${registro.descricao}</span></h3>
+
+                                        </div>
+
+                                        <div>
+                                            <dt>OPERADOR</dt>
+                                            <p>
+                                            <h3>${registro.fk_cpfOperador}</h3>
+                                            </p>
+                                            <div class="button">
+                                                <label style="cursor: pointer; text-align: center;"
+                                                    for="check_confirm">finalizar</label>
+                                            </div>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </details>
+                            `
+
+                    }   
+                });
+                
+            });
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+    });
+
+}
+
+</script>

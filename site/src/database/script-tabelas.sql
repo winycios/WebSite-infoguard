@@ -73,6 +73,17 @@ ram INT,
 FOREIGN KEY (fk_idComputador) REFERENCES tbComputador(idComputador)
 );
 
+select*from tbUsuario;
+select*from tbOrganizacao;
+select*from tbOcorrencia;
+select*from tbUsuario;
+
+select * from tbOcorrencia;
+insert into tbOcorrencia(descricao, hora)
+value ("Monitor sem vídeo", '2023-06-30 15:22:00');
+
+update tbOcorrencia SET fk_cpfOperador = 22222222222, status = "Em andamento" where idOcorrencia = 1;
+
 create user 'superOn'@'localhost' identified by '123';
 grant all privileges on SuperVisiON.* to 'superOn'@'localhost';
 flush privileges;

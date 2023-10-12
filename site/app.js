@@ -12,6 +12,7 @@ var relatorioRouter = require("./src/routes/relatorio");
 var eventoRouter = require("./src/routes/eventos");
 var usuarioRouter = require("./src/routes/usuarios");
 var organizacaoRouter = require("./src/routes/organizacao");
+var chamadasRouter = require("./src/routes/chamadas");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -23,6 +24,7 @@ app.use("/relatorio", relatorioRouter);
 app.use("/evento", eventoRouter);
 app.use("/usuarios", usuarioRouter);
 app.use("/organizacao", organizacaoRouter);
+app.use("/chamadas", chamadasRouter);
 
 app.listen(PORTA, function () {
     console.log(`Servidor do seu site já está rodando! Acesse o caminho a seguir para visualizar: http://localhost:${PORTA} \n
