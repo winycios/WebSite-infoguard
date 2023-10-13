@@ -18,7 +18,7 @@
 
 </head>
 
-<body onload="validarSessao(), listarChamados()">
+<body onload="validarSessao(), listar(), pegarCnpj()">
     <div class="app-container">
         <div class="app-header">
             <div class="app-header-left">
@@ -67,7 +67,7 @@
                         screen_search_desktop
                     </span>
                 </a>
-               <span id="cargo"></span>
+                <span id="cargo"></span>
                 <a href="./chamados.html" class="app-sidebar-link active">
                     <span class="material-symbols-outlined">
                         support_agent
@@ -92,7 +92,6 @@
 
                         <!-- card pendente -->
                         <div id="chamadosPendente" class="project-boxes jsGridView" style="align-items: unset"></div>
-
                     </div>
                 </div>
 
@@ -108,42 +107,7 @@
                         </div>
 
                         <!-- card concluido -->
-                        <div class="project-boxes jsGridView" style="align-items: unset">
-                            <details>
-                                <summary>
-                                    <div>
-                                        <span class="material-symbols-outlined" style="color: green;">
-                                            task_alt
-                                        </span>
-                                        <h3>
-                                            <strong>REPORTE 1</strong>
-                                        </h3>
-                                        <span style="color: green;">CONCLUÍDO</span>
-                                    </div>
-                                </summary>
-                                <div>
-                                    <dl>
-                                        <div>
-                                            <dt>CPU</dt>
-                                            <h3>Temp. <span>4.27pm</span></h3>
-                                            <h3>Freq. <span>4.27pm</span></h3>
-                                        </div>
-
-                                        <div>
-                                            <dt>GPU</dt>
-                                            <h3>Temp. <span>4.27pm</span></h3>
-                                            <h3>Freq. <span>4.27pm</span></h3>
-                                        </div>
-
-                                        <div>
-                                            <dt>OPERADOR</dt>
-                                            <p>
-                                            <h3>Winyc</h3>
-                                            </p>
-                                        </div>
-                                    </dl>
-                                </div>
-                            </details>
+                        <div class="project-boxes jsGridView" style="align-items: unset" id="concluido">
                         </div>
                     </div>
 
@@ -156,7 +120,44 @@
 
                         <!-- card andamento -->
                         <div id="chamadosEmAndamento" class="project-boxes jsGridView" style="align-items: unset"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+
+    <!-- Modal -->
+    <div class="modal-wrapper modal" id="modal">
+        <div class="modal-body card">
+            <div class="details-modal">
+                <a href="#" role="button" aria-label="close this modal" class="details-modal-close">
+                    <span class="material-symbols-outlined">
+                        close
+                    </span>
+                </a>
+                <div class="details-modal-title">
+                    <h2>Atualização de dados</h2>
+                </div>
+                <div class="details-modal-content">
+                    <div class="wrapper">
+                        <div class="form">
+                            <div class="input-box">
+                                <label>DESCRIÇÃO</label>
+                                <div id="pegar_desc"></div>
+                            </div>
+                            <div class="input-box">
+                                <label>OPERADOR :</label>
+                                <select id="select_operador">
+                                    <option selected disabled value="">SELECIONE O OPERADOR</option>
+                                </select>
+                            </div>
+                            <div class="direction_button">
+                                <div class="input-box button">
+                                    <input type="Submit" onclick="updatePendente()" value="Atualizar chamado">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -175,10 +176,10 @@
                 </span>
             </div>
             <header>Confirmar</header>
-            <p>Deseja realmente finalizar esse evento ?</p>
+            <p>Deseja realmente excluir esse usuário ?</p>
             <div class="btns">
                 <label class="confirm" for="check">Cancelar</label>
-                <label class="cancel" for="check" onclick="check_confirm.checked = true">Sim, finalizar!</label>
+                <label class="cancel" for="check" onclick="excluirUser()">Sim, finalizar!</label>
             </div>
         </div>
     </div>
@@ -194,16 +195,30 @@
                 </span>
             </div>
             <header>Perfeito</header>
-            <p>Ação concluída com sucesso</p>
+            <p id="texto_sucesso"></p>
             <div class="btns">
-                <label class="confirm" for="check_confirm">Fechar</label>
+                <label class="confirm">Fechar</label>
             </div>
         </div>
     </div>
 
-
-    <!-- partial -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- erro -->
+    <div>
+        <input type="checkbox" id="check_error">
+        <div class="background"></div>
+        <div class="alert_box">
+            <div class="icon">
+                <span class="material-symbols-outlined">
+                    close
+                </span>
+            </div>
+            <header>ERRO</header>
+            <p id="texto_erro"></p>
+            <div class="btns">
+                <label class="confirm">Fechar</label>
+            </div>
+        </div>
+    </div>
 
     <script src="../Assets/js/script.js"></script>
 </body>
@@ -211,15 +226,159 @@
 </html>
 <script>
 
-function listarChamados() {
+    var id_ocorrencia;
+    var desc_ocorrencia;
+    // função que ajuda a pegar o id e nome do usuario selecionado
+    function pegarId(idOcorrencia, descricao) {
+        id_ocorrencia = idOcorrencia;
+        desc_ocorrencia = descricao;
 
+        pegar_desc.innerHTML = `<input type="text" placeholder="${desc_ocorrencia}" readonly>`;
+    }
+
+    // atualizar dados
+    function updatePendente() {
+        var idVar = id_ocorrencia;
+        var operadorVar = select_operador.value;
+
+        // Enviando o valor da nova input
+        fetch("/chamadas/updatePendente", {
+            method: "put",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                idServer: idVar,
+                operadorServer: operadorVar,
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+                if (!resposta.ok) {
+
+                    resposta.json().then(function (data) {
+                        var erro = data.mensagem;
+
+                        check_error.checked = true;
+                        texto_erro.innerHTML = erro;
+
+                        setTimeout(function () {
+                            check_error.checked = false;
+                        }, 1500);
+                    });
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+        check_confirm.checked = true;
+        texto_sucesso.innerHTML = "Chamado está em andamento !";
+
+        setTimeout(function () {
+            window.location = "chamados.html";
+            check_confirm.checked = false;
+        }, 1500);
+
+        return false;
+    }
+
+    // atualizar dados
+    function finalizarChamado(id, cpf) {
+        var idVar = id;
+        var operadorVar = cpf;
+
+        console.log(idVar, operadorVar);
+        // Enviando o valor da nova input
+        fetch("/chamadas/finalizarChamado", {
+            method: "put",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                idServer: idVar,
+                operadorServer: operadorVar,
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+                if (!resposta.ok) {
+
+                    resposta.json().then(function (data) {
+                        var erro = data.mensagem;
+
+                        check_error.checked = true;
+                        texto_erro.innerHTML = erro;
+
+                        setTimeout(function () {
+                            check_error.checked = false;
+                        }, 1500);
+                    });
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+        check_confirm.checked = true;
+        texto_sucesso.innerHTML = "Chamado finalizado !";
+
+        setTimeout(function () {
+            window.location = "chamados.html";
+            check_confirm.checked = false;
+        }, 1500);
+
+        return false;
+    }
+
+
+    function pegarCnpj() {
+        var cnpjVar = sessionStorage.CNPJ_ORGANIZACAO;
+
+        // Retornando a Promise
+        // Enviando o valor da nova input
+        fetch("/chamadas/pegarCnpj", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                cnpjServer: cnpjVar,
+
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+            })
+            .catch(function (erro) {
+                console.log(`#ERRO: ${erro}`);
+            });
+    }
+
+
+    function listar() {
         fetch(`/chamadas/listarChamados`, {
             method: "GET", cache: 'no-store'
         }).then(function (resposta) {
-            resposta.json().then((eventos) => {
-                eventos.forEach((registro) => {
-                   
-                    const dataAtual = new Date(registro.hora);
+            console.log("resposta: ", resposta);
+            if (!resposta.ok) {
+                resposta.json().then(function (data) {
+                    chamadosPendente.innerHTML = `<p style="color: var(--link-color)">${data.mensagem}</p>`;
+                    concluido.innerHTML = `<p style="color: var(--link-color)">${data.mensagem}</p>`;
+                    chamadosEmAndamento.innerHTML = `<p style="color: var(--link-color)">${data.mensagem}</p>`;
+                });
+            } else {
+                var contadorPendente = 0;
+                        var contadorAndamento = 0;
+                        var contadorConcluido = 0;
+                resposta.json().then((eventos) => {
+                    eventos.forEach((registro) => {
+
+                        const dataAtual = new Date(registro.hora);
                         const opcoesDeFormato = {
                             year: 'numeric',
                             month: 'long',
@@ -231,8 +390,9 @@ function listarChamados() {
                         };
                         const dataFormatada = dataAtual.toLocaleDateString('pt-BR', opcoesDeFormato);
 
-
-                    chamadosPendente.innerHTML += `
+                        if (registro.status == "Pendente") {
+                            contadorPendente++;
+                            chamadosPendente.innerHTML += `
                             <details>
                                 <summary>
                                     <div>
@@ -240,7 +400,7 @@ function listarChamados() {
                                             report
                                         </span>
                                         <h3>
-                                            <strong>REPORTE</strong>
+                                            <strong>${registro.apelidoComputador}</strong>
                                         </h3>
                                         <span style="color: red;">${registro.status}</span>
                                     </div>
@@ -251,52 +411,35 @@ function listarChamados() {
                                             <h3>${dataFormatada}</span></h3>
                                             <br><br>
                                             <h3>DESCRIÇÃO: ${registro.descricao}</span></h3>
-
                                         </div>
-
                                         <div>
-                                            <dt>OPERADOR</dt>
-                                            <p>
-                                                <select>
-                                                    <option selected disabled>selecione um operador</option>
-                                                    <option value="1">Americano</option>
-                                                    <option value="2">Latte</option>
-                                                    <option value="3">Green Tea</option>
-                                                </select>
-                                            </p>
-                                            <div class="button">
-                                                <label style="cursor: pointer; text-align: center;"
-                                                    for="check_confirm">Atualizar chamado</label>
+                                            <a href="#modal" class="button" onclick="pegarId(${registro.idOcorrencia}, '${registro.descricao}')">
+                                                <label style="cursor: pointer; text-align: center;">Editar</label>
                                             </div>
                                         </div>
                                     </dl>
                                 </div>
                             </details>
                             `
-
-
-                            if(registro.status == "Em andamento"){
-
-                            chamadosEmAndamento.innerHTML += `
-                            <details>
+                        } else if (registro.status == "Em andamento") {
+                            contadorAndamento++;
+                            chamadosEmAndamento.innerHTML += `<details>
                                 <summary>
                                     <div>
                                         <span class="material-symbols-outlined" style="color: orange;">
-                                            rule_settings
+                                            report
                                         </span>
                                         <h3>
-                                            <strong>REPORTE</strong>
-                                            <h3>
-                                            <strong>REPORTE</strong>
+                                            <strong>${registro.apelidoComputador}</strong>
                                         </h3>
-                                        <span style="color: red;">${registro.status}</span>
+                                        <span style="color: orange;">${registro.status}</span>
                                     </div>
                                 </summary>
                                 <div>
                                     <dl>
                                         <div>
                                             <h3>${dataFormatada}</span></h3>
-                                            <br><br>
+                                        <br><br>
                                             <h3>DESCRIÇÃO: ${registro.descricao}</span></h3>
 
                                         </div>
@@ -304,26 +447,92 @@ function listarChamados() {
                                         <div>
                                             <dt>OPERADOR</dt>
                                             <p>
-                                            <h3>${registro.fk_cpfOperador}</h3>
+                                            <h3>${registro.nome}</h3>
                                             </p>
                                             <div class="button">
-                                                <label style="cursor: pointer; text-align: center;"
-                                                    for="check_confirm">finalizar</label>
+                                                <label style="cursor: pointer; text-align: center;" onclick="finalizarChamado(${registro.idOcorrencia}, '${registro.cpf}')">Finalizar chamado</label>
                                             </div>
                                         </div>
                                     </dl>
                                 </div>
                             </details>
                             `
+                        } else {
+                            contadorConcluido++;
+                            concluido.innerHTML += `    
+                            <details>
+                                <summary>
+                                    <div>
+                                        <span class="material-symbols-outlined" style="color: green;">
+                                            report
+                                        </span>
+                                        <h3>
+                                            <strong>${registro.apelidoComputador}</strong>
+                                        </h3>
+                                        <span style="color: green;">${registro.status}</span>
+                                    </div>
+                                </summary>
+                                <div>
+                                    <dl>
+                                        <div>
+                                            <h3>${dataFormatada}</span></h3>
+                                        <br><br>
+                                            <h3>DESCRIÇÃO: ${registro.descricao}</span></h3>
 
-                    }   
+                                        </div>
+
+                                        <div>
+                                            <dt>OPERADOR</dt>
+                                            <p>
+                                            <h3>${registro.nome}</h3>
+                                            </p>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </details>
+                            `
+                        }
+
+                        if (contadorPendente == 0) {
+                            chamadosPendente.innerHTML = `<p style="color: var(--link-color)">Não há chamados pendentes</p>`
+                        }
+                        if (contadorAndamento == 0) {
+                            chamadosEmAndamento.innerHTML = `<p style="color: var(--link-color)">Não há chamados Em andamento</p>`
+                        }
+                        if (contadorConcluido == 0) {
+                            concluido.innerHTML = `<p style="color: var(--link-color)">Não há chamados Em concluídos</p>`
+                        }
+
+                    });
                 });
-                
-            });
+            }
         }).catch(function (resposta) {
             console.log(`#ERRO: ${resposta}`);
-    });
+        });
 
-}
+
+        // listar operadores
+
+        fetch(`/chamadas/listarOperadores`, {
+            method: "GET", cache: 'no-store'
+        }).then(function (resposta) {
+            console.log("resposta: ", resposta);
+            if (!resposta.ok) {
+                resposta.json().then(function (data) {
+                    console.log(data.mensagem);
+                });
+            } else {
+                resposta.json().then((eventos) => {
+                    eventos.forEach((registro) => {
+
+                        select_operador.innerHTML += `<option value='${registro.cpf}'>${registro.operador}</option>`;
+
+                    });
+                });
+            }
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+        });
+    }
 
 </script>

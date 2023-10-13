@@ -16,7 +16,7 @@ function validarSessao() {
     }
 
     if (cargoUser == "Gerente") {
-        cargo.innerHTML = ` <a href="./relatorio.html" class="app-sidebar-link">
+        cargo.innerHTML = ` <a href="./relatorio.html">
         <span class="material-symbols-outlined">
             quick_reference
         </span>

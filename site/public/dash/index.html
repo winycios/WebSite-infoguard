@@ -131,12 +131,16 @@
 
 <script>
   var data = document.getElementById("time");
-  // data atual 
-  var mes = new Array("janeiro", "fevereiro", "março", "abril", "maio", "junho", "agosto", "outubro", "novembro", "dezembro");
-  var now = new Date;
+  var dataAtual = new Date();
+  var hora = dataAtual.getHours();
 
-
-  data.innerHTML = `${mes[now.getMonth()]}, ${now.getDate()}`;
+  if (hora > 6 && hora < 12) {
+    data.innerHTML = `Bom dia!, ${sessionStorage.NOME_USUARIO}`;
+  } else if (hora > 18 && hora < 23) {
+    data.innerHTML = `Boa tarde, ${sessionStorage.NOME_USUARIO}`;
+  } else {
+    data.innerHTML = `Boa noite, ${sessionStorage.NOME_USUARIO}`;
+  }
 
 
   // mudar as telas
@@ -213,7 +217,7 @@
                                             Operador : ${registro.nome}
                                         </p>
                                         <p class="message-line">
-                                            Operador : ${registro.descricao}
+                                            Descrição : ${registro.descricao}
                                         </p>
                                         <p class="message-line time" style="color:red;">
                                             ${registro.status}
@@ -240,7 +244,7 @@
                                             Operador : ${registro.nome}
                                         </p>
                                         <p class="message-line">
-                                            Operador : ${registro.descricao}
+                                          Descrição : ${registro.descricao}
                                         </p>
                                         <p class="message-line time" style="color: orange">
                                             ${registro.status}
@@ -267,7 +271,7 @@
                                             Operador : ${registro.nome}
                                         </p>
                                         <p class="message-line">
-                                            Operador : ${registro.descricao}
+                                            Descrição : ${registro.descricao}
                                         </p>
                                         <p class="message-line time" style="color: green">
                                             ${registro.status}
