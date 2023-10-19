@@ -68,21 +68,26 @@ function listarOperadores(req, res) {
 
 //Listar chamados
 function listarChamados(req, res) {
-    chamadasModel.listarChamados()
-        .then((resultado) => {
-            if (resultado.length > 0) {
-                res.status(200).json(resultado);
-            } else {
-                res
-                    .status(401)
-                    .json({ mensagem: `Nenhum chamado feito` });
-            }
-        })
-        .catch((error) => {
-            console.error(error);
-            res.status(500).json({ mensagem: 'Nenhum chamado feito' });
-        });
+    const chamadosPromise = chamadasModel.listarChamados();
+
+    if (chamadosPromise && typeof chamadosPromise.then === 'function') {
+        chamadosPromise
+            .then((resultado) => {
+                if (resultado.length > 0) {
+                    res.status(200).json(resultado);
+                } else {
+                    res.status(401).json({ mensagem: `Nenhum chamado feito` });
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+                res.status(500).json({ mensagem: 'Erro ao obter chamados, por favor recarregue a pagina' });
+            });
+    } else {
+        res.status(500).json({ mensagem: 'Erro ao obter chamados' });
+    }
 }
+
 
 
 module.exports = {

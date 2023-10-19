@@ -77,16 +77,21 @@ function plotar_computadores(req, res) {
 
 
 function plotar_chamado(req, res) {
-    relatorioModel.plotar_chamado().then(function (resultado) {
-        if (resultado.length > 0) {
-            res.status(200).json(resultado);
-        } else {
-            res
-                .status(401)
-                .json({ mensagem: `Nenhum chamado encotrado` });
-        }
-    });
+    const plotarPromise = relatorioModel.plotar_chamado();
+
+    if (plotarPromise && typeof plotarPromise.then === 'function') {
+        plotarPromise.then(function (resultado) {
+            if (resultado.length > 0) {
+                res.status(200).json(resultado);
+            } else {
+                res.status(401).json({ mensagem: `Nenhum chamado encontrado` });
+            }
+        });
+    } else {
+        res.status(500).json({ mensagem: `Erro ao obter dados do chamado` });
+    }
 }
+
 
 
 module.exports = {

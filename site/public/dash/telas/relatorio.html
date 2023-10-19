@@ -433,7 +433,8 @@
                 resposta.json().then((eventos) => {
                     eventos.forEach((registro) => {
 
-                        pcs.innerHTML += `<article class="leaderboard__profile">
+                        if (registro.status == "bom") {
+                            pcs.innerHTML += `<article class="leaderboard__profile">
                                     <span class="material-symbols-outlined" style="color: var(--color-yellow);">
                                         devices
                                     </span>
@@ -442,6 +443,28 @@
                                         radio_button_checked
                                     </span>
                                 </article>`
+                        } else if (registro.status == "andamento") {
+                            pcs.innerHTML += `<article class="leaderboard__profile">
+                                    <span class="material-symbols-outlined" style="color: var(--color-yellow);">
+                                        devices
+                                    </span>
+                                    <span class="leaderboard__name">${registro.apelidoComputador}</span>
+                                    <span class="material-symbols-outlined leaderboard__success" style= "color: orange">
+                                        radio_button_checked
+                                    </span>
+                                </article>`
+                        } else {
+                            pcs.innerHTML += `<article class="leaderboard__profile">
+                                    <span class="material-symbols-outlined" style="color: var(--color-yellow);">
+                                        devices
+                                    </span>
+                                    <span class="leaderboard__name">${registro.apelidoComputador}</span>
+                                    <span class="material-symbols-outlined leaderboard__success" style= "color: red">
+                                        radio_button_checked
+                                    </span>
+                                </article>`
+                        }
+
                     });
                 });
             }

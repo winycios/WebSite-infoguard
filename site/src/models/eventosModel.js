@@ -15,10 +15,20 @@ function finalizar(confirm, cnpj) {
             const idAtual = response[0].idEvento;
             var query = `update tbEvento set status = '${confirm}' where idEvento = ${idAtual};`;
 
-            return database.executar(query);
+            return setTimeout(function () {
+                atualizarEquipe(cnpj);
+            }, 2000), database.executar(query);
         });
     });
 }
+
+function atualizarEquipe(cnpj) {
+    return new Promise(() => {
+        var query = `update tbUsuario set statusServico = 'livre' where fk_organizacao = ${cnpj};`;
+        return database.executar(query);
+    });
+}
+
 
 // finalizar evento
 function updateEvento(e1, e2, evento, cnpj) {
@@ -132,13 +142,13 @@ function desktop(qtd, cnpj, equipe1, equipe2) {
                 const promises = [];
                 for (let index = 1; index <= qtd; index++) {
                     promises.push(
-                        database.executar(`insert into tbComputador (idComputador,fk_idEvento,apelidoComputador) values (null, '${idAtual}' , 'PC${index}' ' ${equipe1}');`)
+                        database.executar(`insert into tbComputador (idComputador,fk_idEvento,apelidoComputador, status) values (null, '${idAtual}' , 'PC${index}' ' ${equipe1}', 'bom');`)
                     );
                 }
                 // criação dos computadores da equipe 2
                 for (let index = 1; index <= qtd; index++) {
                     promises.push(
-                        database.executar(`insert into tbComputador (idComputador,fk_idEvento,apelidoComputador) values (null, '${idAtual}' , 'PC${index}' ' ${equipe2}');`)
+                        database.executar(`insert into tbComputador (idComputador,fk_idEvento,apelidoComputador, status) values (null, '${idAtual}' , 'PC${index}' ' ${equipe2}', 'bom');`)
                     );
                 }
             });

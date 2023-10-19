@@ -370,11 +370,15 @@
                     chamadosPendente.innerHTML = `<p style="color: var(--link-color)">${data.mensagem}</p>`;
                     concluido.innerHTML = `<p style="color: var(--link-color)">${data.mensagem}</p>`;
                     chamadosEmAndamento.innerHTML = `<p style="color: var(--link-color)">${data.mensagem}</p>`;
+
+                    if (data.mensagem == "Erro ao obter chamados, por favor recarregue a pagina") {
+                        location.reload();
+                    }
                 });
             } else {
-                var contadorPendente = 0;
-                        var contadorAndamento = 0;
-                        var contadorConcluido = 0;
+                var contadorPendente = true;
+                var contadorAndamento = true;
+                var contadorConcluido = true;
                 resposta.json().then((eventos) => {
                     eventos.forEach((registro) => {
 
@@ -391,7 +395,7 @@
                         const dataFormatada = dataAtual.toLocaleDateString('pt-BR', opcoesDeFormato);
 
                         if (registro.status == "Pendente") {
-                            contadorPendente++;
+                            contadorPendente = false;
                             chamadosPendente.innerHTML += `
                             <details>
                                 <summary>
@@ -422,7 +426,7 @@
                             </details>
                             `
                         } else if (registro.status == "Em andamento") {
-                            contadorAndamento++;
+                            contadorAndamento = false;
                             chamadosEmAndamento.innerHTML += `<details>
                                 <summary>
                                     <div>
@@ -458,7 +462,7 @@
                             </details>
                             `
                         } else {
-                            contadorConcluido++;
+                            contadorConcluido = false;
                             concluido.innerHTML += `    
                             <details>
                                 <summary>
@@ -492,18 +496,16 @@
                             </details>
                             `
                         }
-
-                        if (contadorPendente == 0) {
-                            chamadosPendente.innerHTML = `<p style="color: var(--link-color)">Não há chamados pendentes</p>`
-                        }
-                        if (contadorAndamento == 0) {
-                            chamadosEmAndamento.innerHTML = `<p style="color: var(--link-color)">Não há chamados Em andamento</p>`
-                        }
-                        if (contadorConcluido == 0) {
-                            concluido.innerHTML = `<p style="color: var(--link-color)">Não há chamados Em concluídos</p>`
-                        }
-
                     });
+                    if (contadorPendente) {
+                        chamadosPendente.innerHTML = `<p style="color: var(--link-color)">Não há chamados pendentes</p>`
+                    }
+                    if (contadorAndamento) {
+                        chamadosEmAndamento.innerHTML = `<p style="color: var(--link-color)">Não há chamados Em andamento</p>`
+                    }
+                    if (contadorConcluido) {
+                        concluido.innerHTML = `<p style="color: var(--link-color)">Não há chamados Em concluídos</p>`
+                    }
                 });
             }
         }).catch(function (resposta) {

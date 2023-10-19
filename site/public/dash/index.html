@@ -115,7 +115,7 @@
           <div class="projects-section-header">
             <p style="text-transform: uppercase;">Chama<span style="color: var(--color-yellow);">dos</span></p>
           </div>
-          <div id="chamado"></div>
+            <div id="chamado" style="overflow-y: auto;"></div>
         </div>
       </div>
     </div>
@@ -185,6 +185,9 @@
           var erro = data.mensagem;
 
           chamado.innerHTML = `<p style="color: var(--link-color)">${erro}</p>`;
+          if (data.mensagem == "Erro ao obter dados do chamado") {
+                        location.reload();
+                    }
         });
       } else {
         resposta.json().then((eventos) => {

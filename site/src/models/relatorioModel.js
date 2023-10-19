@@ -56,7 +56,7 @@ function plotar_computadores() {
     } else {
         console.log("select da equipe de suporte");
         var instrucao = `
-        select apelidoComputador from tbComputador where fk_idEvento = (select idEvento from tbEvento where fk_organizacao = ${globalCnpj} AND status = "Em andamento");
+        select apelidoComputador, status from tbComputador where fk_idEvento = (select idEvento from tbEvento where fk_organizacao = ${globalCnpj} AND status = "Em andamento");
         `;
 
         console.log("Executando a instrução SQL: \n" + instrucao);
