@@ -55,7 +55,7 @@ function cadastrar(req, res) {
     });
 }
 
-// cadastrar Evento
+// Finaliza um evento
 function finalizar(req, res) {
     // Crie uma variável que vá recuperar os valores
     var confirm = req.body.confirmacaoServer;

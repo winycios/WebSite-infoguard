@@ -27,6 +27,16 @@ function buscarPorUser() {
     }
 }
 
+// buscar usuarios de uma organização que tenham resolvido chamados
+function buscarPorChamados(cpf) {
+    if (globalCnpj == undefined) {
+    } else {
+        var query = `select COUNT(o.idOcorrencia) as 'contador' from tbUsuario u inner Join tbOcorrencia o ON o.fk_cpfOperador = u.cpf where o.fk_cpfOperador = ${cpf} AND u.fk_organizacao = ${globalCnpj};`;
+
+        return database.executar(query);
+    }
+}
+
 // exlcuir usuario
 function excluirUser(cpf) {
     var query = `delete from tbUsuario where cpf = ${cpf};`;
@@ -85,6 +95,7 @@ module.exports = {
     pegarCnpj,
     plotar_computadores,
     plotar_chamado,
+    buscarPorChamados,
     plotar_equipe,
     buscarPorUser,
     updateUser,

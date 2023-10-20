@@ -10,7 +10,7 @@ function pegarCnpj(req, res) {
 }
 
 // buscar por usuarios em uma organização
-//buscar eventos
+
 function buscarPorUser(req, res) {
 
     relatorioModel.buscarPorUser().then((resultado) => {
@@ -18,24 +18,37 @@ function buscarPorUser(req, res) {
     });
 }
 
+function buscarPorChamados(req, res) {
+
+    relatorioModel.buscarPorChamados(cpf).then((resultado) => {
+        res.status(200).json(resultado);
+    });
+}
+
+
 // excluir usuario
 function excluirUser(req, res) {
     // Crie uma variável que vá recuperar os valores
     var cpf = req.body.cpfServer;
 
+    relatorioModel.buscarPorChamados(cpf).then((result) => {
+        relatorioModel.buscarPorUser().then((resultado) => {
+            if (resultado.length == 1) {
+                res
+                    .status(401)
+                    .json({ mensagem: `É necessário ter pelo menos um integrante na organização` });
 
-    relatorioModel.buscarPorUser().then((resultado) => {
-        if (resultado.length == 1) {
-            res
+            } else if (result.length > 0) {
+                res
                 .status(401)
-                .json({ mensagem: `É necessário ter pelo menos um integrante na organização` });
-        } else {
-            // verifica se o usuario já existe
-            relatorioModel.excluirUser(cpf).then((resultado) => {
-                res.status(200).json(resultado);
-            });
-
-        }
+                .json({ mensagem: `Não é possível excluir esse usuário, pois ele já lidou com solicitações.` });
+            } else {
+                // verifica se o usuario já existe
+                relatorioModel.excluirUser(cpf).then((resultado) => {
+                    res.status(200).json(resultado);
+                });
+            }
+        });
     });
 }
 
@@ -54,14 +67,20 @@ function updateUser(req, res) {
 
 /* select da equipe de suporte*/
 function plotar_equipe(req, res) {
-    relatorioModel.plotar_equipe().then(function (resultado) {
-        if (resultado.length > 0) {
-            res.status(200).json(resultado);
-        } else {
-            res.status(204).send("Nenhum resultado encontrado!")
-        }
-    });
+    relatorioModel.plotar_equipe()
+        .then(resultado => {
+            if (resultado.length > 0) {
+                res.status(200).json(resultado);
+            } else {
+                res.status(204).send("Nenhum resultado encontrado!");
+            }
+        })
+        .catch(error => {
+            console.error("Erro ao plotar equipe:", error);
+            res.status(500).send("Erro interno no servidor");
+        });
 }
+
 
 function plotar_computadores(req, res) {
     relatorioModel.plotar_computadores().then(function (resultado) {
@@ -101,5 +120,6 @@ module.exports = {
     buscarPorUser,
     updateUser,
     plotar_equipe,
+    buscarPorChamados,
     plotar_chamado
 }

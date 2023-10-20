@@ -16,10 +16,18 @@ function updatePendente(id, operador) {
 
     var query = `update tbOcorrencia set status = "Em andamento", fk_cpfOperador = ${operador} where idOcorrencia = ${id};`;
 
-    return setTimeout(function () {
-        statusOcupado(operador);
-        statusPcAndamento(id);
-    }, 1000), database.executar(query);
+    return new Promise((resolve, reject) => {
+        database.executar(query)
+            .then(() => {
+                setTimeout(() => {
+                    statusPcAndamento(id)
+                        .then(() => statusOcupado(operador))
+                        .then(() => resolve())
+                        .catch(error => reject(error));
+                }, 2000);
+            })
+            .catch(error => reject(error));
+    });
 }
 function statusOcupado(operador) {
     return new Promise(() => {
@@ -27,52 +35,56 @@ function statusOcupado(operador) {
         return database.executar(query);
     });
 }
-function statusPcAndamento(id) {
-    return new Promise(() => {
-        database.executar(`select idComputador from tbComputador where idComputador = (select fk_idComputador from tbOcorrencia where fk_idComputador = ${id});`)
-            .then((rows) => {
-                const idAtual = rows[0].idComputador;
+async function statusPcAndamento(id) {
 
-
-                var query = `update tbComputador set status = 'andamento' where idComputador = ${idAtual};`
-                return database.executar(query);
-
-            });
-    });
+    try {
+        const rows = await database.executar(
+            `SELECT fk_idComputador FROM tbOcorrencia WHERE idOcorrencia = ${id};`
+        );
+        const idAtual = rows[0].fk_idComputador;
+        const query = `UPDATE tbComputador SET status = 'andamento' WHERE idComputador = ${idAtual};`;
+        return await database.executar(query);
+    } catch (error) {
+        return console.error(error);
+    }
 }
-
-
 
 
 // finalizar chamado
 function finalizarChamado(id, operador) {
+    const query = `UPDATE tbOcorrencia SET status = "Finalizado", fk_cpfOperador = ${operador} WHERE idOcorrencia = ${id};`;
 
-    var query = `update tbOcorrencia set status = "Finalizado", fk_cpfOperador = ${operador} where idOcorrencia = ${id};`;
-
-    return setTimeout(function () {
-        statusLivre(operador);
-        statusPcFinal(id);
-    }, 1000), database.executar(query);
+    return new Promise((resolve, reject) => {
+        database.executar(query)
+            .then(() => {
+                setTimeout(() => {
+                    statusLivre(operador)
+                        .then(() => statusPcFinal(id))
+                        .then(() => resolve())
+                        .catch(error => reject(error));
+                }, 1000);
+            })
+            .catch(error => reject(error));
+    });
 }
+
 function statusLivre(operador) {
-    return new Promise(() => {
-        var query = `update tbUsuario set statusServico = "livre" where cpf = ${operador};`
-        return database.executar(query);
-    });
+    const query = `UPDATE tbUsuario SET statusServico = "livre" WHERE cpf = ${operador};`;
+    return database.executar(query);
 }
+
 function statusPcFinal(id) {
-    return new Promise(() => {
-        database.executar(`select idComputador from tbComputador where idComputador = (select fk_idComputador from tbOcorrencia where fk_idComputador = ${id});`)
-            .then((rows) => {
-                const idAtual = rows[0].idComputador;
-
-
-                var query = `update tbComputador set status = 'bom' where idComputador = ${idAtual};`
-                return database.executar(query);
-
-            });
-    });
+    return database.executar(
+        `SELECT fk_idComputador FROM tbOcorrencia WHERE idOcorrencia = ${id};`
+    )
+        .then(rows => {
+            const idAtual = rows[0].fk_idComputador;
+            const updateQuery = `UPDATE tbComputador SET status = 'bom' WHERE idComputador = ${idAtual};`;
+            return database.executar(updateQuery);
+        })
+        .catch(error => console.error(error));
 }
+
 
 
 // buscar usuarios de uma organização

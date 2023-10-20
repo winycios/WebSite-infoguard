@@ -19,7 +19,7 @@
 
 </head>
 
-<body onload="validarSessao(), pegarCnpj(), listar()">
+<body onload="validarSessao(), pegarCnpj(), plotarDados()">
     <div class="app-container">
         <div class="app-header">
             <div class="app-header-left">
@@ -245,7 +245,7 @@
     function pegarId(cpf, nome) {
         cpf_usuario = cpf;
         nome_usuario = nome;
-
+        console.log(cpf_usuario);
         pegar_nome.innerHTML = `<input type="text" id="cpf_usuario" placeholder="${nome_usuario}" readonly>`;
     }
 
@@ -368,6 +368,11 @@
             });
     }
 
+    function plotarDados() {
+        setTimeout(() => {
+            listar();
+        }, 100);
+    }
     // listar usuarios
     function listar() {
         var cargo = sessionStorage.CARGO_USUARIO;
@@ -392,7 +397,7 @@
                                             <td style="color:red;">${registro.statusServico}</td>
                                             <td>${registro.cargo}</td>
                                             <td>${registro.telefone} </td>
-                                            <td> <a href="#modal" role="button" class="material-symbols-outlined settings">
+                                            <td> <a href="#modal" role="button"  onclick="pegarId(${registro.cpf}, '${registro.nome}')"  class="material-symbols-outlined settings">
                                                 manage_accounts
                                             </a></td>
                                             </tr>

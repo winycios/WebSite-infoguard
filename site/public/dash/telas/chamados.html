@@ -18,7 +18,7 @@
 
 </head>
 
-<body onload="validarSessao(), listar(), pegarCnpj()">
+<body onload="validarSessao(), plotarDados(), pegarCnpj()">
     <div class="app-container">
         <div class="app-header">
             <div class="app-header-left">
@@ -359,6 +359,11 @@
             });
     }
 
+    function plotarDados() {
+        setTimeout(() => {
+            listar();
+        }, 500);
+    }
 
     function listar() {
         fetch(`/chamadas/listarChamados`, {
