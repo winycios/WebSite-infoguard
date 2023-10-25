@@ -107,12 +107,12 @@
                 <div class="projects-section" style="flex: 1">
                     <span class="status-number">EVENTO : <span id="nome"></span></span>
                     <div class="projects-section-header">
-                        <p><span id="eq1">EQUIPE</span> : <span id="pc">Desktops</span></p>
+                        <p><span id="eq1">EQUIPE</span> : <span id="pc">Selecione um PC</span></p>
 
                         <!-- Dropdown de computadores -->
                         <div class="select">
                             <select id="selectEquipe1">
-                                <option selected disabled>Desktops</option>
+                                <option selected disabled value="none">Selecione ...</option>
                             </select>
                         </div>
                     </div>
@@ -120,21 +120,22 @@
                     <!-- card graficos -->
                     <div class="project-boxes jsGridView">
                         <div class="project-box-wrapper" id="desktops">
-                            <canvas id="barTemp"></canvas>
-                            <canvas id="barFreq"></canvas>
-                            <canvas id="lineRede"></canvas>
-                            <canvas id="barAux"></canvas>
+                            <canvas style="width: 0;" id="barTemp"></canvas>
+                            <canvas style="width: 0;" id="barFreq"></canvas>
+                            <canvas style="width: 0;" id="lineRede"></canvas>
+                            <canvas style="width: 0;" id="barAux"></canvas>
                         </div>
                     </div>
                 </div>
 
                 <!-- message section -->
                 <div class="projects-section" style="flex: 1; margin-left: 34px">
+                    <span class="information"><a href="#target-content">Sobre os gráficos</a></span>
                     <div class="projects-section-header">
-                        <p><span id="eq2">EQUIPE</span> : <span id="pc2">Desktops</span></p>
+                        <p><span id="eq2">EQUIPE</span> : <span id="pc2">Selecione um PC</span></p>
                         <div class="select">
                             <select id="selectEquipe2">
-                                <option selected disabled>Desktops</option>
+                                <option selected disabled>Selecione ...</option>
                             </select>
                         </div>
                     </div>
@@ -142,10 +143,10 @@
                     <!-- card graficos -->
                     <div class="project-boxes jsGridView">
                         <div class="project-box-wrapper" id="desktops">
-                            <canvas id="barTemp_eq2"></canvas>
-                            <canvas id="barFreq_eq2"></canvas>
-                            <canvas id="lineRede_eq2"></canvas>
-                            <canvas id="barAux_eq2"></canvas>
+                            <canvas style="width: 0;" id="barTemp_eq2"></canvas>
+                            <canvas style="width: 0;" id="barFreq_eq2"></canvas>
+                            <canvas style="width: 0;" id="lineRede_eq2"></canvas>
+                            <canvas style="width: 0;" id="barAux_eq2"></canvas>
                         </div>
                     </div>
                 </div>
@@ -196,6 +197,29 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- information -->
+    <div id="target-content">
+        <a href="#" class="close"></a>
+        <div id="target-inner">
+            <h2>Sobre os nossos gráficos</h2>
+            <ul>
+                <li>
+                    <p>Todos são atualizados a cada 10 segundos</p>
+                </li>
+                <li><code>Gráficos de temperatura :</code> os valores são trazidos em graus celsius (°C)</li>
+                <li><code>Gráficos de frequência :</code> os valores são trazidos em porcentual(%). quantos por cento
+                    está sendo utilizado de tal componente</li>
+                <li><code>Gráficos de rede :</code> Sendo o unico valor a Latência, ela pode ser lida por
+                    millisegundos(MS)</li>
+                <p style="text-transform:uppercase;">Gráficos auxiliares</p>
+                <li><code>Ram :</code> o valor trazido é em porcentual(%). Quantos por cento
+                    está sendo utilizado da RAM em determinado computador</li>
+                <li><code>Tempo de atividade :</code> O tempo de atividade que é trazido em porcentual(%), representa a
+                    porcentagem de uso do disco.</li>
+            </ul>
         </div>
     </div>
 
@@ -558,7 +582,7 @@
                 } else {
                     resposta.json().then((eventos) => {
                         eventos.forEach((evento) => {
-                            selectEquipe1.innerHTML += `<option value='${evento.e1}'>${evento.e1}</option>`;
+                            selectEquipe1.innerHTML += `<option value='${evento.idComputador}'>${evento.e1}</option>`;
                         });
                     });
                 }
@@ -579,7 +603,7 @@
                 } else {
                     resposta.json().then((eventos) => {
                         eventos.forEach((evento) => {
-                            selectEquipe2.innerHTML += `<option value='${evento.e2}'>${evento.e2}</option>`;
+                            selectEquipe2.innerHTML += `<option value='${evento.idComputador}'>${evento.e2}</option>`;
                         });
                     });
                 }

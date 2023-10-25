@@ -185,7 +185,7 @@ function listarPCE1() {
                     }
 
                     const time = rows[0].time1;
-                    const query = `SELECT apelidoComputador AS 'e1' FROM tbComputador c
+                    const query = `SELECT idComputador, apelidoComputador AS 'e1' FROM tbComputador c
                         INNER JOIN tbEvento o ON c.fk_idEvento = o.idEvento
                         WHERE fk_idEvento = (SELECT idEvento FROM tbEvento WHERE fk_organizacao = ${globalCnpj} ORDER BY idEvento DESC LIMIT 1) 
                         AND o.status = "Em andamento" AND apelidoComputador LIKE  '%${time}';`;
@@ -210,7 +210,7 @@ function listarPCE2() {
                         return;
                     }
                     const time = rows[0].time2;
-                    var query = `select apelidoComputador as 'e2' from tbComputador c
+                    var query = `select idComputador, apelidoComputador as 'e2' from tbComputador c
             inner join tbEvento o ON c.fk_idEvento = o.idEvento
             where fk_idEvento = (select idEvento from tbEvento where fk_organizacao = ${globalCnpj} ORDER BY idEvento DESC LIMIT 1) 
             AND o.status = "Em andamento" AND apelidoComputador LIKE '%${time}';`;

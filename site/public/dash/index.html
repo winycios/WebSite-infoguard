@@ -115,7 +115,7 @@
           <div class="projects-section-header">
             <p style="text-transform: uppercase;">Chama<span style="color: var(--color-yellow);">dos</span></p>
           </div>
-            <div id="chamado" style="overflow-y: auto;"></div>
+          <div id="chamado" style="overflow-y: auto;"></div>
         </div>
       </div>
     </div>
@@ -134,12 +134,15 @@
   var dataAtual = new Date();
   var hora = dataAtual.getHours();
 
+
   if (hora > 6 && hora < 12) {
     data.innerHTML = `Bom dia!, ${sessionStorage.NOME_USUARIO}`;
-  } else if (hora > 18 && hora < 23) {
+  } else if (hora < 18) {
     data.innerHTML = `Boa tarde, ${sessionStorage.NOME_USUARIO}`;
-  } else {
+  } else if (hora <= 23) {
     data.innerHTML = `Boa noite, ${sessionStorage.NOME_USUARIO}`;
+  } {
+    data.innerHTML = `Boa madrugada, ${sessionStorage.NOME_USUARIO}`;
   }
 
 
@@ -186,8 +189,8 @@
 
           chamado.innerHTML = `<p style="color: var(--link-color)">${erro}</p>`;
           if (data.mensagem == "Erro ao obter dados do chamado") {
-                        location.reload();
-                    }
+            location.reload();
+          }
         });
       } else {
         resposta.json().then((eventos) => {

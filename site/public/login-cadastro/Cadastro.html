@@ -31,6 +31,16 @@
 
                 <div class="dual">
                     <div class="input-box">
+                        <span>Organização</span>
+                        <select id="select_organização">
+                            <option selected disabled value="">Escolha sua organização</option>
+                        </select>
+
+                        <h6>Não encontrou sua empresa ? <a href="#" onclick="show.checked = true;">clique aqui</a></h6>
+                    </div>
+                </div>
+                <div class="dual">
+                    <div class="input-box">
                         <span>Nome</span>
                         <input type="text" id="input_name" placeholder="Primeiro nome">
                     </div>
@@ -58,17 +68,6 @@
                         <option value="Suporte">Suporte</option>
                         <option value="Gerente">Gerente</option>
                     </select>
-                </div>
-
-                <div class="dual">
-                    <div class="input-box">
-                        <span>Organização</span>
-                        <select id="select_organização">
-                            <option selected disabled value="">Escolha sua organização</option>
-                        </select>
-
-                        <h6>Não encontrou sua empresa ? <a href="#" onclick="show.checked = true;">clique aqui</a></h6>
-                    </div>
                 </div>
                 <div class="input-box">
                     <input type="submit" onclick="cadastrar()" value="Cadastrar">

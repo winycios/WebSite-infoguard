@@ -13,6 +13,8 @@ var eventoRouter = require("./src/routes/eventos");
 var usuarioRouter = require("./src/routes/usuarios");
 var organizacaoRouter = require("./src/routes/organizacao");
 var chamadasRouter = require("./src/routes/chamadas");
+var medidasRouter = require("./src/routes/medidas");
+var medidasEq2Router = require("./src/routes/medidasEq2");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -25,6 +27,8 @@ app.use("/evento", eventoRouter);
 app.use("/usuarios", usuarioRouter);
 app.use("/organizacao", organizacaoRouter);
 app.use("/chamadas", chamadasRouter);
+app.use("/medidas", medidasRouter);
+app.use("/medidasEq2", medidasEq2Router);
 
 app.listen(PORTA, function () {
     console.log(`Servidor do seu site já está rodando! Acesse o caminho a seguir para visualizar: http://localhost:${PORTA} \n
