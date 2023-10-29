@@ -89,6 +89,7 @@
                             <p style="text-transform: uppercase;">FUNCIO<span
                                     style="color: var(--color-yellow);">NÁRIOS</span>
                             </p>
+                            <p class="generatorPDF" onclick="gravarPdf()">gerar pdf</p>
                         </div>
 
                         <!-- card usuarios -->
@@ -209,7 +210,7 @@
             <header>Perfeito</header>
             <p id="texto_sucesso"></p>
             <div class="btns">
-                <label class="confirm">Fechar</label>
+                <label class="confirm" for="check_confirm">Fechar</label>
             </div>
         </div>
     </div>
@@ -227,8 +228,23 @@
             <header>ERRO</header>
             <p id="texto_erro"></p>
             <div class="btns">
-                <label class="confirm">Fechar</label>
+                <label class="confirm"  for="check_error">Fechar</label>
             </div>
+        </div>
+    </div>
+
+    <!-- espera -->
+    <div>
+        <input type="checkbox" id="check_calma">
+        <div class="background"></div>
+        <div class="alert_box">
+            <div class="icon">
+                <span class="material-symbols-outlined">
+                    picture_as_pdf
+                </span>
+            </div>
+            <header>Gerando ...</header>
+            <p id="texto_calma"></p>
         </div>
     </div>
 
@@ -592,5 +608,48 @@
         }).catch(function (resposta) {
             console.log(`#ERRO: ${resposta}`);
         });
+    }
+
+
+    function gravarPdf() {
+        event.preventDefault();
+
+        check_calma.checked = true;
+        texto_calma.innerHTML = "Seu relatório está sendo gerado, espere um momentinho !";
+
+        setTimeout(function () {
+            check_calma.checked = false;
+        }, 2100);
+
+        var cnpjVar = sessionStorage.CNPJ_ORGANIZACAO;
+
+        // Enviando o valor da nova input
+        fetch("/pdf/criarPdf", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+
+                cnpjServer: cnpjVar,
+            }),
+        })
+            .then(response => {
+                if (response.ok) {
+                    check_confirm.checked = true;
+                    texto_sucesso.innerHTML = "Relatório criado com sucesso, estará localizado na pasta do projeto !";
+
+                    setTimeout(function () {
+                        check_confirm.checked = false;
+                    }, 3500);
+                } else {
+                    throw new Error('Erro ao criar pdf.');
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 </script>

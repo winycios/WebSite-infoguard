@@ -58,12 +58,14 @@
 }
 
 /* faz ela aparecer */
+#check_calma:checked~.alert_box,
 #check_error:checked~.alert_box,
 #check_confirm:checked~.alert_box,
 #check:checked~.alert_box {
     opacity: 1;
     pointer-events: auto;
 }
+#check_calma:checked~.background,
 #check_error:checked~.background,
 #check_confirm:checked~.background, 
 #check:checked~.background {
@@ -71,6 +73,7 @@
     pointer-events: auto;
 }
 
+#check_calma,
 #check_error,
 #check_confirm,
 #check {

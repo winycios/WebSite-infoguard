@@ -15,10 +15,11 @@
 
 
   <link rel="stylesheet" href="./Assets/css/style.css">
+  <link rel="stylesheet" href="./Assets/css/alert_box.css">
 
 </head>
 
-<body onload="validarTelaInicial(), listar(), pegarCnpj()">
+<body onload="validarTelaInicial(), listar(), pegarCnpj(), graficos()">
   <div class="app-container">
     <div class="app-header">
       <div class="app-header-left">
@@ -96,12 +97,17 @@
                 <span class="status-number">Organização</span>
                 <span class="status-type" id="b_org"></span>
               </div>
+              <div class="item-status">
+                <span class="status-number">Evento</span>
+                <span class="status-type" id="b_event"></span>
+              </div>
             </div>
           </div>
 
           <!-- card graficos -->
           <div class="project-boxes jsGridView">
             <div class="project-box-wrapper">
+              <span style="display: none;" class="status-type" id="eventoGrafico"></span>
               <canvas id="barTemp"></canvas>
               <canvas id="barFreq"></canvas>
               <canvas id="lineRede"></canvas>
@@ -121,6 +127,23 @@
     </div>
   </div>
 
+  <!-- erro -->
+  <div>
+    <input type="checkbox" id="check_error">
+    <div class="background"></div>
+    <div class="alert_box">
+      <div class="icon">
+        <span class="material-symbols-outlined">
+          close
+        </span>
+      </div>
+      <header>ERRO</header>
+      <p id="texto_erro"></p>
+      <div class="btns">
+        <label class="confirm" for="check_error">Fechar</label>
+      </div>
+    </div>
+  </div>
 
   <!-- partial -->
   <script src="./Assets/js/script.js"></script>
@@ -134,12 +157,12 @@
   var dataAtual = new Date();
   var hora = dataAtual.getHours();
 
-
+  console.log(hora);
   if (hora > 6 && hora < 12) {
     data.innerHTML = `Bom dia!, ${sessionStorage.NOME_USUARIO}`;
   } else if (hora < 18) {
     data.innerHTML = `Boa tarde, ${sessionStorage.NOME_USUARIO}`;
-  } else if (hora <= 23) {
+  } else if (hora <= 24) {
     data.innerHTML = `Boa noite, ${sessionStorage.NOME_USUARIO}`;
   } {
     data.innerHTML = `Boa madrugada, ${sessionStorage.NOME_USUARIO}`;
@@ -176,9 +199,41 @@
     }
   }
 
-
   function listar() {
-    fetch(`/relatorio/plotar_chamado`, {
+    var msg = document.getElementById('b_event');
+    // plotar evento
+    fetch(`/index/plotar_evento`, {
+      method: "GET", cache: 'no-store'
+    }).then(function (resposta) {
+      console.log("resposta: ", resposta);
+      if (!resposta.ok) {
+
+        resposta.json().then(function (data) {
+          var erro = data.mensagem;
+
+          eventoGrafico.style.display = "block";
+          eventoGrafico.innerHTML = 'Não tem nenhum evento acontecendo !';
+          msg.innerHTML = erro;
+        });
+      } else {
+
+        resposta.json().then((eventos) => {
+          eventos.forEach((registro) => {
+
+            msg.innerHTML = registro.nome;
+
+           
+
+          });
+        });
+      }
+    }).catch(function (resposta) {
+      console.log(`#ERRO: ${resposta}`);
+    });
+
+
+    // plotar chamados
+    fetch(`/index/plotar_chamado`, {
       method: "GET", cache: 'no-store'
     }).then(function (resposta) {
       console.log("resposta: ", resposta);
@@ -302,7 +357,7 @@
 
     // Retornando a Promise
     // Enviando o valor da nova input
-    fetch("/relatorio/pegarCnpj", {
+    fetch("/index/pegarCnpj", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

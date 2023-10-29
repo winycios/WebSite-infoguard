@@ -4,10 +4,13 @@ process.env.AMBIENTE_PROCESSO = "desenvolvimento";
 var express = require("express");
 var cors = require("cors");
 var path = require("path");
+
 var PORTA = process.env.AMBIENTE_PROCESSO == "desenvolvimento" ? 3333 : 8080;
 
 var app = express();
 
+var pdfRouter = require("./src/routes/pdf");
+var indexRouter = require("./src/routes/index");
 var relatorioRouter = require("./src/routes/relatorio");
 var eventoRouter = require("./src/routes/eventos");
 var usuarioRouter = require("./src/routes/usuarios");
@@ -22,6 +25,8 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(cors());
 
+app.use("/pdf", pdfRouter);
+app.use("/index", indexRouter);
 app.use("/relatorio", relatorioRouter);
 app.use("/evento", eventoRouter);
 app.use("/usuarios", usuarioRouter);
