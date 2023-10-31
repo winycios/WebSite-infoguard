@@ -5,7 +5,7 @@ var medidaModel = require("../models/medidasModel");
 // ------------------------ temperatura
 function buscarUltimasMedidasTempEq1(req, res) {
 
-    const limite_linhas = 1;
+    const limite_linhas = 4;
 
     var apelidoMaquina = req.params.apelidoMaquina;
 
@@ -46,7 +46,7 @@ function buscarMedidasEmTempoRealTempEq1(req, res) {
 // ------------------------ frequencia
 function buscarUltimasMedidasFreqEq1(req, res) {
 
-    const limite_linhas = 1;
+    const limite_linhas = 4;
 
     var apelidoMaquina = req.params.apelidoMaquina;
 

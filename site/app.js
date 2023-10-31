@@ -11,6 +11,7 @@ var app = express();
 
 var pdfRouter = require("./src/routes/pdf");
 var indexRouter = require("./src/routes/index");
+var historicoRouter = require("./src/routes/historico");
 var relatorioRouter = require("./src/routes/relatorio");
 var eventoRouter = require("./src/routes/eventos");
 var usuarioRouter = require("./src/routes/usuarios");
@@ -34,6 +35,7 @@ app.use("/organizacao", organizacaoRouter);
 app.use("/chamadas", chamadasRouter);
 app.use("/medidas", medidasRouter);
 app.use("/medidasEq2", medidasEq2Router);
+app.use("/historico", historicoRouter);
 
 app.listen(PORTA, function () {
     console.log(`Servidor do seu site já está rodando! Acesse o caminho a seguir para visualizar: http://localhost:${PORTA} \n

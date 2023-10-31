@@ -90,19 +90,19 @@ function plotarGraficoTempEq2(resposta, apelidoMaquina) {
 
     // Criando estrutura para plotar gráfico - dados
     let dados = {
-        labels: [labels],
+        labels: labels,
         datasets: [{
             label: 'Temperatura CPU (°C)',
             data: [],
             borderWidth: 1,
-            backgroundColor: ['#ffcc00'],
-            borderColor: 'black',
+            backgroundColor: ['black'],
+            borderColor: 'rgba(46, 204, 113, 1)',
         }, {
             label: 'Temperatura GPU (°C)',
-            fill: false,
             data: [],
-            backgroundColor: ['#89cff0'],
-            borderColor: 'white',
+            borderWidth: 1,
+            backgroundColor: ['white'],
+            borderColor: 'rgba(231, 76, 60, 1)',
         }]
     };
 
@@ -117,7 +117,7 @@ function plotarGraficoTempEq2(resposta, apelidoMaquina) {
 
     // Criando estrutura para plotar gráfico - config
     const config = {
-        type: 'bar',
+        type: 'line',
         data: dados,
         options: {
             scales: {
@@ -129,7 +129,7 @@ function plotarGraficoTempEq2(resposta, apelidoMaquina) {
                 title: {
                     display: true,
                     text: 'Temperatura dos computadores',
-                    color: '#ffcc00',
+                    color: 'rgba(46, 204, 113, 1)',
                     font: {
                         size: 16,
                         weight: 'bold',
@@ -242,19 +242,19 @@ function plotarGraficoFreqEq2(resposta, apelidoMaquina) {
 
     // Criando estrutura para plotar gráfico - dados
     let dados = {
-        labels: [labels],
+        labels: labels,
         datasets: [{
             label: 'Frequência CPU (% )',
             data: [],
             borderWidth: 1,
-            backgroundColor: ['#ffcc00'],
-            borderColor: 'black',
+            backgroundColor: ['black'],
+            borderColor: 'rgba(46, 204, 113, 1)',
         }, {
             label: 'Frequência GPU (% )',
-            fill: false,
             data: [],
-            backgroundColor: ['#89cff0'],
-            borderColor: 'white',
+            borderWidth: 1,
+            backgroundColor: ['white'],
+            borderColor: 'rgba(231, 76, 60, 1)',
         }]
     };
 
@@ -268,7 +268,7 @@ function plotarGraficoFreqEq2(resposta, apelidoMaquina) {
 
     // Criando estrutura para plotar gráfico - config
     const config = {
-        type: 'bar',
+        type: 'line',
         data: dados,
         options: {
             scales: {
@@ -280,7 +280,7 @@ function plotarGraficoFreqEq2(resposta, apelidoMaquina) {
                 title: {
                     display: true,
                     text: 'Frequência dos computadores',
-                    color: '#ffcc00',
+                    color: 'rgba(46, 204, 113, 1)',
                     font: {
                         size: 16,
                         weight: 'bold',
@@ -399,7 +399,7 @@ function plotarGraficoRedeEq2(resposta, apelidoMaquina) {
             data: [],
             fill: false,
             backgroundColor: ['black'],
-            borderColor: ['#ffcc00'],
+            borderColor: ['rgba(46, 204, 113, 1)'],
             tension: 0.1
         }]
     };
@@ -425,7 +425,7 @@ function plotarGraficoRedeEq2(resposta, apelidoMaquina) {
                 title: {
                     display: true,
                     text: 'Rede',
-                    color: '#ffcc00',
+                    color: 'rgba(46, 204, 113, 1)',
                     font: {
                         size: 16,
                         weight: 'bold',
@@ -542,7 +542,7 @@ function plotarGraficoAuxEq2(resposta, apelidoMaquina) {
             label: 'Tempo de atividade (% )',
             data: [],
             backgroundColor: [
-                '#ffcc00'
+                'rgba(46, 204, 113, 1)'
             ],
             borderColor: ['black'],
             tension: 0.1
@@ -550,7 +550,7 @@ function plotarGraficoAuxEq2(resposta, apelidoMaquina) {
             label: 'ram (% )',
             data: [],
             backgroundColor: [
-                '#89cff0'
+                'rgba(231, 76, 60, 1)'
             ],
             borderColor: ['black'],
             tension: 0.1
@@ -579,7 +579,7 @@ function plotarGraficoAuxEq2(resposta, apelidoMaquina) {
                 title: {
                     display: true,
                     text: 'auxiliares',
-                    color: '#ffcc00',
+                    color: 'rgba(46, 204, 113, 1)',
                     font: {
                         size: 16,
                         weight: 'bold',

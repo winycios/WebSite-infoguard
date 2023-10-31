@@ -221,7 +221,7 @@ function criar(req, res) {
                                 </div>
                         
                                 <p>Quantidade de chamados por máquina</p>
-                                <div class="table1">
+                                <div class="">
                                     <div class="tbl-header">
                                         <table cellpadding="0" cellspacing="0" border="0">
                                             <thead>
@@ -242,8 +242,8 @@ function criar(req, res) {
                                     </div>
                                 </div>
                         
-                        
-                                <div class="table2">
+                        <br><br>
+                                <div class="">
                                     <p>Quantidade de chamados atendidos</p>
                                     <div class="tbl-header">
                                         <table cellpadding="0" cellspacing="0" border="0">

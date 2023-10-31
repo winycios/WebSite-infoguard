@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="PT-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUPERVISION - COMPUTADORES</title>
+
+    <script src="../../js/sessao.js"></script>
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+
+    <link rel="stylesheet" href="../Assets/css/relatorio.css">
+    <link rel="stylesheet" href="../Assets/css/style.css">
+    <link rel="stylesheet" href="../Assets/css/alert_box.css">
+
+</head>
+
+<body onload="validarSessao(), pegarCnpj(), listarSelect()">
+    <div class="app-container">
+        <div class="app-header">
+            <div class="app-header-left">
+                <span class="app-icon"></span>
+                <p class="app-name">SUPERVISI<span style="color: var(--color-yellow);">ON</span></p>
+                <div class="search-wrapper">
+                    <input class="search-input" id="valorTela" list="telas" type="search" placeholder="Pesquisar">
+                    <button onclick="pesquisarTelasPath()" class="buttonValor">
+                        <span style="color: var(--main-color);" class="material-symbols-outlined">
+                            search
+                        </span>
+                    </button>
+
+                    <datalist id="telas">
+                        <option value="Tela inicial"></option>
+                        <option value="Desktops"></option>
+                        <option value="Chamados"></option>
+                        <option value="Usuário"></option>
+                        <option value="Relatório"></option>
+                    </datalist>
+                </div>
+            </div>
+            <div class="app-header-right">
+                <button class="mode-switch" title="Switch Theme">
+                    <span class="material-symbols-outlined moon">
+                        brightness_5
+                    </span>
+                </button>
+                <button class="profile-btn">
+                    <img src="../Assets/images/user.png" />
+                    <span id="b_usuario"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- sidebar -->
+        <div class="app-content">
+            <div class="app-sidebar">
+                <a href="../index.html" class="app-sidebar-link">
+                    <span class="material-symbols-outlined">
+                        home
+                    </span>
+                </a>
+                <a href="./computadores.html" class="app-sidebar-link">
+                    <span class="material-symbols-outlined">
+                        screen_search_desktop
+                    </span>
+                </a>
+                <a id="cargo" href="./relatorio.html" class="app-sidebar-link active">
+                    <span class="material-symbols-outlined">
+                        quick_reference
+                    </span>
+                </a>
+                <a id="cargo" href="./historico.html" class="app-sidebar-link active">
+                    <span class="material-symbols-outlined">
+                        manage_search
+                    </span>
+                </a>
+                <a href="./chamados.html" class="app-sidebar-link">
+                    <span class="material-symbols-outlined">
+                        support_agent
+                    </span>
+                </a>
+                <a href="" onclick="limparSessaoTelas()" class="app-sidebar-link">
+                    <span class="material-symbols-outlined">
+                        logout
+                    </span>
+                </a>
+            </div>
+
+            <!-- card principal -->
+            <div class="box">
+                <div class="box-message" style="flex: 2; height: 100%;">
+                    <div class="projects-section project-height">
+                        <div class="projects-section-header">
+                            <p style="text-transform: uppercase;">CHAMADOS<span style="color: var(--color-yellow);">
+                                    ANTIGOS</span>
+                            </p>
+                            <p class="generatorPDF" onclick="gravarPdf()">gerar pdf</p>
+                        </div>
+
+                        <!-- card usuarios -->
+                        <div class="project-boxes jsGridView" style="align-items: unset">
+                            <p><span style="color: var(--link-color);">Selecione um evento: </span></p>
+                            <label class="select" for="slct">
+                                <select id="slct" required="required">
+                                    <option value="" disabled="disabled" selected="selected">Selecione uma opção
+                                    </option>
+
+                                </select>
+                                <svg>
+                                    <use xlink:href="#select-arrow-down"></use>
+                                </svg>
+                            </label>
+                            <!-- SVG Sprites-->
+                            <svg class="sprites">
+                                <symbol id="select-arrow-down" viewbox="0 0 10 6">
+                                    <polyline points="1 1 5 5 9 1"></polyline>
+                                </symbol>
+                            </svg>
+                            </label>
+                            <div class="containerTable">
+                                <ul class="responsive-table">
+                                    <li class="table-header">
+                                        <div class="col col-1">Máquina</div>
+                                        <div class="col col-2">descrição</div>
+                                        <div class="col col-3">Operador</div>
+                                        <div class="col col-4">Hora</div>
+                                    </li>
+                                    <div id="listaChamados"></div>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- message section -->
+                <div class="box-message"
+                    style="display: flex; flex-direction: column; gap: 20px; flex: 1; height: 100%;">
+
+                    <div class="projects-section" style="margin-left: 34px;">
+                        <div class="projects-section-header">
+                            <p style="text-transform: uppercase;">EVE<span
+                                    style="color: var(--color-yellow);">NTO</span>
+                            </p>
+                        </div>
+                        <!-- card computadores -->
+                        <div class="project-boxes jsGridView" style="align-items: unset">
+                            <div class="container">
+                                <ul class="responsive-table">
+                                    <li class="table-row">
+                                        <div class="">Evento : <span id="evento"></span></div>
+                                    </li>
+                                    <li class="table-row">
+                                        <div class="">Equipe 1 : <span id="eq1"></span></div>
+                                    </li>
+                                    <li class="table-row">
+                                        <div class="">Equipe 2 : <span id="eq2"></span></div>
+                                    </li>
+                                    <li class="table-row">
+                                        <div class="">Finalizado : <span id="fim"></span></div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- confirmação -->
+    <div>
+        <input type="checkbox" id="check_confirm">
+        <div class="background"></div>
+        <div class="alert_box">
+            <div class="icon">
+                <span class="material-symbols-outlined" style="color: #26f267; border: 3px solid #26f267;">
+                    check
+                </span>
+            </div>
+            <header>Perfeito</header>
+            <p id="texto_sucesso"></p>
+            <div class="btns">
+                <label class="confirm" for="check_confirm">Fechar</label>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- espera -->
+    <div>
+        <input type="checkbox" id="check_calma">
+        <div class="background"></div>
+        <div class="alert_box">
+            <div class="icon">
+                <span class="material-symbols-outlined">
+                    picture_as_pdf
+                </span>
+            </div>
+            <header>Gerando ...</header>
+            <p id="texto_calma"></p>
+        </div>
+    </div>
+
+    <script src="../Assets/js/script.js"></script>
+</body>
+
+</html>
+
+<script>
+
+    function pegarCnpj() {
+        var cnpjVar = sessionStorage.CNPJ_ORGANIZACAO;
+        var cargo = sessionStorage.CARGO_USUARIO;
+
+        if (cargo != "Gerente") {
+            window.location = "../index.html";
+        }
+
+
+        // Retornando a Promise
+        // Enviando o valor da nova input
+        fetch("/historico/pegarCnpj", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                cnpjServer: cnpjVar,
+
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+            })
+            .catch(function (erro) {
+                console.log(`#ERRO: ${erro}`);
+            });
+    }
+
+
+    document.getElementById('slct').addEventListener('change', function () {
+        var selectEvento = document.getElementById('slct');
+        var opcaoEvento = selectEvento.value;
+
+        if (opcaoEvento != "") {
+            document.getElementById('listaChamados').innerHTML = '';
+            listarChamado(opcaoEvento);
+            listarEquipe(opcaoEvento);
+        }
+    });
+
+    function listarChamado(opcaoEvento) {
+        fetch(`/historico/plotar_chamado/${opcaoEvento}`, {
+            method: "GET",
+            cache: 'no-store'
+        }).then(function (resposta) {
+            if (!resposta.ok) {
+                resposta.json().then(function (data) {
+                    var erro = data.mensagem;
+
+                    listaChamados.innerHTML = `<p style="color: var(--link-color)">${erro}</p>`;
+                });
+            } else {
+                resposta.json().then((historicos) => {
+                    historicos.forEach((registro) => {
+
+                        const dataAtual = new Date(registro.hora);
+                        const opcoesDeFormato = {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: 'numeric',
+                            minute: 'numeric',
+                            second: 'numeric',
+                            hour12: false // Usar formato de 24 horas 
+                        };
+                        const dataFormatada = dataAtual.toLocaleDateString('pt-BR', opcoesDeFormato);
+
+                        listaChamados.innerHTML += `<li class="table-row">
+                                        <div class="col col-1" data-label="Máquina">${registro.apelidoComputador}</div>
+                                        <div class="col col-2" data-label="descrição">${registro.descricao}</div>
+                                        <div class="col col-3" data-label="Operador">${registro.nome}</div>
+                                        <div class="col col-4" data-label="Hora">${dataFormatada}</div>
+                                    </li>`
+                    });
+                });
+            }
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+        });
+    }
+
+    function listarEquipe(opcaoEvento) {
+        fetch(`/historico/listarEquipe/${opcaoEvento}`, {
+            method: "GET",
+        })
+            .then(function (resposta) {
+                resposta.json().then((historicos) => {
+                    historicos.forEach((dados) => {
+                        const dataAtual = new Date();
+                        const opcoesDeFormato = {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: 'numeric',
+                            minute: 'numeric',
+                            second: 'numeric',
+                            hour12: false // Usar formato de 24 horas 
+                        };
+                        const dataFormatada = dataAtual.toLocaleDateString('pt-BR', opcoesDeFormato);
+
+                        evento.innerHTML = dados.nome;
+                        eq1.innerHTML = dados.time1;
+                        eq2.innerHTML = dados.time2;
+                        fim.innerHTML = dataFormatada;
+                    });
+                });
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+    }
+
+
+    function listarSelect() {
+        fetch("/historico/listarSelect", {
+            method: "GET",
+        })
+            .then(function (resposta) {
+                resposta.json().then((historicos) => {
+                    historicos.forEach((dados) => {
+                        data = new Date();
+                        slct.innerHTML += `<option value='${dados.idEvento}'>${dados.nome}</option>`;
+                    });
+                });
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+    }
+
+
+    function gravarPdf() {
+        event.preventDefault();
+
+        check_calma.checked = true;
+        texto_calma.innerHTML = "Seu relatório está sendo gerado, espere um momentinho !";
+
+        setTimeout(function () {
+            check_calma.checked = false;
+        }, 2100);
+
+        var cnpjVar = sessionStorage.CNPJ_ORGANIZACAO;
+
+        // Enviando o valor da nova input
+        fetch("/pdf/criarPdf", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+
+                cnpjServer: cnpjVar,
+            }),
+        })
+            .then(response => {
+                if (response.ok) {
+                    check_confirm.checked = true;
+                    texto_sucesso.innerHTML = "Relatório criado com sucesso, estará localizado na pasta do projeto !";
+
+                    setTimeout(function () {
+                        check_confirm.checked = false;
+                    }, 3500);
+                } else {
+                    throw new Error('Erro ao criar pdf.');
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+</script>

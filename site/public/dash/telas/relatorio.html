@@ -68,7 +68,16 @@
                         screen_search_desktop
                     </span>
                 </a>
-                <span id="cargo" class="app-sidebar-link active"></span>
+                <a id="cargo" href="./relatorio.html" class="app-sidebar-link active">
+                    <span class="material-symbols-outlined">
+                        quick_reference
+                    </span>
+                </a>
+                <a href="./historico.html" class="app-sidebar-link active">
+                    <span class="material-symbols-outlined">
+                        manage_search
+                    </span>
+                </a>
                 <a href="./chamados.html" class="app-sidebar-link">
                     <span class="material-symbols-outlined">
                         support_agent
@@ -89,7 +98,6 @@
                             <p style="text-transform: uppercase;">FUNCIO<span
                                     style="color: var(--color-yellow);">NÁRIOS</span>
                             </p>
-                            <p class="generatorPDF" onclick="gravarPdf()">gerar pdf</p>
                         </div>
 
                         <!-- card usuarios -->
@@ -228,7 +236,7 @@
             <header>ERRO</header>
             <p id="texto_erro"></p>
             <div class="btns">
-                <label class="confirm"  for="check_error">Fechar</label>
+                <label class="confirm" for="check_error">Fechar</label>
             </div>
         </div>
     </div>
@@ -610,46 +618,4 @@
         });
     }
 
-
-    function gravarPdf() {
-        event.preventDefault();
-
-        check_calma.checked = true;
-        texto_calma.innerHTML = "Seu relatório está sendo gerado, espere um momentinho !";
-
-        setTimeout(function () {
-            check_calma.checked = false;
-        }, 2100);
-
-        var cnpjVar = sessionStorage.CNPJ_ORGANIZACAO;
-
-        // Enviando o valor da nova input
-        fetch("/pdf/criarPdf", {
-            method: "post",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                // crie um atributo que recebe o valor recuperado aqui
-                // Agora vá para o arquivo routes/usuario.js
-
-                cnpjServer: cnpjVar,
-            }),
-        })
-            .then(response => {
-                if (response.ok) {
-                    check_confirm.checked = true;
-                    texto_sucesso.innerHTML = "Relatório criado com sucesso, estará localizado na pasta do projeto !";
-
-                    setTimeout(function () {
-                        check_confirm.checked = false;
-                    }, 3500);
-                } else {
-                    throw new Error('Erro ao criar pdf.');
-                }
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    }
 </script>

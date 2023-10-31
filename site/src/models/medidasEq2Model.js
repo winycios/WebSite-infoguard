@@ -29,7 +29,7 @@ function buscarMedidasEmTempoRealTempEq2(idComputador) {
 function buscarUltimasMedidasFreqEq2(idComputador, limite_linhas) {
 
 
-    instrucaoSql = `select cpuFreq, gpuFreq, DATE_FORMAT(dataHora,'%H:%i:%s') as momento_grafico from tbMonitoramento where fk_idComputador = ${idComputador} order by dataHora desc limit 1;`;
+    instrucaoSql = `select cpuFreq, gpuFreq, DATE_FORMAT(dataHora,'%H:%i:%s') as momento_grafico from tbMonitoramento where fk_idComputador = ${idComputador} order by dataHora desc limit ${limite_linhas};`;
 
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql);

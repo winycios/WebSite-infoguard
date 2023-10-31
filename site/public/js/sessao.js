@@ -15,12 +15,8 @@ function validarSessao() {
         window.location = "../../login-cadastro/Login.html";
     }
 
-    if (cargoUser == "Gerente") {
-        cargo.innerHTML = ` <a href="./relatorio.html" class="app-sidebar-link">
-        <span class="material-symbols-outlined">
-            quick_reference
-        </span>
-    </a>`
+    if (cargoUser != "Gerente") {
+        cargo.style.display = "none";
     }
 }
 
@@ -42,12 +38,8 @@ function validarTelaInicial() {
         window.location = "../login-cadastro/Login.html";
     }
 
-    if (cargoUser == "Gerente") {
-        cargo.innerHTML = ` <a href="./telas/relatorio.html" class="app-sidebar-link">
-        <span class="material-symbols-outlined">
-          quick_reference
-        </span>
-        </a>`
+    if (cargoUser != "Gerente") {
+        cargo.style.display = "none";
     }
 }
 

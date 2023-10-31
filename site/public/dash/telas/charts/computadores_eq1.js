@@ -84,19 +84,19 @@ function plotarGraficoTempEq1(resposta, apelidoMaquina) {
 
     // Criando estrutura para plotar gráfico - dados
     let dados = {
-        labels: [labels],
+        labels: labels,
         datasets: [{
             label: 'Temperatura CPU (°C)',
             data: [],
             borderWidth: 1,
-            backgroundColor: ['#ffcc00'],
-            borderColor: 'black',
+            backgroundColor: ['black'],
+            borderColor: '#ffcc00',
         }, {
             label: 'Temperatura GPU (°C)',
-            fill: false,
             data: [],
-            backgroundColor: ['#89cff0'],
-            borderColor: 'white',
+            borderWidth: 1,
+            backgroundColor: ['white'],
+            borderColor: '#89cff0',
         }]
     };
 
@@ -111,7 +111,7 @@ function plotarGraficoTempEq1(resposta, apelidoMaquina) {
 
     // Criando estrutura para plotar gráfico - config
     const config = {
-        type: 'bar',
+        type: 'line',
         data: dados,
         options: {
             scales: {
@@ -236,19 +236,19 @@ function plotarGraficoFreqEq1(resposta, apelidoMaquina) {
 
     // Criando estrutura para plotar gráfico - dados
     let dados = {
-        labels: [labels],
+        labels: labels,
         datasets: [{
             label: 'Frequência CPU (% )',
             data: [],
             borderWidth: 1,
-            backgroundColor: ['#ffcc00'],
-            borderColor: 'black',
+            backgroundColor: ['black'],
+            borderColor: '#ffcc00',
         }, {
             label: 'Frequência GPU (% )',
-            fill: false,
             data: [],
-            backgroundColor: ['#89cff0'],
-            borderColor: 'white',
+            borderWidth: 1,
+            backgroundColor: ['white'],
+            borderColor: '#89cff0',
         }]
     };
 
@@ -262,7 +262,7 @@ function plotarGraficoFreqEq1(resposta, apelidoMaquina) {
 
     // Criando estrutura para plotar gráfico - config
     const config = {
-        type: 'bar',
+        type: 'line',
         data: dados,
         options: {
             scales: {
