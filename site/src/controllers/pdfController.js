@@ -29,11 +29,12 @@ function pegarDadosOperador(req, res) {
 
 function criar(req, res) {
     const cnpj = req.body.cnpjServer;
+    const evento = req.body.eventoServer;
 
-    pdfModel.pegarDadosOperador(cnpj).then((resultadoOperador) => {
-        pdfModel.pegarDadosOcorrencia(cnpj).then((resultadoOcorrencia) => {
-            pdfModel.pegarDadosEvento(cnpj).then((resultado) => {
-                pdfModel.pegarDadosComputador(cnpj).then((resultadoPc) => {
+    pdfModel.pegarDadosOperador(cnpj, evento).then((resultadoOperador) => {
+        pdfModel.pegarDadosOcorrencia(cnpj, evento).then((resultadoOcorrencia) => {
+            pdfModel.pegarDadosEvento(cnpj, evento).then((resultado) => {
+                pdfModel.pegarDadosComputador(cnpj, evento).then((resultadoPc) => {
                     if (resultado.length > 0) {
                         var org = "";
                         var eventos = "";
@@ -109,6 +110,7 @@ function criar(req, res) {
 
                         <head>
                             <style>
+
                                 h1 {
                                     font-size: 30px;
                                     color: black;
@@ -149,11 +151,11 @@ function criar(req, res) {
                                     border: 1px solid rgba(0, 0, 0, 0.3);
                                 }
                         
-                                th {
+                                th, p {
                                     padding: 20px 15px;
                                     text-align: center;
                                     font-weight: 500;
-                                    font-size: 12px;
+                                    font-size: 17px;
                                     color: black;
                                     text-transform: uppercase;
                                 }
@@ -164,7 +166,7 @@ function criar(req, res) {
                                     padding: 15px;
                                     vertical-align: middle;
                                     font-weight: 300;
-                                    font-size: 12px;
+                                    font-size: 15px;
                                     border-bottom: solid 1px rgba(0, 0, 0, 0.1);
                                 }
                             </style>
@@ -174,7 +176,7 @@ function criar(req, res) {
                             <section>
                                 <h1>Relatório da ${org}</h1>
                                 <hr>
-                                <p>Primeiramente iremos listar todos os eventos</p>
+                                <p>Evento escolhido</p>
                                 <div class="tbl-header">
                                     <table cellpadding="0" cellspacing="0" border="0">
                                         <thead>
@@ -219,7 +221,7 @@ function criar(req, res) {
                                         </tbody>
                                     </table>
                                 </div>
-                        
+                                <hr>
                                 <p>Quantidade de chamados por máquina</p>
                                 <div class="">
                                     <div class="tbl-header">
@@ -241,10 +243,9 @@ function criar(req, res) {
                                         </table>
                                     </div>
                                 </div>
-                        
-                        <br><br>
                                 <div class="">
-                                    <p>Quantidade de chamados atendidos</p>
+                                <hr>
+                                    <p>Operadores que atenderam chamados</p>
                                     <div class="tbl-header">
                                         <table cellpadding="0" cellspacing="0" border="0">
                                             <thead>
@@ -263,6 +264,7 @@ function criar(req, res) {
                                             </tbody>
                                         </table>
                                     </div>
+                                    <hr>
                                 </div>
                             </section>
                         </body>
@@ -270,7 +272,7 @@ function criar(req, res) {
                         </html>
                 `;
 
-                        pdf.create(conteudo).toFile(`historico(${org}).pdf`, (err, result) => {
+                        pdf.create(conteudo).toFile(`historico.pdf`, (err, result) => {
                             if (err) {
                                 console.log("Um erro aconteceu", err);
                                 res.status(500).send("Erro ao criar PDF");

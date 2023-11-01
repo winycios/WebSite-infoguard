@@ -8,6 +8,8 @@
     "postinstall": "cd site && npm install"
   },
   "dependencies": {
-    "html-pdf": "^3.0.1"
+    "html-pdf": "^3.0.1",
+    "pdf-parse": "^1.1.1",
+    "pdfjs-dist": "^3.11.174"
   }
 }

@@ -207,6 +207,23 @@
         </div>
     </div>
 
+    <!-- erro -->
+    <div>
+        <input type="checkbox" id="check_error">
+        <div class="background"></div>
+        <div class="alert_box">
+            <div class="icon">
+                <span class="material-symbols-outlined">
+                    close
+                </span>
+            </div>
+            <header>ERRO</header>
+            <p id="texto_erro"></p>
+            <div class="btns">
+                <label class="confirm" for="check_error">Fechar</label>
+            </div>
+        </div>
+    </div>
     <script src="../Assets/js/script.js"></script>
 </body>
 
@@ -245,7 +262,7 @@
             });
     }
 
-
+var opcaoPdf;
     document.getElementById('slct').addEventListener('change', function () {
         var selectEvento = document.getElementById('slct');
         var opcaoEvento = selectEvento.value;
@@ -254,6 +271,7 @@
             document.getElementById('listaChamados').innerHTML = '';
             listarChamado(opcaoEvento);
             listarEquipe(opcaoEvento);
+            opcaoPdf = opcaoEvento;
         }
     });
 
@@ -351,17 +369,30 @@
     function gravarPdf() {
         event.preventDefault();
 
-        check_calma.checked = true;
-        texto_calma.innerHTML = "Seu relatório está sendo gerado, espere um momentinho !";
+        if (opcaoPdf == "" || opcaoPdf == null) {
 
-        setTimeout(function () {
-            check_calma.checked = false;
-        }, 2100);
+            check_error.checked = true;
+            texto_erro.innerHTML = "Selecione um evento primeiro";
+
+            setTimeout(function () {
+                check_error.checked = false;
+            }, 1500);
+
+            return false;
+        } 
+
+            check_calma.checked = true;
+            texto_calma.innerHTML = "Seu relatório está sendo gerado, espere um momentinho !";
+
+            setTimeout(function () {
+                check_calma.checked = false;
+            }, 2000);
+        
 
         var cnpjVar = sessionStorage.CNPJ_ORGANIZACAO;
 
         // Enviando o valor da nova input
-        fetch("/pdf/criarPdf", {
+        fetch(`/pdf/criarPdf`, {
             method: "post",
             headers: {
                 "Content-Type": "application/json",
@@ -371,15 +402,17 @@
                 // Agora vá para o arquivo routes/usuario.js
 
                 cnpjServer: cnpjVar,
+                eventoServer: opcaoPdf
             }),
         })
             .then(response => {
                 if (response.ok) {
                     check_confirm.checked = true;
-                    texto_sucesso.innerHTML = "Relatório criado com sucesso, estará localizado na pasta do projeto !";
+                    texto_sucesso.innerHTML = "Relatório criado com sucesso, abrindo uma nova guia !";
 
                     setTimeout(function () {
                         check_confirm.checked = false;
+                        window.open('http://localhost:3333/pdfLer', '_blank');
                     }, 3500);
                 } else {
                     throw new Error('Erro ao criar pdf.');
