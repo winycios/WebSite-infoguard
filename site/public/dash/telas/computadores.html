@@ -134,7 +134,6 @@
 
                 <!-- message section -->
                 <div class="projects-section" style="flex: 1; margin-left: 34px">
-                    <button onclick="abrirToast()">Show Toast</button>
                     <span class="information"><a href="#target-content">Sobre os gráficos</a></span>
                     <div class="projects-section-header">
                         <p><span id="eq2">EQUIPE</span> : <span id="pc2">Selecione um PC</span></p>
@@ -206,20 +205,37 @@
     </div>
 
     <!-- Toast -->
-    <div class="toast">
+    <div class="toast" id="toast">
         <div class="toast-content">
             <span class="material-symbols-outlined check">
                 emergency_home
             </span>
             <div class="message">
-                <span class="text text-1">Success</span>
-                <span class="text text-2">Your changes has been saved</span>
+                <span class="text text-1" id="maquina"></span>
+                <span class="text text-2" id="problema"></span>
             </div>
         </div>
         <span class="material-symbols-outlined close" onclick="closed()">
             close
         </span>
-        <div class="progress"></div>
+        <div class="progress" id="progress"></div>
+    </div>
+
+
+    <div class="toast" id="toast2" style="margin-top: 100px; border-left:6px solid rgba(46, 204, 113, 1);">
+        <div class="toast-content">
+            <span class="material-symbols-outlined check">
+                emergency_home
+            </span>
+            <div class="message">
+                <span class="text text-1" id="maquinaEq2"></span>
+                <span class="text text-2" id="problemaEq2"></span>
+            </div>
+        </div>
+        <span class="material-symbols-outlined close" onclick="closed2()">
+            close
+        </span>
+        <div class="progress_green" id="progress2"></div>
     </div>
 
     <!-- information -->
@@ -343,12 +359,15 @@
     <script src="../Assets/js/script.js"></script>
     <script src="../Assets/js/toast.js"></script>
 
+    <script src="../Assets/js/alertas.js"></script>
+    <script src="../Assets/js/alertasEq2.js"></script>
     <script src="./charts/computadores_eq1.js"></script>
     <script src="./charts/computadores_eq2.js"></script>
 </body>
 
 </html>
 <script>
+
     // cadastrar evento
     function cadastrarEvento() {
 
@@ -636,3 +655,6 @@
             });
     }
 </script>
+
+
+

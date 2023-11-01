@@ -2,6 +2,9 @@ document.getElementById('selectEquipe1').addEventListener('change', function () 
     var apelidoMaquina = document.getElementById('selectEquipe1');
     var apelido = apelidoMaquina.value;
 
+    if (apelido == "" || apelido == null) {
+        return false;
+    }
 
     // Obtém a instância atual do gráfico de temperatura
     var ctxTemp = document.getElementById('barTemp').getContext('2d');
@@ -657,8 +660,10 @@ function atualizarGraficoAuxEq1(apelidoMaquina, dados, myChartAux) {
 //  ----------------------  mudar computador
 var selectEquipe1 = document.getElementById('selectEquipe1');
 var mostrarPc = document.getElementById('pc');
+var titulo = document.getElementById(`maquina`)
 
 selectEquipe1.addEventListener("change", function () {
     var opcaoSelecionada = selectEquipe1.options[selectEquipe1.selectedIndex];
     mostrarPc.innerHTML = opcaoSelecionada.text;
+    titulo.innerHTML = opcaoSelecionada.text;
 });

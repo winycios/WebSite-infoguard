@@ -2,7 +2,6 @@ document.getElementById('selectEquipe2').addEventListener('change', function () 
     var apelidoMaquina = document.getElementById('selectEquipe2');
     var apelido = apelidoMaquina.value;
 
-
     // Obtém a instância atual do gráfico de temperatura
     var ctxTemp = document.getElementById('barTemp_eq2').getContext('2d');
     var currentCharTemp = Chart.getChart(ctxTemp);
@@ -46,14 +45,13 @@ document.getElementById('selectEquipe2').addEventListener('change', function () 
 // -------------------------------- temperatura
 function obterDadosGraficoTempEq2(apelidoMaquina) {
 
-    // ...
-
     fetch(`/medidasEq2/ultimasTempEq2/${apelidoMaquina}`, { cache: 'no-store' })
         .then(function (response) {
             if (response.ok) {
                 response.json().then(function (resposta) {
-                    if (resposta.length === 0) {
+                    if (resposta.length === 0 || resposta === undefined) {
                         console.log('A resposta JSON está vazia.');
+                        return false;
                     } else {
                         console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
                         resposta.reverse();
@@ -663,8 +661,10 @@ function atualizarGraficoAuxEq2(apelidoMaquina, dados, myChartAux) {
 //  ----------------------  mudar computador
 var selectEquipe2 = document.getElementById('selectEquipe2');
 var mostrarPc2 = document.getElementById('pc2');
+var titulo2 = document.getElementById(`maquinaEq2`)
 
 selectEquipe2.addEventListener("change", function () {
     var opcaoSelecionada = selectEquipe2.options[selectEquipe2.selectedIndex];
     mostrarPc2.innerHTML = opcaoSelecionada.text;
+    titulo2.innerHTML = opcaoSelecionada.text;
 });

@@ -149,7 +149,7 @@
     background: var(--projects-section);
     padding: 20px 35px 20px 25px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-    border-left: 6px solid red;
+    border-left: 6px solid var(--color-yellow);
     overflow: hidden;
     transform: translateX(calc(100% + 30px));
     transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.35);
@@ -185,12 +185,18 @@
 .message .text {
     font-size: 20px;
     font-weight: 400;
-    ;
     color: var(--main-color);
 }
 
 .message .text.text-1 {
     font-weight: 600;
+    text-transform: uppercase;
+    color: var(--link-color);
+}
+
+.message .text.text-2 {
+    font-weight: 300;
+    font-size: 18px;
     color: var(--link-color);
 }
 
@@ -208,6 +214,7 @@
     opacity: 1;
 }
 
+.toast .progress_green,
 .toast .progress {
     position: absolute;
     bottom: 0;
@@ -217,16 +224,27 @@
     background: var(--button-bg);
 }
 
-.toast .progress:before {
+.toast .progress:before  {
     content: '';
     position: absolute;
     bottom: 0;
     right: 0;
     height: 100%;
     width: 100%;
-    background-color: red;
+    background-color: var(--color-yellow);
 }
 
+.toast .progress_green:before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(46, 204, 113, 1);
+}
+
+.progress_green.active:before,
 .progress.active:before {
     animation: progress 5s linear forwards;
 }

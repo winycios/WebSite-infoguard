@@ -2,6 +2,25 @@ var medidaModel = require("../models/medidasModel");
 
 
 // equipe 1
+
+// todos os itens
+function buscarMedidasEmTempoRealTodosEq1(req, res) {
+
+    var apelidoMaquina = req.params.apelidoMaquina;
+
+    medidaModel.buscarMedidasEmTempoRealTodosEq1(apelidoMaquina).then(function (resultado) {
+        if (resultado.length > 0) {
+            res.status(200).json(resultado);
+        } else {
+            res.status(204).send("Essa maquina não está sendo monitorada!")
+        }
+    }).catch(function (erro) {
+        console.log(erro);
+        console.log("Houve um erro ao buscar as ultimas medidas.", erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
+
 // ------------------------ temperatura
 function buscarUltimasMedidasTempEq1(req, res) {
 
@@ -14,8 +33,8 @@ function buscarUltimasMedidasTempEq1(req, res) {
             res.status(200).json(resultado);
         } else {
             res
-            .status(401)
-            .json({ mensagem: `Esse computador não está sendo monitorado` });
+                .status(401)
+                .json({ mensagem: `Esse computador não está sendo monitorado` });
         }
     }).catch(function (erro) {
         console.log(erro);
@@ -166,5 +185,6 @@ module.exports = {
     buscarUltimasMedidasFreqEq1,
     buscarMedidasEmTempoRealFreqEq1,
     buscarUltimasMedidasTempEq1,
-    buscarMedidasEmTempoRealTempEq1
+    buscarMedidasEmTempoRealTempEq1,
+    buscarMedidasEmTempoRealTodosEq1
 }

@@ -5,6 +5,11 @@ var medidaController = require("../controllers/medidasEq2Controller");
 
 
 //equipe 2
+// tempo-real de todos os itens
+router.get("/tempo-realTodosEq2/:apelidoMaquina", function (req, res) {
+    medidaController.buscarMedidasEmTempoRealTodosEq2(req, res);
+})
+
 // temperatura
 router.get("/ultimasTempEq2/:apelidoMaquina", function (req, res) {
     medidaController.buscarUltimasMedidasTempEq2(req, res);
@@ -19,6 +24,7 @@ router.get("/tempo-realTempEq2/:apelidoMaquina", function (req, res) {
 router.get("/ultimasFreqEq2/:apelidoMaquina", function (req, res) {
     medidaController.buscarUltimasMedidasFreqEq2(req, res);
 });
+
 
 router.get("/tempo-realFreqEq2/:apelidoMaquina", function (req, res) {
     medidaController.buscarMedidasEmTempoRealFreqEq2(req, res);

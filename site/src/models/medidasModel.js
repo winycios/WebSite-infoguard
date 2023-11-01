@@ -2,6 +2,15 @@ var database = require("../database/config");
 
 
 // equipe 1
+
+// todos
+function buscarMedidasEmTempoRealTodosEq1(idComputador) {
+    
+    instrucaoSql = `select cpuTemp, gpuTemp, cpuFreq , gpuFreq, ram, redeLatencia, DATE_FORMAT(dataHora,'%H:%i:%s') as momento_grafico from tbMonitoramento where fk_idComputador = ${idComputador} order by dataHora desc limit 1;`
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
 // temperatura da GPU e CPU
 function buscarUltimasMedidasTempEq1(idComputador, limite_linhas) {
 
@@ -105,5 +114,6 @@ module.exports = {
     buscarUltimasMedidasTempEq1,
     buscarMedidasEmTempoRealTempEq1,
     buscarUltimasMedidasFreqEq1,
-    buscarMedidasEmTempoRealFreqEq1
+    buscarMedidasEmTempoRealFreqEq1,
+    buscarMedidasEmTempoRealTodosEq1
 }

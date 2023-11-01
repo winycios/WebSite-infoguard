@@ -2,6 +2,26 @@ var medidaModel = require("../models/medidasEq2Model");
 
 
 // equipe 2
+
+// todos os itens
+function buscarMedidasEmTempoRealTodosEq2(req, res) {
+
+    var apelidoMaquina = req.params.apelidoMaquina;
+
+    medidaModel.buscarMedidasEmTempoRealTodosEq2(apelidoMaquina).then(function (resultado) {
+        if (resultado.length > 0) {
+            res.status(200).json(resultado);
+        } else {
+            res.status(204).send("Essa maquina não está sendo monitorada!")
+        }
+    }).catch(function (erro) {
+        console.log(erro);
+        console.log("Houve um erro ao buscar as ultimas medidas.", erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
+
+
 // ------------------------ temperatura
 function buscarUltimasMedidasTempEq2(req, res) {
 
@@ -166,5 +186,6 @@ module.exports = {
     buscarUltimasMedidasFreqEq2,
     buscarMedidasEmTempoRealFreqEq2,
     buscarUltimasMedidasTempEq2,
-    buscarMedidasEmTempoRealTempEq2
+    buscarMedidasEmTempoRealTempEq2,
+    buscarMedidasEmTempoRealTodosEq2
 }
