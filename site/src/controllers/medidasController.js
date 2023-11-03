@@ -1,18 +1,28 @@
 var medidaModel = require("../models/medidasModel");
 
+// pegar cnpj
+function buscaCnpj(req, res) {
+    var cnpj = req.body.cnpjServer;
+
+    medidaModel.buscaCnpj(cnpj).then((resultado) => {
+        res.status(201).json(resultado);
+    });
+}
 
 // equipe 1
 
 // todos os itens
 function buscarMedidasEmTempoRealTodosEq1(req, res) {
 
-    var apelidoMaquina = req.params.apelidoMaquina;
+    var cnpj = req.params.cnpj;
 
-    medidaModel.buscarMedidasEmTempoRealTodosEq1(apelidoMaquina).then(function (resultado) {
+    medidaModel.buscaCnpj(cnpj).then(function (resultado) {
         if (resultado.length > 0) {
-            res.status(200).json(resultado);
+            medidaModel.buscarMedidasEmTempoRealTodosEq1(cnpj).then((resultado) => {
+                res.status(200).json(resultado);
+            });
         } else {
-            res.status(204).send("Essa maquina não está sendo monitorada!")
+            res.status(204).send("Essa organização não existe mais")
         }
     }).catch(function (erro) {
         console.log(erro);
@@ -184,6 +194,7 @@ module.exports = {
     buscarMedidasEmTempoRealRedeEq1,
     buscarUltimasMedidasFreqEq1,
     buscarMedidasEmTempoRealFreqEq1,
+    buscaCnpj,
     buscarUltimasMedidasTempEq1,
     buscarMedidasEmTempoRealTempEq1,
     buscarMedidasEmTempoRealTodosEq1

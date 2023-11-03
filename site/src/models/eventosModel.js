@@ -160,16 +160,33 @@ function desktop(qtd, cnpj, equipe1, equipe2) {
 
 /* select das equipes e nome do evento*/
 function plotar_equipe() {
-    if (globalCnpj == undefined) {
+    if (globalCnpj === undefined) {
+        return Promise.resolve(0);
     } else {
         console.log("select das equipes e nome do evento");
         var instrucao = `
-    select time1 as 't1', time2 as 't2', nome from tbEvento where  idEvento = (select idEvento from tbEvento where fk_organizacao = ${globalCnpj} ORDER BY idEvento DESC LIMIT 1) AND status = "Em andamento";
-    `;
+            SELECT time1 as 't1', time2 as 't2', nome 
+            FROM tbEvento 
+            WHERE idEvento = (
+                SELECT idEvento 
+                FROM tbEvento 
+                WHERE fk_organizacao = ${globalCnpj} 
+                ORDER BY idEvento DESC 
+                LIMIT 1
+            ) AND status = "Em andamento";
+        `;
         console.log("Executando a instrução SQL: \n" + instrucao);
-        return database.executar(instrucao);
+
+        return database.executar(instrucao)
+            .then(result => result)
+            .catch(error => {
+                // Handle any errors that occur during database execution
+                console.error("Error executing SQL:", error);
+                throw error; // Rethrow the error to propagate it
+            });
     }
 }
+
 
 /* listar maquinas*/
 function listarPCE1() {
@@ -201,6 +218,7 @@ function listarPCE1() {
 
 function listarPCE2() {
     if (globalCnpj == undefined) {
+        return Promise.reject("CNPJ não definido");
     } else {
         return new Promise((resolve, reject) => {
             database.executar(`select time2 from tbEvento where fk_organizacao = ${globalCnpj} AND status = "Em andamento";`)

@@ -297,13 +297,8 @@ select option {
 
 
 
-/* modal lateral */
+/* modal */
 
-/*******************************
-* MODAL AS LEFT/RIGHT SIDEBAR
-* Add "left" or "right" in modal parent div, after class="modal".
-* Get free snippets on bootpen.com
-*******************************/
 .modal.left .modal-dialog,
 .modal.right .modal-dialog {
     position: fixed;
@@ -365,10 +360,6 @@ select option {
 }
 
 /* ----- v CAN BE DELETED v ----- */
-body {
-    background-color: #78909C;
-}
-
 .demo {
     padding-top: 60px;
     padding-bottom: 110px;

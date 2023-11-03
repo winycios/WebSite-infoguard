@@ -4,7 +4,6 @@ function validarSessao() {
     var nome = sessionStorage.NOME_USUARIO;
     var org = sessionStorage.CNPJ_ORGANIZACAO;
     var cargoUser = sessionStorage.CARGO_USUARIO;
-    
 
     var cargo = document.getElementById("cargo");
     var b_usuario = document.getElementById("b_usuario");

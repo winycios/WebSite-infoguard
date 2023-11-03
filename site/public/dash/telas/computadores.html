@@ -18,7 +18,7 @@
 
 </head>
 
-<body onload="validarSessao() , pegarCnpj(), listar()">
+<body onload="validarSessao() , pegarCnpj(), listar(), chamarAlertas()">
     <div class="app-container">
         <div class="app-header">
             <div class="app-header-left">
@@ -134,7 +134,10 @@
 
                 <!-- message section -->
                 <div class="projects-section" style="flex: 1; margin-left: 34px">
-                    <span class="information"><a href="#target-content">Sobre os gráficos</a></span>
+                    <div style="display: flex; flex-direction: row; gap: 20px;">
+                        <span class="information"><a href="#target-content">Sobre os gráficos</a></span>
+                        <span class="information"><a href="#modalAlertas">índices de alertas</a></span>
+                    </div>
                     <div class="projects-section-header">
                         <p><span id="eq2">EQUIPE</span> : <span id="pc2">Selecione um PC</span></p>
                         <div class="select">
@@ -221,7 +224,6 @@
         <div class="progress" id="progress"></div>
     </div>
 
-
     <div class="toast" id="toast2" style="margin-top: 100px; border-left:6px solid rgba(46, 204, 113, 1);">
         <div class="toast-content">
             <span class="material-symbols-outlined check">
@@ -258,6 +260,49 @@
                 <li><code>Tempo de atividade :</code> O tempo de atividade que é trazido em porcentual(%), representa a
                     porcentagem de uso do disco.</li>
             </ul>
+        </div>
+    </div>
+
+
+    <!-- valores dos alertas -->
+    <div class="modal-wrapper modal" id="modalAlertas">
+        <div class="modal-body card">
+            <div class="details-modal">
+                <a href="#" role="button" aria-label="close this modal" class="details-modal-close">
+                    <span class="material-symbols-outlined">
+                        close
+                    </span>
+                </a>
+                <div class="details-modal-title">
+                    <h2>VALORES CRÍTICOS DOS ALERTAS</h2>
+                </div>
+                <div class="details-modal-content">
+                    <div class="wrapper">
+                        <div class="form">
+                            <div class="input-box">
+                                <label>TEMPERATURA :</label>
+                                <input type="text" id="temperatura" placeholder="" required>
+                            </div>
+                            <div class="input-box">
+                                <label>FREQUÊNCIA :</label>
+                                <input type="text" id="frequencia" placeholder="" required>
+                            </div>
+                            <div class="input-box">
+                                <label>LATÊNCIA :</label>
+                                <input type="text" id="latencia" placeholder="" required>
+                            </div>
+                            <div class="input-box">
+                                <label>RAM :</label>
+                                <input type="text" id="ram" placeholder="" required>
+                            </div>
+                            <div class="input-box button">
+                                <input type="Submit" onclick="atualizarAlertas()" id="buttonAlerta"
+                                    value="Atualizar valores máximos">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -368,11 +413,63 @@
 </html>
 <script>
 
+    // valida os valores que o usuario digitar
+    function validarEntrada(valor, nomeCampo) {
+        if (valor === "" || isNaN(valor) || valor < 0) {
+            check_error.checked = true;
+            texto_erro.innerHTML = `Campo ${nomeCampo} inválido`;
+
+
+            setTimeout(function () {
+                check_error.checked = false;
+            }, 1500);
+            return false;
+        }
+        return true;
+    }
+
+    // atualiza os limites dos alertas
+    function atualizarAlertas() {
+        var temp = document.getElementById("temperatura").value,
+            freq = document.getElementById("frequencia").value,
+            late = document.getElementById("latencia").value,
+            ramValue = document.getElementById("ram").value;
+
+        if (!(validarEntrada(temp, "Temperatura") && validarEntrada(freq, "Frequência") && validarEntrada(late, "Latência") && validarEntrada(ramValue, "RAM"))) {
+            console.log("Preencha os campos corretamente.");
+
+        } else {
+            sessionStorage.setItem('Temp', temp);
+            sessionStorage.setItem('Freq', freq);
+            sessionStorage.setItem('Late', late);
+            sessionStorage.setItem('Ram', ramValue);
+
+            check_confirm.checked = true;
+            texto_sucesso.innerHTML = "Os indicadores foram atualizados com sucesso. Em breve, em até 10 segundos, as alterações serão refletidas!";
+
+
+            setTimeout(function () {
+                check_confirm.checked = false;
+            }, 1500);
+        }
+
+        temperatura.value = "";
+        frequencia.value = "";
+        latencia.value = "";
+        ram.value = "";
+    }
+
+
+    function chamarAlertas() {
+
+        atualizacaoPeriodica();
+        atualizacaoPeriodicaEq2();
+    }
+
     // cadastrar evento
     function cadastrarEvento() {
 
         // Agora vá para o método fetch logo abaixo
-        var cnpjVar = sessionStorage.CNPJ_ORGANIZACAO;
         var equipe1Var = input_equipe1.value;
         var equipe2Var = input_equipe2.value;
         var eventoVar = input_evento.value;
@@ -405,7 +502,7 @@
                     equipe2Server: equipe2Var,
                     eventoServer: eventoVar,
                     qtdServer: qtdVar,
-                    cnpjServer: cnpjVar,
+                    cnpjServer: sessionStorage.CNPJ_ORGANIZACAO,
 
                 }),
             })
@@ -445,7 +542,6 @@
     }
 
     function pegarCnpj() {
-        var cnpjVar = sessionStorage.CNPJ_ORGANIZACAO;
 
         // Retornando a Promise
         // Enviando o valor da nova input
@@ -457,7 +553,7 @@
             body: JSON.stringify({
                 // crie um atributo que recebe o valor recuperado aqui
                 // Agora vá para o arquivo routes/usuario.js
-                cnpjServer: cnpjVar,
+                cnpjServer: sessionStorage.CNPJ_ORGANIZACAO
 
             }),
         })
@@ -474,7 +570,6 @@
         var equipe1Var = at_input_equipe1.value;
         var equipe2Var = at_input_equipe2.value;
         var eventoVar = at_input_evento.value;
-        var cnpjVar = sessionStorage.CNPJ_ORGANIZACAO;
 
         // Enviando o valor da nova input
         fetch("/evento/updateEvento", {
@@ -488,7 +583,7 @@
                 equipe1Server: equipe1Var,
                 equipe2Server: equipe2Var,
                 eventoServer: eventoVar,
-                cnpjServer: cnpjVar,
+                cnpjServer: sessionStorage.CNPJ_ORGANIZACAO
             }),
         })
             .then(function (resposta) {
@@ -527,8 +622,6 @@
     function finalizar() {
         // Agora vá para o método fetch logo abaixo
         var confirmacao = "Concluido";
-        var cnpjVar = sessionStorage.CNPJ_ORGANIZACAO;
-
 
         // Enviando o valor da nova input
         fetch("/evento/finalizar", {
@@ -540,7 +633,7 @@
                 // crie um atributo que recebe o valor recuperado aqui
                 // Agora vá para o arquivo routes/usuario.js
                 confirmacaoServer: confirmacao,
-                cnpjServer: cnpjVar,
+                cnpjServer: sessionStorage.CNPJ_ORGANIZACAO,
             }),
         })
             .then(function (resposta) {
@@ -653,8 +746,7 @@
             .catch(function (resposta) {
                 console.log(`#ERRO: ${resposta}`);
             });
+
+        return false;
     }
 </script>
-
-
-

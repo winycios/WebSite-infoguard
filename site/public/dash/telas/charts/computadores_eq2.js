@@ -661,10 +661,8 @@ function atualizarGraficoAuxEq2(apelidoMaquina, dados, myChartAux) {
 //  ----------------------  mudar computador
 var selectEquipe2 = document.getElementById('selectEquipe2');
 var mostrarPc2 = document.getElementById('pc2');
-var titulo2 = document.getElementById(`maquinaEq2`)
 
 selectEquipe2.addEventListener("change", function () {
     var opcaoSelecionada = selectEquipe2.options[selectEquipe2.selectedIndex];
     mostrarPc2.innerHTML = opcaoSelecionada.text;
-    titulo2.innerHTML = opcaoSelecionada.text;
 });

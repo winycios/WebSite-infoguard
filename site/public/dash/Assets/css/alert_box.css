@@ -144,6 +144,7 @@
 .toast {
     position: absolute;
     top: 25px;
+    display: none;
     right: 30px;
     border-radius: 12px;
     background: var(--projects-section);
@@ -224,7 +225,7 @@
     background: var(--button-bg);
 }
 
-.toast .progress:before  {
+.toast .progress:before {
     content: '';
     position: absolute;
     bottom: 0;

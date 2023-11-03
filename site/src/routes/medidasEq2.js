@@ -6,7 +6,7 @@ var medidaController = require("../controllers/medidasEq2Controller");
 
 //equipe 2
 // tempo-real de todos os itens
-router.get("/tempo-realTodosEq2/:apelidoMaquina", function (req, res) {
+router.get("/tempo-realTodosEq2/:cnpj", function (req, res) {
     medidaController.buscarMedidasEmTempoRealTodosEq2(req, res);
 })
 

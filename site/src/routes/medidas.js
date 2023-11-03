@@ -16,7 +16,7 @@ router.get("/tempo-realTempEq1/:apelidoMaquina", function (req, res) {
 
 
 // tempo-real de todos os itens
-router.get("/tempo-realTodosEq1/:apelidoMaquina", function (req, res) {
+router.get("/tempo-realTodosEq1/:cnpj", function (req, res) {
     medidaController.buscarMedidasEmTempoRealTodosEq1(req, res);
 })
 

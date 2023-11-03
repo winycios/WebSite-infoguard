@@ -1,11 +1,23 @@
 var pdfModel = require("../models/pdfModel");
 const pdf = require("html-pdf");
 
+const fs = require('fs');
+var nomeEvento = null
+
 function pegarDadosEvento(req, res) {
     pdfModel.pegarDadosEvento(cnpj).then((resultado) => {
         res.status(200).json(resultado);
     });
 }
+
+function pdfLer(req, res) {
+    const filePath = `historico(${nomeEvento}).pdf`;
+    fs.readFile(filePath, function (err, data) {
+        res.contentType("application/pdf");
+        res.send(data);
+    });
+}
+
 
 function pegarDadosComputador(req, res) {
     pdfModel.pegarDadosComputador(cnpj).then((resultado) => {
@@ -25,7 +37,6 @@ function pegarDadosOperador(req, res) {
         res.status(200).json(resultado);
     });
 }
-
 
 function criar(req, res) {
     const cnpj = req.body.cnpjServer;
@@ -271,8 +282,8 @@ function criar(req, res) {
                         
                         </html>
                 `;
-
-                        pdf.create(conteudo).toFile(`historico.pdf`, (err, result) => {
+                        nomeEvento = org;
+                        pdf.create(conteudo).toFile(`historico(${org}).pdf`, (err, result) => {
                             if (err) {
                                 console.log("Um erro aconteceu", err);
                                 res.status(500).send("Erro ao criar PDF");
@@ -295,5 +306,6 @@ module.exports = {
     pegarDadosEvento,
     pegarDadosComputador,
     pegarDadosOcorrencia,
-    pegarDadosOperador
+    pegarDadosOperador,
+    pdfLer
 };

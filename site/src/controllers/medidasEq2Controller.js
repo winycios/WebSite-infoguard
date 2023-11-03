@@ -1,4 +1,12 @@
 var medidaModel = require("../models/medidasEq2Model");
+// pegar cnpj
+function buscaCnpj(req, res) {
+    var cnpj = req.body.cnpjServer;
+
+    medidaModel.buscaCnpj(cnpj).then((resultado) => {
+        res.status(201).json(resultado);
+    });
+}
 
 
 // equipe 2
@@ -6,13 +14,15 @@ var medidaModel = require("../models/medidasEq2Model");
 // todos os itens
 function buscarMedidasEmTempoRealTodosEq2(req, res) {
 
-    var apelidoMaquina = req.params.apelidoMaquina;
+    var cnpj = req.params.cnpj;
 
-    medidaModel.buscarMedidasEmTempoRealTodosEq2(apelidoMaquina).then(function (resultado) {
+    medidaModel.buscaCnpj(cnpj).then(function (resultado) {
         if (resultado.length > 0) {
-            res.status(200).json(resultado);
+            medidaModel.buscarMedidasEmTempoRealTodosEq2(cnpj).then((resultado) => {
+                res.status(200).json(resultado);
+            });
         } else {
-            res.status(204).send("Essa maquina não está sendo monitorada!")
+            res.status(204).send("Essa organização não existe mais")
         }
     }).catch(function (erro) {
         console.log(erro);
@@ -34,8 +44,8 @@ function buscarUltimasMedidasTempEq2(req, res) {
             res.status(200).json(resultado);
         } else {
             res
-            .status(401)
-            .json({ mensagem: `Esse computador não está sendo monitorado` });
+                .status(401)
+                .json({ mensagem: `Esse computador não está sendo monitorado` });
         }
     }).catch(function (erro) {
         console.log(erro);
@@ -187,5 +197,6 @@ module.exports = {
     buscarMedidasEmTempoRealFreqEq2,
     buscarUltimasMedidasTempEq2,
     buscarMedidasEmTempoRealTempEq2,
-    buscarMedidasEmTempoRealTodosEq2
+    buscarMedidasEmTempoRealTodosEq2,
+    buscaCnpj
 }

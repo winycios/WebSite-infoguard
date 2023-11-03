@@ -69,7 +69,7 @@ function finalizar(req, res) {
                 res.status(200).json(resultado);
             });
         } else {
-                res
+            res
                 .status(401)
                 .json({ mensagem: `Sua organização não tem nenhum evento em andamento` });
         }
@@ -90,7 +90,7 @@ function updateEvento(req, res) {
                 res.status(200).json(resultado);
             });
         } else {
-                res
+            res
                 .status(401)
                 .json({ mensagem: `Sua organização não tem nenhum evento em andamento` });
         }
@@ -106,7 +106,6 @@ function pegarCnpj(req, res) {
 }
 
 // metodos get
-// listar computadores
 // listar computadores
 function listarPCE1(req, res) {
     eventosModel.listarPCE1()
@@ -151,9 +150,12 @@ function plotar_equipe(req, res) {
             res.status(200).json(resultado);
         } else {
             res
-            .status(401)
-            .json({ mensagem: `Nenhum evento acontecendo no momento` });
+                .status(401)
+                .json({ mensagem: `Nenhum evento acontecendo no momento` });
         }
+    }).catch((error) => {
+        console.error(error);
+        res.status(500).json({ mensagem: 'Erro ao listar equipes' });
     });
 }
 

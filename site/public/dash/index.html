@@ -19,7 +19,7 @@
 
 </head>
 
-<body onload="validarTelaInicial(), listar(), pegarCnpj(), graficos()">
+<body onload="validarTelaInicial(), plotarDados(), pegarCnpj()">
   <div class="app-container">
     <div class="app-header">
       <div class="app-header-left">
@@ -74,7 +74,7 @@
           <span class="material-symbols-outlined">
             quick_reference
           </span>
-          </a>
+        </a>
         </a>
         <a href="./telas/chamados.html" class="app-sidebar-link">
           <span class="material-symbols-outlined">
@@ -161,14 +161,13 @@
   var dataAtual = new Date();
   var hora = dataAtual.getHours();
 
-  console.log(hora);
-  if (hora > 6 && hora < 12) {
+  if (hora <= 12) {
     data.innerHTML = `Bom dia!, ${sessionStorage.NOME_USUARIO}`;
   } else if (hora < 18) {
     data.innerHTML = `Boa tarde, ${sessionStorage.NOME_USUARIO}`;
   } else if (hora <= 24) {
     data.innerHTML = `Boa noite, ${sessionStorage.NOME_USUARIO}`;
-  } {
+  } else if (hora < 6) {
     data.innerHTML = `Boa madrugada, ${sessionStorage.NOME_USUARIO}`;
   }
 
@@ -226,7 +225,7 @@
 
             msg.innerHTML = registro.nome;
 
-           
+
 
           });
         });
@@ -354,6 +353,13 @@
     }).catch(function (resposta) {
       console.log(`#ERRO: ${resposta}`);
     });
+  }
+
+  function plotarDados() {
+    setTimeout(() => {
+      listar();
+      graficos();
+    }, 500);
   }
 
   function pegarCnpj() {
