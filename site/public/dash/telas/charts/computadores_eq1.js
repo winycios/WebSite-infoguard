@@ -563,7 +563,7 @@ function plotarGraficoAuxEq1(resposta, apelidoMaquina) {
 
     // Criando estrutura para plotar gráfico - config
     const config = {
-        type: 'bar',
+        type: 'line',
         data: dados,
         options: {
             scales: {

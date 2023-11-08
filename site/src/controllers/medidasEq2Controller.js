@@ -152,7 +152,7 @@ function buscarMedidasEmTempoRealRedeEq2(req, res) {
 // ------------------------ Aux
 function buscarUltimasMedidasAuxEq2(req, res) {
 
-    const limite_linhas = 1;
+    const limite_linhas = 4;
 
     var apelidoMaquina = req.params.apelidoMaquina;
 

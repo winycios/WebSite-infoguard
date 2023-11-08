@@ -9,22 +9,22 @@ function abrirToast() {
 
     setTimeout(() => {
         toast.classList.add("active");
-        progress.classList.add("active");
+        //progress.classList.add("active");
     }, 50);
-    timer1 = setTimeout(() => {
-        toast.classList.remove("active");
-    }, 5000);
-    timer2 = setTimeout(() => {
-        progress.classList.remove("active");
-        toast.style.display = "none";
-    }, 5300);
+    // timer1 = setTimeout(() => {
+    //     toast.classList.remove("active");
+    // }, 5000);
+    // timer2 = setTimeout(() => {
+    //     progress.classList.remove("active");
+    //     toast.style.display = "none";
+    // }, 5300);
 };
 
 function closed() {
     toast.classList.remove("active");
 
     setTimeout(() => {
-        progress.classList.remove("active");
+    //progress.classList.remove("active");
         toast.style.display = "none";
     }, 300);
     clearTimeout(timer1);
@@ -46,23 +46,23 @@ function abrirToastEq2() {
 
     setTimeout(() => {
         toast2.classList.add("active");
-        progress2.classList.add("active");
+    //    progress2.classList.add("active");
     }, 50);
 
-    timer3 = setTimeout(() => {
-        toast2.classList.remove("active");
-    }, 5000); //1s = 1000 milliseconds
-    timer4 = setTimeout(() => {
-        progress2.classList.remove("active");
-        toast2.style.display = "none";
-    }, 5300);
+    // timer3 = setTimeout(() => {
+    //     toast2.classList.remove("active");
+    // }, 5000); //1s = 1000 milliseconds
+    // timer4 = setTimeout(() => {
+    //     progress2.classList.remove("active");
+    //     toast2.style.display = "none";
+    // }, 5300);
 };
 
 function closed2() {
     toast2.classList.remove("active");
 
     setTimeout(() => {
-        progress2.classList.remove("active");
+    //    progress2.classList.remove("active");
         toast2.style.display = "none";
     }, 300);
     clearTimeout(timer3);
