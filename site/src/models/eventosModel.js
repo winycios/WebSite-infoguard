@@ -121,7 +121,7 @@ function cadastrar(equipe1, equipe2, evento, qtd, cnpj) {
     // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
     //  e na ordem de inserção dos dados.
     var instrucao = `
-        insert into tbEvento values (null, '${cnpj}' , '${evento}', '${equipe1}', '${equipe2}', 'Em andamento');
+        insert into tbEvento (fk_organizacao, nome, time1, time2, status) values ('${cnpj}' , '${evento}', '${equipe1}', '${equipe2}', 'Em andamento');
     `;
     console.log('Executando a instrução SQL: \n' + instrucao);
 
@@ -141,13 +141,13 @@ function desktop(qtd, cnpj, equipe1, equipe2) {
                 const promises = [];
                 for (let index = 1; index <= qtd; index++) {
                     promises.push(
-                        database.executar(`insert into tbComputador (idComputador,fk_idEvento,apelidoComputador, status) values (null, '${idAtual}' , 'PC${index}' ' ${equipe1}', 'bom');`)
+                        database.executar(`insert into tbComputador (fk_idEvento,apelidoComputador, status) values ('${idAtual}' , 'PC${index} ${equipe1}', 'bom');`)
                     );
                 }
                 // criação dos computadores da equipe 2
                 for (let index = 1; index <= qtd; index++) {
                     promises.push(
-                        database.executar(`insert into tbComputador (idComputador,fk_idEvento,apelidoComputador, status) values (null, '${idAtual}' , 'PC${index}' ' ${equipe2}', 'bom');`)
+                        database.executar(`insert into tbComputador (fk_idEvento,apelidoComputador, status) values ('${idAtual}' , 'PC${index} ${equipe2}', 'bom');`)
                     );
                 }
             });
@@ -163,7 +163,23 @@ function plotar_equipe() {
         return Promise.resolve(0);
     } else {
         console.log('select das equipes e nome do evento');
-        var instrucao = `
+
+        if (process.env.AMBIENTE_PROCESSO == 'producao') {
+            var instrucao = `
+            SELECT time1 as 't1', time2 as 't2', nome 
+            FROM tbEvento 
+            WHERE idEvento = (
+                SELECT TOP 1
+                idEvento 
+                FROM tbEvento 
+                WHERE fk_organizacao = ${globalCnpj} 
+                ORDER BY idEvento DESC 
+            ) AND status = 'Em andamento';
+        `;
+    
+        }
+        else if (process.env.AMBIENTE_PROCESSO == 'desenvolvimento') {
+            var instrucao = `
             SELECT time1 as 't1', time2 as 't2', nome 
             FROM tbEvento 
             WHERE idEvento = (
@@ -174,6 +190,12 @@ function plotar_equipe() {
                 LIMIT 1
             ) AND status = 'Em andamento';
         `;
+    
+        } else {
+            console.log('\nO AMBIENTE (produção OU desenvolvimento) NÃO FOI DEFINIDO EM app.js\n');
+            return
+        }
+       
         console.log('Executando a instrução SQL: \n' + instrucao);
 
         return database.executar(instrucao)
@@ -201,10 +223,25 @@ function listarPCE1() {
                     }
 
                     const time = rows[0].time1;
-                    const query = `SELECT idComputador, apelidoComputador AS 'e1' FROM tbComputador c
+
+                    if (process.env.AMBIENTE_PROCESSO == 'producao') {
+                        var query = `SELECT idComputador, apelidoComputador AS 'e1' FROM tbComputador c
+                        INNER JOIN tbEvento o ON c.fk_idEvento = o.idEvento
+                        WHERE fk_idEvento = (SELECT TOP 1 idEvento FROM tbEvento WHERE fk_organizacao = ${globalCnpj} ORDER BY idEvento DESC) 
+                        AND o.status = 'Em andamento' AND apelidoComputador LIKE  '%${time}';`;
+                
+                    }
+                    else if (process.env.AMBIENTE_PROCESSO == 'desenvolvimento') {
+                        var query = `SELECT idComputador, apelidoComputador AS 'e1' FROM tbComputador c
                         INNER JOIN tbEvento o ON c.fk_idEvento = o.idEvento
                         WHERE fk_idEvento = (SELECT idEvento FROM tbEvento WHERE fk_organizacao = ${globalCnpj} ORDER BY idEvento DESC LIMIT 1) 
                         AND o.status = 'Em andamento' AND apelidoComputador LIKE  '%${time}';`;
+                
+                    } else {
+                        console.log('\nO AMBIENTE (produção OU desenvolvimento) NÃO FOI DEFINIDO EM app.js\n');
+                        return
+                    }
+                   
 
                     return database.executar(query);
                 })
@@ -227,11 +264,25 @@ function listarPCE2() {
                         return;
                     }
                     const time = rows[0].time2;
-                    var query = `select idComputador, apelidoComputador as 'e2' from tbComputador c
-            inner join tbEvento o ON c.fk_idEvento = o.idEvento
-            where fk_idEvento = (select idEvento from tbEvento where fk_organizacao = ${globalCnpj} ORDER BY idEvento DESC LIMIT 1) 
-            AND o.status = 'Em andamento' AND apelidoComputador LIKE '%${time}';`;
 
+                    if (process.env.AMBIENTE_PROCESSO == 'producao') {
+                        var query = `select idComputador, apelidoComputador as 'e2' from tbComputador c
+                        inner join tbEvento o ON c.fk_idEvento = o.idEvento
+                        where fk_idEvento = (select TOP 1 idEvento from tbEvento where fk_organizacao = ${globalCnpj} ORDER BY idEvento DESC) 
+                        AND o.status = 'Em andamento' AND apelidoComputador LIKE '%${time}';`;
+                
+                    }
+                    else if (process.env.AMBIENTE_PROCESSO == 'desenvolvimento') {
+                        var query = `select idComputador, apelidoComputador as 'e2' from tbComputador c
+                        inner join tbEvento o ON c.fk_idEvento = o.idEvento
+                        where fk_idEvento = (select idEvento from tbEvento where fk_organizacao = ${globalCnpj} ORDER BY idEvento DESC LIMIT 1) 
+                        AND o.status = 'Em andamento' AND apelidoComputador LIKE '%${time}';`;
+                
+                    } else {
+                        console.log('\nO AMBIENTE (produção OU desenvolvimento) NÃO FOI DEFINIDO EM app.js\n');
+                        return
+                    }
+                 
                     return database.executar(query);
                 })
                 .then((result) => resolve(result))
