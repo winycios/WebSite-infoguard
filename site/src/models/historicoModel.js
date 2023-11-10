@@ -1,4 +1,4 @@
-var database = require("../database/config")
+var database = require('../database/config')
 var globalCnpj = null;
 
 
@@ -21,13 +21,13 @@ function plotar_chamado(opcaoEvento) {
     WHERE c.fk_idEvento = ${opcaoEvento};`;
 
 
-    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    console.log('Executando a instrução SQL: \n' + instrucaoSql);
     return database.executar(instrucaoSql);
 }
 
 // lista todos os eventos que já aconteceram
 function listarSelect() {
-    var query = `select idEvento, nome from tbEvento where fk_organizacao = ${globalCnpj} AND status = "Concluido";`;
+    var query = `select idEvento, nome from tbEvento where fk_organizacao = ${globalCnpj} AND status = 'Concluido';`;
 
     return database.executar(query);
 }

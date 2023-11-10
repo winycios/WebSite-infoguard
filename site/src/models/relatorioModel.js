@@ -1,4 +1,4 @@
-var database = require("../database/config")
+var database = require('../database/config')
 var globalCnpj = null;
 
 
@@ -12,7 +12,7 @@ function pegarCnpj(cnpj) {
 // Atualizar cargo do funcionario
 function updateUser(cpf, cargo) {
 
-    var query = `update tbUsuario set cargo = "${cargo}" where cpf = ${cpf};`;
+    var query = `update tbUsuario set cargo = '${cargo}' where cpf = ${cpf};`;
 
     return database.executar(query);
 }
@@ -50,12 +50,12 @@ function excluirUser(cpf) {
 function plotar_equipe() {
     if (globalCnpj == undefined) {
     } else {
-        console.log("select da equipe de suporte");
+        console.log('select da equipe de suporte');
         var instrucao = `
         select cpf,nome,telefone,cargo,statusServico from tbUsuario where fk_organizacao = ${globalCnpj};	
         `;
 
-        console.log("Executando a instrução SQL: \n" + instrucao);
+        console.log('Executando a instrução SQL: \n' + instrucao);
         return database.executar(instrucao);
     }
 }
@@ -64,12 +64,12 @@ function plotar_equipe() {
 function plotar_computadores() {
     if (globalCnpj == undefined) {
     } else {
-        console.log("select da equipe de suporte");
+        console.log('select da equipe de suporte');
         var instrucao = `
-        select apelidoComputador, status from tbComputador where fk_idEvento = (select idEvento from tbEvento where fk_organizacao = ${globalCnpj} AND status = "Em andamento");
+        select apelidoComputador, status from tbComputador where fk_idEvento = (select idEvento from tbEvento where fk_organizacao = ${globalCnpj} AND status = 'Em andamento');
         `;
 
-        console.log("Executando a instrução SQL: \n" + instrucao);
+        console.log('Executando a instrução SQL: \n' + instrucao);
         return database.executar(instrucao);
     }
 }
@@ -78,14 +78,14 @@ function plotar_computadores() {
 function plotar_chamado() {
     if (globalCnpj == undefined) {
     } else {
-        console.log("select dos chamados");
+        console.log('select dos chamados');
         var instrucao = `
         select c.apelidoComputador, o.status, o.descricao, u.nome, o.hora from tbComputador c 
         INNER JOIN tbOcorrencia o ON c.idComputador = o.fk_idComputador
-        LEFT JOIN tbUsuario u ON u.cpf = o.fk_cpfOperador where fk_idEvento = (select idEvento from tbEvento where fk_organizacao = ${globalCnpj} AND status = "Em andamento");
+        LEFT JOIN tbUsuario u ON u.cpf = o.fk_cpfOperador where fk_idEvento = (select idEvento from tbEvento where fk_organizacao = ${globalCnpj} AND status = 'Em andamento');
         `;
 
-        console.log("Executando a instrução SQL: \n" + instrucao);
+        console.log('Executando a instrução SQL: \n' + instrucao);
         return database.executar(instrucao);
     }
 }

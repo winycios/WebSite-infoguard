@@ -1,4 +1,4 @@
-var database = require("../database/config")
+var database = require('../database/config')
 var globalCnpj = null;
 
 
@@ -10,22 +10,20 @@ function pegarCnpj(cnpj) {
     });
 }
 
-
 // metodo get
-
 
 // plotar computadores
 function plotar_chamado() {
     if (globalCnpj == undefined) {
     } else {
-        console.log("select dos chamados");
+        console.log('select dos chamados');
         var instrucao = `
         select c.apelidoComputador, o.status, o.descricao, u.nome, o.hora from tbComputador c 
         INNER JOIN tbOcorrencia o ON c.idComputador = o.fk_idComputador
-        LEFT JOIN tbUsuario u ON u.cpf = o.fk_cpfOperador where fk_idEvento = (select idEvento from tbEvento where fk_organizacao = ${globalCnpj} AND status = "Em andamento");
+        LEFT JOIN tbUsuario u ON u.cpf = o.fk_cpfOperador where fk_idEvento = (select idEvento from tbEvento where fk_organizacao = ${globalCnpj} AND status = 'Em andamento');
         `;
 
-        console.log("Executando a instrução SQL: \n" + instrucao);
+        console.log('Executando a instrução SQL: \n' + instrucao);
         return database.executar(instrucao);
     }
 }
@@ -33,11 +31,11 @@ function plotar_chamado() {
 function plotar_evento() {
     if (globalCnpj == undefined) {
     } else {
-        console.log("select dos chamados");
+        console.log('select dos chamados');
         var instrucao = `
-        select nome from tbEvento where fk_organizacao = ${globalCnpj} AND status = "Em andamento";`;
+        select nome from tbEvento where fk_organizacao = ${globalCnpj} AND status = 'Em andamento';`;
 
-        console.log("Executando a instrução SQL: \n" + instrucao);
+        console.log('Executando a instrução SQL: \n' + instrucao);
         return database.executar(instrucao);
     }
 }
@@ -56,7 +54,7 @@ function buscarUltimasMedidasTemp() {
         FROM tbEvento e
             INNER JOIN tbComputador c ON c.fk_idEvento = e.idEvento
             LEFT JOIN tbMonitoramento m ON m.fk_idComputador = c.idComputador
-        WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = "Em andamento"
+        WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = 'Em andamento'
     ) AS subquery
     WHERE row_num = 1
     ORDER BY dataHora DESC;`;
@@ -68,7 +66,6 @@ function buscarMedidasEmTempoRealTemp() {
 
     instrucaoSql = ''
 
-
     instrucaoSql = `SELECT apelidoComputador, cpuTemp, gpuTemp, dataHora
     FROM (
         SELECT c.apelidoComputador, m.cpuTemp, m.gpuTemp, m.dataHora,
@@ -76,7 +73,7 @@ function buscarMedidasEmTempoRealTemp() {
         FROM tbEvento e
             INNER JOIN tbComputador c ON c.fk_idEvento = e.idEvento
             LEFT JOIN tbMonitoramento m ON m.fk_idComputador = c.idComputador
-        WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = "Em andamento"
+        WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = 'Em andamento'
     ) AS subquery
     WHERE row_num = 1
     ORDER BY dataHora DESC;`
@@ -96,7 +93,7 @@ function buscarUltimasMedidasFreq() {
         FROM tbEvento e
             INNER JOIN tbComputador c ON c.fk_idEvento = e.idEvento
             LEFT JOIN tbMonitoramento m ON m.fk_idComputador = c.idComputador
-        WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = "Em andamento"
+        WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = 'Em andamento'
     ) AS subquery
     WHERE row_num = 1
     ORDER BY dataHora DESC;`;
@@ -116,7 +113,7 @@ function buscarMedidasEmTempoRealFreq() {
         FROM tbEvento e
             INNER JOIN tbComputador c ON c.fk_idEvento = e.idEvento
             LEFT JOIN tbMonitoramento m ON m.fk_idComputador = c.idComputador
-        WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = "Em andamento"
+        WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = 'Em andamento'
     ) AS subquery
     WHERE row_num = 1
     ORDER BY dataHora DESC;`
@@ -132,7 +129,7 @@ function buscarUltimasMedidasRede() {
     instrucaoSql = `select m.redeLatencia, DATE_FORMAT(m.dataHora,'%H:%i:%s') as momento_grafico from tbEvento e
     INNER JOIN tbComputador c ON c.fk_idEvento = e.idEvento
            INNER JOIN tbMonitoramento m ON m.fk_idComputador = c.idComputador
-       WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = "Em andamento"
+       WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = 'Em andamento'
        order by momento_grafico Desc limit 4;`;
 
     return database.executar(instrucaoSql);
@@ -142,11 +139,28 @@ function buscarMedidasEmTempoRealRede() {
 
     instrucaoSql = ''
 
-    instrucaoSql = `select m.redeLatencia, DATE_FORMAT(m.dataHora,'%H:%i:%s') as momento_grafico from tbEvento e
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        instrucaoSql = `SELECT TOP 4
+         m.redeLatencia, FORMAT(m.dataHora, 'HH:mm:ss') as momento_grafico
+        FROM tbEvento e
+            INNER JOIN tbComputador c ON c.fk_idEvento = e.idEvento
+            INNER JOIN tbMonitoramento m ON m.fk_idComputador = c.idComputador
+        WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = 'Em andamento'
+        ORDER BY momento_grafico DESC;
+        `;
+
+    }
+    else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        instrucaoSql = `select m.redeLatencia, DATE_FORMAT(m.dataHora,'%H:%i:%s') as momento_grafico from tbEvento e
     INNER JOIN tbComputador c ON c.fk_idEvento = e.idEvento
            INNER JOIN tbMonitoramento m ON m.fk_idComputador = c.idComputador
-       WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = "Em andamento"
-       order by momento_grafico Desc limit 4`;
+       WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = 'Em andamento'
+       order by momento_grafico Desc limit 4;`;
+
+    } else {
+        console.log("\nO AMBIENTE (produção OU desenvolvimento) NÃO FOI DEFINIDO EM app.js\n");
+        return
+    }
 
     return database.executar(instrucaoSql);
 }
@@ -157,7 +171,40 @@ function buscarUltimasMedidasOco() {
 
     instrucaoSql = ''
 
-    instrucaoSql = `SELECT
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        instrucaoSql = `SELECT TOP 1
+        (SELECT COUNT(o.status) 
+         FROM tbOcorrencia o
+         INNER JOIN tbComputador c ON c.idComputador = o.fk_idComputador
+         INNER JOIN tbEvento e ON c.fk_idEvento = e.idEvento
+         WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = 'Em andamento' AND o.status = 'Pendente') as pendente,
+    
+        (SELECT COUNT(o.status) 
+         FROM tbOcorrencia o
+         INNER JOIN tbComputador c ON c.idComputador = o.fk_idComputador
+         INNER JOIN tbEvento e ON c.fk_idEvento = e.idEvento
+         WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = 'Em andamento' AND o.status = 'Em andamento') as andamento,
+    
+        (SELECT COUNT(o.status) 
+         FROM tbOcorrencia o
+         INNER JOIN tbComputador c ON c.idComputador = o.fk_idComputador
+         INNER JOIN tbEvento e ON c.fk_idEvento = e.idEvento
+         WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = 'Em andamento' AND o.status = 'Finalizado') as resolvido,
+    
+        hora
+    
+    FROM tbOcorrencia o
+    INNER JOIN tbComputador c ON c.idComputador = o.fk_idComputador
+    INNER JOIN tbEvento e ON c.fk_idEvento = e.idEvento
+    
+    WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = 'Em andamento'
+    GROUP BY hora
+    ORDER BY hora DESC;
+        `;
+
+    }
+    else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        instrucaoSql = `SELECT
     (SELECT COUNT(o.status) 
      FROM tbOcorrencia o
      INNER JOIN tbComputador c ON c.idComputador = o.fk_idComputador
@@ -185,6 +232,12 @@ INNER JOIN tbEvento e ON c.fk_idEvento = e.idEvento
 WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = 'Em andamento'
 GROUP BY hora
 ORDER BY hora DESC LIMIT 1;`;
+
+    } else {
+        console.log("\nO AMBIENTE (produção OU desenvolvimento) NÃO FOI DEFINIDO EM app.js\n");
+        return
+    }
+
 
     return database.executar(instrucaoSql);
 }
@@ -193,7 +246,40 @@ function buscarMedidasEmTempoRealOco() {
 
     instrucaoSql = ''
 
-    instrucaoSql = `SELECT
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        instrucaoSql = `SELECT TOP 1
+        (SELECT COUNT(o.status) 
+         FROM tbOcorrencia o
+         INNER JOIN tbComputador c ON c.idComputador = o.fk_idComputador
+         INNER JOIN tbEvento e ON c.fk_idEvento = e.idEvento
+         WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = 'Em andamento' AND o.status = 'Pendente') as pendente,
+    
+        (SELECT COUNT(o.status) 
+         FROM tbOcorrencia o
+         INNER JOIN tbComputador c ON c.idComputador = o.fk_idComputador
+         INNER JOIN tbEvento e ON c.fk_idEvento = e.idEvento
+         WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = 'Em andamento' AND o.status = 'Em andamento') as andamento,
+    
+        (SELECT COUNT(o.status) 
+         FROM tbOcorrencia o
+         INNER JOIN tbComputador c ON c.idComputador = o.fk_idComputador
+         INNER JOIN tbEvento e ON c.fk_idEvento = e.idEvento
+         WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = 'Em andamento' AND o.status = 'Finalizado') as resolvido,
+    
+        hora
+    
+    FROM tbOcorrencia o
+    INNER JOIN tbComputador c ON c.idComputador = o.fk_idComputador
+    INNER JOIN tbEvento e ON c.fk_idEvento = e.idEvento
+    
+    WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = 'Em andamento'
+    GROUP BY hora
+    ORDER BY hora DESC;
+        `;
+
+    }
+    else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        instrucaoSql = `SELECT
     (SELECT COUNT(o.status) 
      FROM tbOcorrencia o
      INNER JOIN tbComputador c ON c.idComputador = o.fk_idComputador
@@ -221,6 +307,11 @@ INNER JOIN tbEvento e ON c.fk_idEvento = e.idEvento
 WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = 'Em andamento'
 GROUP BY hora
 ORDER BY hora DESC LIMIT 1;`;
+
+    } else {
+        console.log("\nO AMBIENTE (produção OU desenvolvimento) NÃO FOI DEFINIDO EM app.js\n");
+        return
+    }
 
     return database.executar(instrucaoSql);
 }

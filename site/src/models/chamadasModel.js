@@ -1,7 +1,6 @@
-var database = require("../database/config")
+var database = require('../database/config')
 
 var globalCnpj = null;
-
 
 // cnpj da organização
 function pegarCnpj(cnpj) {
@@ -14,7 +13,7 @@ function pegarCnpj(cnpj) {
 // Atualizar chamado
 function updatePendente(id, operador) {
 
-    var query = `update tbOcorrencia set status = "Em andamento", fk_cpfOperador = ${operador} where idOcorrencia = ${id};`;
+    var query = `update tbOcorrencia set status = 'Em andamento', fk_cpfOperador = ${operador} where idOcorrencia = ${id};`;
 
     return new Promise((resolve, reject) => {
         database.executar(query)
@@ -31,7 +30,7 @@ function updatePendente(id, operador) {
 }
 function statusOcupado(operador) {
     return new Promise(() => {
-        var query = `update tbUsuario set statusServico = "ocupado" where cpf = ${operador};`
+        var query = `update tbUsuario set statusServico = 'ocupado' where cpf = ${operador};`
         return database.executar(query);
     });
 }
@@ -52,7 +51,7 @@ async function statusPcAndamento(id) {
 
 // finalizar chamado
 function finalizarChamado(id, operador) {
-    const query = `UPDATE tbOcorrencia SET status = "Finalizado", fk_cpfOperador = ${operador} WHERE idOcorrencia = ${id};`;
+    const query = `UPDATE tbOcorrencia SET status = 'Finalizado', fk_cpfOperador = ${operador} WHERE idOcorrencia = ${id};`;
 
     return new Promise((resolve, reject) => {
         database.executar(query)
@@ -69,7 +68,7 @@ function finalizarChamado(id, operador) {
 }
 
 function statusLivre(operador) {
-    const query = `UPDATE tbUsuario SET statusServico = "livre" WHERE cpf = ${operador};`;
+    const query = `UPDATE tbUsuario SET statusServico = 'livre' WHERE cpf = ${operador};`;
     return database.executar(query);
 }
 
@@ -100,21 +99,21 @@ function buscarPorUser(cpf) {
 /* select */
 
 function listarChamados() {
-    console.log("select dos chamados");
+    console.log('select dos chamados');
 
     return new Promise((resolve, reject) => {
         if (globalCnpj === undefined) {
-            reject(new Error("CNPJ não definido"));
+            reject(new Error('CNPJ não definido'));
         } else {
             var instrucao = `
                 SELECT o.idOcorrencia, c.apelidoComputador, o.descricao, o.hora, o.status, u.nome, u.cpf 
                 FROM tbcomputador c
                 INNER JOIN tbOcorrencia o ON o.fk_idComputador = c.idComputador
                 LEFT JOIN tbUsuario u ON u.cpf = o.fk_cpfOperador 
-                WHERE c.fk_idEvento = (SELECT idEvento FROM tbEvento WHERE fk_organizacao = ${globalCnpj} AND status = "Em andamento");
+                WHERE c.fk_idEvento = (SELECT idEvento FROM tbEvento WHERE fk_organizacao = ${globalCnpj} AND status = 'Em andamento');
             `;
 
-            console.log("Executando a instrução SQL: \n" + instrucao);
+            console.log('Executando a instrução SQL: \n' + instrucao);
 
             database.executar(instrucao)
                 .then(resultado => {
@@ -127,22 +126,20 @@ function listarChamados() {
     });
 }
 
-
 // listar operadores
 function listarOperadores() {
     if (globalCnpj == undefined) {
     } else {
-        console.log("select dos operadores");
+        console.log('select dos operadores');
 
         var instrucao = `
         select cpf, nome as 'operador' from tbUsuario where fk_organizacao = ${globalCnpj};
     `;
-        console.log("Executando a instrução SQL: \n" + instrucao);
+        console.log('Executando a instrução SQL: \n' + instrucao);
 
         return database.executar(instrucao);
     }
 }
-
 
 module.exports = {
     listarChamados,
