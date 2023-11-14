@@ -414,7 +414,8 @@
                                 console.log(`#ERRO: ${resposta}`);
                             });
                         }
-                        window.open(`http://localhost:3333/pdf/pdfLer`, '_blank');
+                        // Caso estiver utilizando o localhost, trocar para window.open(`http://localhost:3333/pdf/pdfLer`, '_blank');
+                        window.open(`http://34.197.21.13/pdf/pdfLer`, '_blank');
                     }, 3500);
                 } else {
                     throw new Error('Erro ao criar pdf.');

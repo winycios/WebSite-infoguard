@@ -391,6 +391,10 @@
                     eventos.forEach((registro) => {
 
                         const dataAtual = new Date(registro.hora);
+
+                        // voltar ao horario pt-br. Comentar caso for utilizar fora de uma instancia
+                        dataAtual.setHours(dataAtual.getHours() + 3);
+
                         const opcoesDeFormato = {
                             year: 'numeric',
                             month: 'long',
@@ -401,6 +405,7 @@
                             hour12: false // Usar formato de 24 horas 
                         };
                         const dataFormatada = dataAtual.toLocaleDateString('pt-BR', opcoesDeFormato);
+
 
                         if (registro.status == "Pendente") {
                             contadorPendente = false;

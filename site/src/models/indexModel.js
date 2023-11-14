@@ -126,11 +126,27 @@ function buscarUltimasMedidasRede() {
 
     instrucaoSql = ''
 
-    instrucaoSql = `select m.redeLatencia, DATE_FORMAT(m.dataHora,'%H:%i:%s') as momento_grafico from tbEvento e
-    INNER JOIN tbComputador c ON c.fk_idEvento = e.idEvento
-           INNER JOIN tbMonitoramento m ON m.fk_idComputador = c.idComputador
-       WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = 'Em andamento'
-       order by momento_grafico Desc limit 4;`;
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        instrucaoSql = `select TOP 4 m.redeLatencia, FORMAT(m.dataHora, 'HH:mm:ss')as momento_grafico from tbEvento e
+        INNER JOIN tbComputador c ON c.fk_idEvento = e.idEvento
+               INNER JOIN tbMonitoramento m ON m.fk_idComputador = c.idComputador
+           WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = 'Em andamento'
+           order by momento_grafico Desc;`;
+
+    }
+    else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        instrucaoSql = `select m.redeLatencia, DATE_FORMAT(m.dataHora,'%H:%i:%s') as momento_grafico from tbEvento e
+        INNER JOIN tbComputador c ON c.fk_idEvento = e.idEvento
+               INNER JOIN tbMonitoramento m ON m.fk_idComputador = c.idComputador
+           WHERE e.fk_Organizacao = ${globalCnpj} AND e.status = 'Em andamento'
+           order by momento_grafico Desc limit 4;`;
+
+    } else {
+        console.log("\nO AMBIENTE (produção OU desenvolvimento) NÃO FOI DEFINIDO EM app.js\n");
+        return
+    }
+
+    
 
     return database.executar(instrucaoSql);
 }

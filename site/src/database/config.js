@@ -3,7 +3,7 @@ var sql = require('mssql');
 
 // // CONEXÃO DO SQL SERVER - AZURE (NUVEM)
 var sqlServerConfig = {
-    server: "52.86.27.75",
+    server: "34.197.21.13",
     database: "SuperVisiON",
     user: "sa",
     password: "MAdalena13",

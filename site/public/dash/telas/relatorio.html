@@ -350,20 +350,18 @@
                         check_error.checked = false;
                     }, 1500);
                 });
+            } else {
+                check_confirm.checked = true;
+                texto_sucesso.innerHTML = "Usuário apagado com sucesso !";
+
+                setTimeout(function () {
+                    window.location = "relatorio.html";
+                    check_confirm.checked = false;
+                }, 1500);
             }
-        })
-            .catch(function (resposta) {
-                console.log(`#ERRO: ${resposta}`);
-            });
-        check_confirm.checked = true;
-        texto_sucesso.innerHTML = "Usuário apagado com sucesso !";
-
-        setTimeout(function () {
-            window.location = "relatorio.html";
-            check_confirm.checked = false;
-        }, 1500);
-
-
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+        });
         return false;
     }
 

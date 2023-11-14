@@ -43,7 +43,6 @@ function excluirUser(req, res) {
                 .status(401)
                 .json({ mensagem: `Não é possível excluir esse usuário, pois ele já lidou com solicitações.` });
             } else {
-                // verifica se o usuario já existe
                 relatorioModel.excluirUser(cpf).then((resultado) => {
                     res.status(200).json(resultado);
                 });

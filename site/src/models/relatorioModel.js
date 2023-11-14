@@ -31,7 +31,7 @@ function buscarPorUser() {
 function buscarPorChamados(cpf) {
     if (globalCnpj == undefined) {
     } else {
-        var query = `select COUNT(o.idOcorrencia) as 'contador' from tbUsuario u inner Join tbOcorrencia o ON o.fk_cpfOperador = u.cpf where o.fk_cpfOperador = ${cpf} AND u.fk_organizacao = ${globalCnpj};`;
+        var query = `select o.idOcorrencia as 'contador' from tbUsuario u inner Join tbOcorrencia o ON o.fk_cpfOperador = u.cpf where o.fk_cpfOperador = ${cpf} AND u.fk_organizacao = ${globalCnpj};`;
 
         return database.executar(query);
     }
