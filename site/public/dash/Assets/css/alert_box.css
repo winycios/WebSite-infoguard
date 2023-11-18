@@ -58,6 +58,7 @@
 }
 
 /* faz ela aparecer */
+#checkPc:checked~.alert_box,
 #check_calma:checked~.alert_box,
 #check_error:checked~.alert_box,
 #check_confirm:checked~.alert_box,
@@ -66,6 +67,7 @@
     pointer-events: auto;
 }
 
+#checkPc:checked~.background,
 #check_calma:checked~.background,
 #check_error:checked~.background,
 #check_confirm:checked~.background,
@@ -74,6 +76,7 @@
     pointer-events: auto;
 }
 
+#checkPc,
 #check_calma,
 #check_error,
 #check_confirm,

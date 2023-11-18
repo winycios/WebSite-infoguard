@@ -44,6 +44,27 @@ function excluirUser(cpf) {
     return database.executar(query);
 }
 
+// exlcuir computador
+function excluirPc(id) {
+    var query = `delete from tbComputador where idComputador = ${id};`;
+
+    return database.executar(query);
+}
+
+// buscar chamados a partir do ID
+function buscarPorChamadoMaquina(id) {
+    var query = `select * from tbOcorrencia where fk_idComputador = ${id};`;
+
+    return database.executar(query);
+}
+
+// buscar monitoramento a partir do ID
+function buscarPorMonitoracao(id) {
+    var query = `select * from tbMonitoramento where fk_idComputador = ${id};`;
+
+    return database.executar(query);
+}
+
 // metodo get
 
 /* select da equipe de suporte*/
@@ -66,7 +87,7 @@ function plotar_computadores() {
     } else {
         console.log('select da equipe de suporte');
         var instrucao = `
-        select apelidoComputador, status from tbComputador where fk_idEvento = (select idEvento from tbEvento where fk_organizacao = ${globalCnpj} AND status = 'Em andamento');
+        select idComputador, apelidoComputador, status from tbComputador where fk_idEvento = (select idEvento from tbEvento where fk_organizacao = ${globalCnpj} AND status = 'Em andamento');
         `;
 
         console.log('Executando a instrução SQL: \n' + instrucao);
@@ -99,5 +120,8 @@ module.exports = {
     plotar_equipe,
     buscarPorUser,
     updateUser,
-    excluirUser
+    excluirUser,
+    excluirPc,
+    buscarPorChamadoMaquina,
+    buscarPorMonitoracao
 };

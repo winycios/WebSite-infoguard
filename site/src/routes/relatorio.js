@@ -7,6 +7,10 @@ router.delete("/excluirUser", function (req, res) {
     relatorioController.excluirUser(req, res);
 });
 
+router.delete("/excluirPc", function (req, res) {
+    relatorioController.excluirPc(req, res);
+});
+
 router.post("/pegarCnpj", function (req, res) {
     relatorioController.pegarCnpj(req, res);
 });

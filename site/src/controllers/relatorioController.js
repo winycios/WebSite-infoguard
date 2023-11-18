@@ -25,7 +25,6 @@ function buscarPorChamados(req, res) {
     });
 }
 
-
 // excluir usuario
 function excluirUser(req, res) {
     // Crie uma variável que vá recuperar os valores
@@ -40,10 +39,50 @@ function excluirUser(req, res) {
 
             } else if (result.length > 0) {
                 res
-                .status(401)
-                .json({ mensagem: `Não é possível excluir esse usuário, pois ele já lidou com solicitações.` });
+                    .status(401)
+                    .json({ mensagem: `Não é possível excluir esse usuário, pois ele já lidou com solicitações.` });
             } else {
                 relatorioModel.excluirUser(cpf).then((resultado) => {
+                    res.status(200).json(resultado);
+                });
+            }
+        });
+    });
+}
+
+// buscar por chamados de uma maquina
+function buscarPorChamadoMaquina(req, res) {
+
+    relatorioModel.buscarPorChamadoMaquina(id).then((resultado) => {
+        res.status(200).json(resultado);
+    });
+}
+
+// buscar por dados de monitoramento
+function buscarPorMonitoracao(req, res) {
+
+    relatorioModel.buscarPorMonitoracao(id).then((resultado) => {
+        res.status(200).json(resultado);
+    });
+}
+// excluir computador
+function excluirPc(req, res) {
+    // Crie uma variável que vá recuperar os valores
+    var id = req.body.idServer;
+
+    relatorioModel.buscarPorChamadoMaquina(id).then((resultado) => {
+        relatorioModel.buscarPorMonitoracao(id).then((result) => {
+            if (resultado.length > 0) {
+                res
+                    .status(401)
+                    .json({ mensagem: `Esse computador já teve chamados anteriores!` });
+
+            } else if (result.length > 0) {
+                res
+                    .status(401)
+                    .json({ mensagem: `Esse computador está sendo monitorado!` });
+            } else {
+                relatorioModel.excluirPc(id).then((resultado) => {
                     res.status(200).json(resultado);
                 });
             }
@@ -120,5 +159,8 @@ module.exports = {
     updateUser,
     plotar_equipe,
     buscarPorChamados,
-    plotar_chamado
+    plotar_chamado,
+    buscarPorChamadoMaquina,
+    buscarPorMonitoracao,
+    excluirPc
 }
