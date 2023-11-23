@@ -11,6 +11,16 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 
+    <!-- data tables -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+    <link rel="stylesheet" href="../../Assets/DataTables/datatables.css">
+
+    <script src="../../Assets/DataTables/datatables.js"></script>
+
     <link rel="stylesheet" href="../Assets/css/relatorio.css">
     <link rel="stylesheet" href="../Assets/css/style.css">
     <link rel="stylesheet" href="../Assets/css/alert_box.css">
@@ -120,15 +130,27 @@
                             </svg>
                             </label>
                             <div class="containerTable">
-                                <ul class="responsive-table">
-                                    <li class="table-header">
-                                        <div class="col col-1">Máquina</div>
-                                        <div class="col col-2">descrição</div>
-                                        <div class="col col-3">Operador</div>
-                                        <div class="col col-4">Hora</div>
-                                    </li>
-                                    <div id="listaChamados"></div>
-                                </ul>
+                                <div class="list">
+                                    <table id="myTable" class="table table-striped" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Máquina</th>
+                                                <th>descrição</th>
+                                                <th>Operador</th>
+                                                <th>Hora</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="listaChamados"></tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Máquina</th>
+                                                <th>descrição</th>
+                                                <th>Operador</th>
+                                                <th>Hora</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -260,8 +282,13 @@
             });
     }
 
+    let table = new DataTable('#myTable', {
+        responsive: true,
+    });
+
     var opcaoPdf;
     document.getElementById('slct').addEventListener('change', function () {
+
         var selectEvento = document.getElementById('slct');
         var opcaoEvento = selectEvento.value;
 
@@ -270,10 +297,19 @@
             listarChamado(opcaoEvento);
             listarEquipe(opcaoEvento);
             opcaoPdf = opcaoEvento;
+
+                table.destroy();
+
+            setTimeout(() => {
+                table = new DataTable('#myTable', {
+                    responsive: true,
+                });
+            }, 300);
         }
     });
 
     function listarChamado(opcaoEvento) {
+
         fetch(`/historico/plotar_chamado/${opcaoEvento}`, {
             method: "GET",
             cache: 'no-store'
@@ -285,6 +321,8 @@
                     listaChamados.innerHTML = `<p style="color: var(--link-color)">${erro}</p>`;
                 });
             } else {
+                listaChamados.innerHTML = "";
+                
                 resposta.json().then((historicos) => {
                     historicos.forEach((registro) => {
 
@@ -300,12 +338,12 @@
                         };
                         const dataFormatada = dataAtual.toLocaleDateString('pt-BR', opcoesDeFormato);
 
-                        listaChamados.innerHTML += `<li class="table-row">
-                                        <div class="col col-1" data-label="Máquina">${registro.apelidoComputador}</div>
-                                        <div class="col col-2" data-label="descrição">${registro.descricao}</div>
-                                        <div class="col col-3" data-label="Operador">${registro.nome}</div>
-                                        <div class="col col-4" data-label="Hora">${dataFormatada}</div>
-                                    </li>`
+                        listaChamados.innerHTML += `<tr>
+                                        <td>${registro.apelidoComputador}</td>
+                                        <td>${registro.descricao}</td>
+                                        <td>${registro.nome}</td>
+                                        <td>${dataFormatada}</td>
+                                    </tr>`
                     });
                 });
             }
