@@ -14,7 +14,7 @@ function pegarCnpj(cnpj) {
 function plotar_chamado(opcaoEvento) {
 
 
-    instrucaoSql = ` SELECT c.apelidoComputador, o.descricao, o.hora, u.nome
+    instrucaoSql = `SELECT c.apelidoComputador, o.descricao, o.hora, u.nome
     FROM tbcomputador c
     INNER JOIN tbOcorrencia o ON o.fk_idComputador = c.idComputador
     LEFT JOIN tbUsuario u ON u.cpf = o.fk_cpfOperador 
