@@ -26,7 +26,7 @@ function buscarMedidasEmTempoRealTodosEq2(cnpj) {
                 INNER JOIN tbComputador c ON c.fk_idEvento = e.idEvento
                 LEFT JOIN tbMonitoramento m ON m.fk_idComputador = c.idComputador
             WHERE e.fk_Organizacao = ${cnpj} AND e.status = 'Em andamento' AND c.apelidoComputador LIKE 
-                '%' + (SELECT time2 FROM tbEvento WHERE fk_organizacao = ${cnpj} AND status = 'Em andamento') + '%'
+                CONCAT('%', (SELECT time2 FROM tbEvento WHERE fk_organizacao = ${cnpj} AND status = 'Em andamento'))
         ) AS subquery
         WHERE row_num = 1
         ORDER BY dataHora DESC;`;
