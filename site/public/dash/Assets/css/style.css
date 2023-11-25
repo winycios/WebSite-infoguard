@@ -518,6 +518,76 @@ a {
   display: none;
 }
 
+
+.title {
+  font-family: "DM Sans", sans-serif;
+  font-size: 20px;
+}
+
+.subtitle-user {
+  font-family: "DM Sans", sans-serif;
+  padding-top: 2.5%;
+}
+
+.box_alter {
+  display: none;
+  margin: auto;
+  width: 23%;
+  height: 25%;
+  border-radius: 34px;
+  margin-top: 22vh;
+  margin-left: 30vw;
+  position: absolute;
+  background-color: white;
+  border: solid #ffcc00;
+  font-weight: 600;
+}
+
+.inputR {
+  position: absolute;
+  border-radius: 20px;
+  width: 90%;
+  height: 15%;
+  font-size: medium;
+  padding: 4px;
+}
+
+.position_inputR {
+  margin-left: 1vw;
+  margin-top: 6vh;
+}
+
+.title_updateBox {
+  position: absolute;
+  margin-left: 10px;
+  margin-top: 2vh;
+}
+
+.buttonUpdate {
+  position: absolute;
+  border-radius: 20px;
+  width: 50%;
+  height: 15%;
+  margin-top: 19vh;
+  margin-left: 4.5vw;
+  font-weight: 600;
+}
+
+.down {
+  flex-direction: column;
+  margin-top: 10vh;
+}
+
+.subdown {
+  flex-direction: column;
+  margin-top: 14vh;
+  margin-left: 0vw;
+}
+
+.positionDelete {
+  margin-left: 80vw;
+}
+
 /* media queries */
 
 @media screen and (max-width: 1024px) {

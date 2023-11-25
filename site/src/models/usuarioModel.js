@@ -1,6 +1,22 @@
 var database = require("../database/config")
 
 
+// cnpj da organização
+function pegarCnpj(cnpj) {
+    return new Promise((resolve) => {
+        globalCnpj = cnpj;
+        resolve(globalCnpj);
+    });
+}
+
+function pegarCpf(cpf) {
+    return new Promise((resolve) => {
+        globalCpf = cpf;
+        resolve(globalCpf);
+    });
+}
+
+
 // buscar por cpf
 function buscarPorCpf(cpf) {
     var query = `select * from tbUsuario where cpf = '${cpf}'`;
@@ -33,6 +49,28 @@ function cadastrar(nome, senha, cpf, telefone, cargo, organizacao) {
     return database.executar(instrucao);
 }
 
+function trazerLider() {
+
+    // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
+    //  e na ordem de inserção dos dados.
+    var instrucao = `
+        select nome, telefone from tbUsuario where cargo = "Gerente" AND fk_organizacao = ${globalCnpj};
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
+function trazerUsuario(cpf) {
+
+    // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
+    //  e na ordem de inserção dos dados.
+    var instrucao = `
+        select nome, telefone, cargo from tbUsuario where cpf = ${cpf};
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
 function renovarSenha(cpf, senha) {
     console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function renovarSenha(): ", cpf, senha)
     var instrucao = `
@@ -42,9 +80,22 @@ function renovarSenha(cpf, senha) {
     return database.executar(instrucao);
 }
 
+function alterarNome(altNome, altTelefone, cpf) {
+    var instrucao = `
+    update tbUsuario set nome = ${altNome}, telefone = ${altTelefone} where cpf = ${cpf};
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
 module.exports = {
     autenticar,
     cadastrar,
     renovarSenha,
-    buscarPorCpf
+    buscarPorCpf,
+    trazerLider,
+    trazerUsuario,
+    pegarCnpj,
+    pegarCpf,
+    alterarNome
 };

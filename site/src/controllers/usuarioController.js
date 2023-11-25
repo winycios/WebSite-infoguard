@@ -1,5 +1,24 @@
 var usuarioModel = require("../models/usuarioModel");
 
+
+// pegar cnpj
+function pegarCnpj(req, res) {
+    var cnpj = req.body.cnpjServer;
+
+    usuarioModel.pegarCnpj(cnpj).then((resultado) => {
+        res.status(201).json(resultado);
+    });
+}
+
+// pegar cpf
+function pegarCpf(req, res) {
+    var cpf = req.body.cpfServer;
+
+    usuarioModel.pegarCpf(cpf).then((resultado) => {
+        res.status(201).json(resultado);
+    });
+}
+
 // Buscar por cpf
 function buscarPorCpf(req, res) {
     var cpf = req.query.cpf;
@@ -86,6 +105,38 @@ function cadastrar(req, res) {
     }
 }
 
+function trazerLider(req, res) {
+    usuarioModel.trazerLider().then(function (resultado) {
+        if (resultado.length > 0) {
+            res.status(200).json(resultado);
+        } else {
+            res.status(204).send("Nenhum resultado encontrado!")
+        }
+    });
+}  
+
+function trazerUsuario(req, res) {
+    var cpf = req.params.cpfUser;
+     usuarioModel.trazerUsuario(cpf).then(function (resultado) {
+        if (resultado.length > 0) {
+            res.status(200).json(resultado);
+        } else {
+            res.status(204).send("Nenhum resultado encontrado!")
+        }
+    });
+} 
+
+function alterarNome(req, res) {
+    // Crie uma variável que vá recuperar os valores
+    var cpf = req.params.cpfUser;
+    var altNome = req.body.alterarNomeServer;
+    var altTelefone = req.body.alterarTelefoneServer;
+
+    relatorioModel.alterarNome(altNome, altTelefone, cpf).then((resultado) => {
+        res.status(200).json(resultado);
+    });
+}
+
 // Trocar senha
 function renovarSenha(req, res) {
     var cpf = req.body.cpfServer;
@@ -119,5 +170,10 @@ module.exports = {
     autenticar,
     cadastrar,
     renovarSenha,
-    buscarPorCpf
+    buscarPorCpf,
+    trazerLider,
+    trazerUsuario,
+    pegarCnpj,
+    pegarCpf,
+    alterarNome
 }

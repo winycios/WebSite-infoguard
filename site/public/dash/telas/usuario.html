@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="PT-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUPERVISION - INICIAL</title>
+
+
+    <script src="../../js/sessao.js"></script>
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+
+    <link rel="stylesheet" href="../Assets/css/style.css">
+
+</head>
+
+<body onload="trazerUsuario(),trazerLiderança(), validarSessao(), pegarCnpj()">
+    <div class="app-container">
+        <div class="app-header">
+            <div class="app-header-left">
+                <span class="app-icon"></span>
+                <p class="app-name">SUPERVISI<span style="color: var(--color-yellow);">ON</span></p>
+                <div class="search-wrapper">
+                    <input class="search-input" id="valorTela" list="telas" type="search" placeholder="Pesquisar">
+                    <button onclick="pesquisarTelasIndex()" class="buttonValor">
+                        <span style="color: var(--main-color);" class="material-symbols-outlined">
+                            search
+                        </span>
+                    </button>
+
+                    <datalist id="telas">
+                        <option value="Tela inicial"></option>
+                        <option value="computadores"></option>
+                        <option value="Desktops"></option>
+                        <option value="Chamados"></option>
+                        <option value="Usuário"></option>
+                    </datalist>
+                </div>
+            </div>
+            <div class="app-header-right">
+                <button class="mode-switch" title="Switch Theme">
+                    <span class="material-symbols-outlined moon">
+                        brightness_5
+                    </span>
+                </button>
+                </button>
+                <button class="profile-btn">
+                    <img src="../Assets/images/user.png" />
+                    <span id="b_usuario"></span>
+                </button>
+            </div>
+            </button>
+        </div>
+
+        <!-- sidebar -->
+    <div class="app-content">
+        <div class="app-sidebar">
+          <a href="../index.html" class="app-sidebar-link active">
+            <span class="material-symbols-outlined">
+              home
+            </span>
+          </a>
+          <a href="./computadores.html" class="app-sidebar-link">
+            <span class="material-symbols-outlined">
+              screen_search_desktop
+            </span>
+          </a>
+          <a id="cargo" href="./relatorio.html" class="app-sidebar-link">
+            <span class="material-symbols-outlined">
+              quick_reference
+            </span>
+          </a>
+          </a>
+          <a href="./chamados.html" class="app-sidebar-link">
+            <span class="material-symbols-outlined">
+              support_agent
+            </span>
+          </a>
+          <a href="" onclick="limparSessao()" class="app-sidebar-link">
+            <span class="material-symbols-outlined">
+              logout
+            </span>
+          </a>
+        </div>
+
+            <!-- Usuario -->
+            <div class="box">
+                <div class="projects-section">
+                    <div class="projects-section-header">
+                        <p class="title">USUÁR<span style="color: var(--color-yellow);">IO</span></p>
+                    </div>
+                    <div>
+                        <p><b>NOME</b></p>
+                        <div id="div_nome"></div>
+                        <a onclick="openBox()" style="font-size: 13px;"><img style="width: 13px;" src="../Assets/images/alterar.png"
+                                alt="">Alterar</a>
+                    </div>
+                    <div class="subtitle-user">
+                        <p><b>TELEFONE</b></p>
+                        <div id="div_telefoneUser"></div>
+                    </div>
+                    <div class="subtitle-user">
+                        <p><b>CARGO</b></p>
+                        <div id="div_cargo"></div>
+                    </div>
+                    <div class="subtitle-user">
+                        <p><b>ORGANIZAÇÃO</b></p>
+                        <div id="div_org"></div>
+                    </div>
+                    <div class="subtitle-user">
+                        <p><b>LIDERANÇA</b></p>
+                        <div >
+                            <select id="div_lider">
+                                <option selected disabled value="">Selecionar Contato</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="subtitle-user">
+                        <p><b>TELEFONE LIDERANÇA</b></p>
+                        <div id="div_telefone">
+                        </div>
+                    </div>
+                    <div id="campoAtualização" class="box_alter">
+                        <div class="title_updateBox">Alterar Nome</div>
+                        <div class="position_inputR"><input class="inputR" type="text" id="input_alterNome"></div>
+                        <div class="title_updateBox down">Alterar Telefone</div>
+                        <div class="position_inputR subdown"><input class="inputR" type="text" id="input_alterTelefone"></div>
+                        <div><button class="buttonUpdate" onclick="alterarNome()">Atualizar</button></div>
+                    </div>
+                    <div><a onclick="openBox2()" class="positionDelete" style="color: lightskyblue;"><u>Remover Conta</u></a></div>
+                    <div id="campoExcluir" class="box_alter">
+                        <div class="title_updateBox">Informar CPF</div>
+                        <div class="position_inputR"><input class="inputR" type="text" id="cpf_usuario"></div>
+                        <div><button class="buttonUpdate" onclick="excluirUser()">Apagar</button></div>
+                    </div>
+                </div>
+            </div>
+</body>
+
+
+<script>
+    div_org.innerHTML += sessionStorage.NOME_ORGANIZACAO;
+
+    function openBox() {
+        campoAtualização.style.display = "flex";
+    }
+    function openBox2() {
+        campoExcluir.style.display = "flex";
+    }
+
+    function pegarCnpj() {
+        var cnpjVar = sessionStorage.CNPJ_ORGANIZACAO;
+
+        // Retornando a Promise
+        // Enviando o valor da nova input
+        fetch("/usuarios/pegarCnpj", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                cnpjServer: cnpjVar,
+
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+            })
+            .catch(function (erro) {
+                console.log(`#ERRO: ${erro}`);
+            });
+    }
+
+    function pegarCpf() {
+        var cpfVar = sessionStorage.CPF_USUARIO;
+
+        // Retornando a Promise
+        // Enviando o valor da nova input
+        fetch("/usuarios/pegarCpf", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                cpfServer: cpfVar,
+
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+            })
+            .catch(function (erro) {
+                console.log(`#ERRO: ${erro}`);
+            });
+    }
+
+    function trazerLiderança() {
+        fetch("/usuarios/liders", {
+            method: "GET",
+        })
+            .then(function (resposta) {
+                resposta.json().then((lideres) => {
+                    lideres.forEach((liderança) => {
+                        div_lider.innerHTML += `<option value='${liderança.cnpj}'>${liderança.nome}</option>`;
+                        div_telefone.innerHTML += `${liderança.telefone}`;
+                    });
+                });
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+    }
+
+    function trazerUsuario() {
+        var cpfUser = sessionStorage.CPF_USUARIO;
+        fetch(`/usuarios/users/${cpfUser}`, {
+            method: "GET",
+        })
+            .then(function (resposta) {
+                resposta.json().then((conjuntoUsuarios) => {
+                    conjuntoUsuarios.forEach((usuario) => {
+                        div_nome.innerHTML += `${usuario.nome}`;
+                        div_telefoneUser.innerHTML += `${usuario.telefone}`
+                        div_cargo.innerHTML += `${usuario.cargo}`;
+                    });
+                });
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+    }
+
+    function alterarNome() {
+        // Agora vá para o método fetch logo abaixo
+        var alterarNome = input_alterNome.value;
+        var alterarTelefone = input_alterTelefone.value;
+        var cpfUser = sessionStorage.CPF_USUARIO;
+        
+
+        // Enviando o valor da nova input
+        fetch(`/usuarios/updateUsuario/${cpfUser}`, {
+            method: "put",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                alterarNomeServer: alterarNome,
+                alterarTelefoneServer: alterarTelefone
+            }),
+        })
+
+        
+    }
+
+    function excluirUser() {
+        var cpfvar = cpf_usuario;
+
+        // Enviando o valor da nova input
+        fetch("/relatorio/excluirUser", {
+            method: "delete",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+
+                cpfServer: cpfvar,
+            }),
+        }).then(function (resposta) {
+            console.log("resposta: ", resposta);
+            if (!resposta.ok) {
+
+                resposta.json().then(function (data) {
+                    var erro = data.mensagem;
+
+                    check_error.checked = true;
+                    texto_erro.innerHTML = erro;
+
+                    setTimeout(function () {
+                        check_error.checked = false;
+                    }, 1500);
+                });
+            }
+        })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+        check_confirm.checked = true;
+        texto_sucesso.innerHTML = "Usuário apagado com sucesso !";
+
+        setTimeout(function () {
+            window.location = "relatorio.html";
+            check_confirm.checked = false;
+        }, 1500);
+
+
+        return false;
+    }
+
+</script>
