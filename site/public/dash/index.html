@@ -48,11 +48,10 @@
             brightness_5
           </span>
         </button>
-        </button>
-        <button class="profile-btn">
+        <a href="./telas/usuario.html" class="profile-btn">
           <img src="./Assets/images/user.png" />
-          <a href="./telas/usuario.html"><span id="b_usuario"></span></a> 
-        </button>
+          <span id="b_usuario"></span>
+        </a>
       </div>
       </button>
     </div>
@@ -185,6 +184,10 @@
 
       case "chamados":
         window.location.href = `./telas/chamados.html`;
+        break;
+
+      case "usuário":
+        window.location.href = `./telas/usuario.html`;
         break;
 
       case "relatório":

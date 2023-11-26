@@ -4,20 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUPERVISION - INICIAL</title>
-
+    <title>SUPERVISION - USUÁRIO</title>
 
     <script src="../../js/sessao.js"></script>
 
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 
+    <!-- data tables -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+
+    <link rel="stylesheet" href="../../Assets/DataTables/datatables.css">
+
+    <script src="../../Assets/DataTables/datatables.js"></script>
+
+    <link rel="stylesheet" href="../Assets/css/relatorio.css">
     <link rel="stylesheet" href="../Assets/css/style.css">
+    <link rel="stylesheet" href="../Assets/css/dropdown_telas.css">
+    <link rel="stylesheet" href="../Assets/css/alert_box.css">
 
 </head>
 
-<body onload="trazerUsuario(),trazerLiderança(), validarSessao(), pegarCnpj()">
+<body onload="validarSessao(), listar()">
     <div class="app-container">
         <div class="app-header">
             <div class="app-header-left">
@@ -25,7 +36,7 @@
                 <p class="app-name">SUPERVISI<span style="color: var(--color-yellow);">ON</span></p>
                 <div class="search-wrapper">
                     <input class="search-input" id="valorTela" list="telas" type="search" placeholder="Pesquisar">
-                    <button onclick="pesquisarTelasIndex()" class="buttonValor">
+                    <button onclick="pesquisarTelasPath()" class="buttonValor">
                         <span style="color: var(--main-color);" class="material-symbols-outlined">
                             search
                         </span>
@@ -33,10 +44,10 @@
 
                     <datalist id="telas">
                         <option value="Tela inicial"></option>
-                        <option value="computadores"></option>
                         <option value="Desktops"></option>
                         <option value="Chamados"></option>
                         <option value="Usuário"></option>
+                        <option value="Relatório"></option>
                     </datalist>
                 </div>
             </div>
@@ -46,226 +57,323 @@
                         brightness_5
                     </span>
                 </button>
-                </button>
-                <button class="profile-btn">
+                <a href="./usuario.html" class="profile-btn">
                     <img src="../Assets/images/user.png" />
                     <span id="b_usuario"></span>
-                </button>
+                </a>
             </div>
-            </button>
         </div>
 
         <!-- sidebar -->
-    <div class="app-content">
-        <div class="app-sidebar">
-          <a href="../index.html" class="app-sidebar-link active">
-            <span class="material-symbols-outlined">
-              home
-            </span>
-          </a>
-          <a href="./computadores.html" class="app-sidebar-link">
-            <span class="material-symbols-outlined">
-              screen_search_desktop
-            </span>
-          </a>
-          <a id="cargo" href="./relatorio.html" class="app-sidebar-link">
-            <span class="material-symbols-outlined">
-              quick_reference
-            </span>
-          </a>
-          </a>
-          <a href="./chamados.html" class="app-sidebar-link">
-            <span class="material-symbols-outlined">
-              support_agent
-            </span>
-          </a>
-          <a href="" onclick="limparSessao()" class="app-sidebar-link">
-            <span class="material-symbols-outlined">
-              logout
-            </span>
-          </a>
-        </div>
+        <div class="app-content">
+            <div class="app-sidebar">
+                <a href="../index.html" class="app-sidebar-link">
+                    <span class="material-symbols-outlined">
+                        home
+                    </span>
+                </a>
+                <a href="./computadores.html" class="app-sidebar-link">
+                    <span class="material-symbols-outlined">
+                        screen_search_desktop
+                    </span>
+                </a>
+                <a id="cargo" href="./relatorio.html" class="app-sidebar-link">
+                    <span class="material-symbols-outlined">
+                        quick_reference
+                    </span>
+                </a>
+                <a href="./chamados.html" class="app-sidebar-link">
+                    <span class="material-symbols-outlined">
+                        support_agent
+                    </span>
+                </a>
+                <a href="" onclick="limparSessaoTelas()" class="app-sidebar-link">
+                    <span class="material-symbols-outlined">
+                        logout
+                    </span>
+                </a>
+            </div>
 
-            <!-- Usuario -->
+            <!-- card principal -->
             <div class="box">
-                <div class="projects-section">
-                    <div class="projects-section-header">
-                        <p class="title">USUÁR<span style="color: var(--color-yellow);">IO</span></p>
-                    </div>
-                    <div>
-                        <p><b>NOME</b></p>
-                        <div id="div_nome"></div>
-                        <a onclick="openBox()" style="font-size: 13px;"><img style="width: 13px;" src="../Assets/images/alterar.png"
-                                alt="">Alterar</a>
-                    </div>
-                    <div class="subtitle-user">
-                        <p><b>TELEFONE</b></p>
-                        <div id="div_telefoneUser"></div>
-                    </div>
-                    <div class="subtitle-user">
-                        <p><b>CARGO</b></p>
-                        <div id="div_cargo"></div>
-                    </div>
-                    <div class="subtitle-user">
-                        <p><b>ORGANIZAÇÃO</b></p>
-                        <div id="div_org"></div>
-                    </div>
-                    <div class="subtitle-user">
-                        <p><b>LIDERANÇA</b></p>
-                        <div >
-                            <select id="div_lider">
-                                <option selected disabled value="">Selecionar Contato</option>
-                            </select>
+                <div class="box-message" style="flex: 1; height: 100%;">
+                    <div class="projects-section project-height">
+                        <div class="projects-section-header">
+                            <p style="text-transform: uppercase;">SEUS<span
+                                    style="color: var(--color-yellow);">DADOS</span>
+                            </p>
+                            <div class="box_buttons">
+                                <a class="button_option red" style=" border: 3px solid rgb(252, 70, 100);" for="check"
+                                    onclick="check.checked = true;">EXCLUIR</a>
+                                <a class=" button_option" href="#modal">ALTERAR</a>
+                            </div>
+                        </div>
+                        <!-- card usuarios -->
+                        <div class="project-boxes jsGridView" style="align-items: unset">
+                            <div class="box_list">
+                                <ul role="list">
+                                    <li class="member">
+                                        <div class="member-link">
+                                            <h2 class="member-name">Nome: </h2>
+                                            <p class="member-role" id="nomeUser"></p>
+                                        </div>
+                                    </li>
+
+                                    <li class="member">
+                                        <div class="member-link">
+                                            <h2 class="member-name">Organização :</h2>
+                                            <p class="member-role" id="orgUser"></p>
+                                        </div>
+                                    </li>
+
+                                    <li class="member">
+                                        <div class="member-link">
+                                            <h2 class="member-name">Cargo :</h2>
+                                            <p class="member-role" id="cargoUser"></p>
+                                        </div>
+                                    </li>
+
+                                    <li class="member">
+                                        <div class="member-link">
+                                            <h2 class="member-name">CPF :</h2>
+                                            <p class="member-role" id="cpfUser"></p>
+                                        </div>
+                                    </li>
+
+                                    <li class="member">
+                                        <div class="member-link">
+                                            <h2 class="member-name">Telefone :</h2>
+                                            <p class="member-role" id="telefoneUser"></p>
+                                        </div>
+                                    </li>
+
+                                    <li class="member">
+                                        <div class="member-link" id="foco">
+                                            <h2 class="member-name">Senha :</h2>
+                                            <input type="password" class="member-role not_input" id="senhaUser"
+                                                readonly>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                    <div class="subtitle-user">
-                        <p><b>TELEFONE LIDERANÇA</b></p>
-                        <div id="div_telefone">
+                </div>
+
+                <!-- message section -->
+                <div class="box-message"
+                    style="display: flex; flex-direction: column; gap: 20px; flex: 1; height: 100%;">
+
+                    <div class="projects-section" style="margin-left: 34px;">
+                        <div class="projects-section-header">
+                            <p style="text-transform: uppercase;">GERE<span
+                                    style="color: var(--color-yellow);">NTES</span>
+                            </p>
+                        </div>
+                        <!-- card computadores -->
+                        <div class="project-boxes jsGridView" style="align-items: unset">
+                            <div class="leaderboard__profiles">
+                                <div class="list">
+                                    <table id="myTable" class="table table-striped" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Nome</th>
+                                                <th>Telefone</th>
+                                                <th>Ocupação</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="usuarios_gerentes"></tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div id="campoAtualização" class="box_alter">
-                        <div class="title_updateBox">Alterar Nome</div>
-                        <div class="position_inputR"><input class="inputR" type="text" id="input_alterNome"></div>
-                        <div class="title_updateBox down">Alterar Telefone</div>
-                        <div class="position_inputR subdown"><input class="inputR" type="text" id="input_alterTelefone"></div>
-                        <div><button class="buttonUpdate" onclick="alterarNome()">Atualizar</button></div>
-                    </div>
-                    <div><a onclick="openBox2()" class="positionDelete" style="color: lightskyblue;"><u>Remover Conta</u></a></div>
-                    <div id="campoExcluir" class="box_alter">
-                        <div class="title_updateBox">Informar CPF</div>
-                        <div class="position_inputR"><input class="inputR" type="text" id="cpf_usuario"></div>
-                        <div><button class="buttonUpdate" onclick="excluirUser()">Apagar</button></div>
+
+                    <div class="projects-section" style="margin-left: 34px;">
+                        <div class="projects-section-header">
+                            <p style="text-transform: uppercase;">SEUS CHA<span
+                                    style="color: var(--color-yellow);">MADOS</span>
+                            </p>
+                        </div>
+
+                        <!-- card chamados -->
+                        <div class="project-boxes jsGridView" style="align-items: unset" id="chamado">
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-wrapper modal" id="modal">
+        <div class="modal-body card">
+            <div class="details-modal">
+                <a href="#" role="button" aria-label="close this modal" class="details-modal-close">
+                    <span class="material-symbols-outlined">
+                        close
+                    </span>
+                </a>
+                <div class="details-modal-title">
+                    <h2>Atualização de dados</h2>
+                </div>
+                <div class="details-modal-content">
+                    <div class="wrapper">
+                        <div class="form">
+                            <div class="input-box">
+                                <label>Seu nome:</label>
+                                <input type="text" id="nomeinput">
+                            </div>
+                            <div class="input-box">
+
+                                <label>Seu Telefone:</label>
+                                <input type="text" id="input_telefone" placeholder="(dd) 9 **** ****" maxlength="14"
+                                    onkeyup="mascaraTel(this)">
+                            </div>
+                            <div class="input-box">
+                                <label>Sua senha:</label>
+                                <input type="text" id="senhainput" maxlength="10">
+                            </div>
+                            <div class="direction_button">
+                                <div class="input-box button">
+                                    <input type="Submit" onclick="updateUser()" value="Atualizar dados">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alerta -->
+    <div>
+        <input type="checkbox" id="check">
+        <div class="background"></div>
+        <div class="alert_box">
+            <div class="icon">
+                <span class="material-symbols-outlined">
+                    close
+                </span>
+            </div>
+            <header>Confirmar</header>
+            <p>Deseja realmente excluir sua conta ?</p>
+            <div class="btns">
+                <label class="confirm" for="check">Cancelar</label>
+                <label class="cancel" for="check" onclick="excluirUser()">Sim, excluir!</label>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- confirmação -->
+    <div>
+        <input type="checkbox" id="check_confirm">
+        <div class="background"></div>
+        <div class="alert_box">
+            <div class="icon">
+                <span class="material-symbols-outlined" style="color: #26f267; border: 3px solid #26f267;">
+                    check
+                </span>
+            </div>
+            <header>Perfeito</header>
+            <p id="texto_sucesso"></p>
+            <div class="btns">
+                <label class="confirm" for="check_confirm">Fechar</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- erro -->
+    <div>
+        <input type="checkbox" id="check_error">
+        <div class="background"></div>
+        <div class="alert_box">
+            <div class="icon">
+                <span class="material-symbols-outlined">
+                    close
+                </span>
+            </div>
+            <header>ERRO</header>
+            <p id="texto_erro"></p>
+            <div class="btns">
+                <label class="confirm" for="check_error">Fechar</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- error computadores -->
+    <div>
+        <input type="checkbox" id="check_calma">
+        <div class="background"></div>
+        <div class="alert_box">
+            <div class="icon">
+                <span class="material-symbols-outlined">
+                    devices_off
+                </span>
+            </div>
+            <header>Esse computador já está sendo monitorado ...</header>
+            <p id="texto_calma"></p>
+            <div class="btns">
+                <label class="confirm" for="check_calma">Fechar</label>
+            </div>
+        </div>
+    </div>
+    <script src="../Assets/js/script.js"></script>
 </body>
 
+</html>
 
 <script>
-    div_org.innerHTML += sessionStorage.NOME_ORGANIZACAO;
 
-    function openBox() {
-        campoAtualização.style.display = "flex";
-    }
-    function openBox2() {
-        campoExcluir.style.display = "flex";
-    }
+    var trocar = document.querySelector('#foco');
+    var pass = document.querySelector('#senhaUser');
 
-    function pegarCnpj() {
-        var cnpjVar = sessionStorage.CNPJ_ORGANIZACAO;
+    trocar.addEventListener('click', function (e) {
 
-        // Retornando a Promise
-        // Enviando o valor da nova input
-        fetch("/usuarios/pegarCnpj", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                // crie um atributo que recebe o valor recuperado aqui
-                // Agora vá para o arquivo routes/usuario.js
-                cnpjServer: cnpjVar,
+        if (pass.getAttribute("type") == "password") {
+            pass.setAttribute("type", "text");
+        } else {
+            pass.setAttribute("type", "password");
+        }
+    });
 
-            }),
-        })
-            .then(function (resposta) {
-                console.log("resposta: ", resposta);
-            })
-            .catch(function (erro) {
-                console.log(`#ERRO: ${erro}`);
-            });
+    function mascaraTel(input_telefone) {
+        var telefoneFormatado = input_telefone.value;
+        telefoneFormatado = telefoneFormatado.replace(/\D/g, "")
+        telefoneFormatado = telefoneFormatado.replace(/(\d{0})(\d)/, "$1($2")
+        telefoneFormatado = telefoneFormatado.replace(/(\d{2})(\d)/, "$1)$2")
+        telefoneFormatado = telefoneFormatado.replace(/(\d{5})(\d)/, "$1-$2")
+        input_telefone.value = telefoneFormatado;
     }
 
-    function pegarCpf() {
-        var cpfVar = sessionStorage.CPF_USUARIO;
 
-        // Retornando a Promise
-        // Enviando o valor da nova input
-        fetch("/usuarios/pegarCpf", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                // crie um atributo que recebe o valor recuperado aqui
-                // Agora vá para o arquivo routes/usuario.js
-                cpfServer: cpfVar,
+    function mascaraTelefone(input_telefone) {
+        var telefoneFormatado = input_telefone;
+        telefoneFormatado = telefoneFormatado.replace(/\D/g, "")
+        telefoneFormatado = telefoneFormatado.replace(/(\d{0})(\d)/, "$1($2")
+        telefoneFormatado = telefoneFormatado.replace(/(\d{2})(\d)/, "$1)$2")
+        telefoneFormatado = telefoneFormatado.replace(/(\d{5})(\d)/, "$1-$2")
 
-            }),
-        })
-            .then(function (resposta) {
-                console.log("resposta: ", resposta);
-            })
-            .catch(function (erro) {
-                console.log(`#ERRO: ${erro}`);
-            });
+        return telefoneFormatado;
     }
 
-    function trazerLiderança() {
-        fetch("/usuarios/liders", {
-            method: "GET",
-        })
-            .then(function (resposta) {
-                resposta.json().then((lideres) => {
-                    lideres.forEach((liderança) => {
-                        div_lider.innerHTML += `<option value='${liderança.cnpj}'>${liderança.nome}</option>`;
-                        div_telefone.innerHTML += `${liderança.telefone}`;
-                    });
-                });
-            })
-            .catch(function (resposta) {
-                console.log(`#ERRO: ${resposta}`);
-            });
+    function mascaraCpf(input_cpf) {
+        var cpfFormatado = input_cpf;
+        cpfFormatado = cpfFormatado.replace(/\D/g, "")
+        cpfFormatado = cpfFormatado.replace(/(\d{3})(\d)/, "$1.$2")
+        cpfFormatado = cpfFormatado.replace(/(\d{3})(\d)/, "$1.$2")
+        cpfFormatado = cpfFormatado.replace(/(\d{3})(\d{1,2})$/, "$1-$2")
+        return cpfFormatado;
     }
 
-    function trazerUsuario() {
-        var cpfUser = sessionStorage.CPF_USUARIO;
-        fetch(`/usuarios/users/${cpfUser}`, {
-            method: "GET",
-        })
-            .then(function (resposta) {
-                resposta.json().then((conjuntoUsuarios) => {
-                    conjuntoUsuarios.forEach((usuario) => {
-                        div_nome.innerHTML += `${usuario.nome}`;
-                        div_telefoneUser.innerHTML += `${usuario.telefone}`
-                        div_cargo.innerHTML += `${usuario.cargo}`;
-                    });
-                });
-            })
-            .catch(function (resposta) {
-                console.log(`#ERRO: ${resposta}`);
-            });
-    }
-
-    function alterarNome() {
-        // Agora vá para o método fetch logo abaixo
-        var alterarNome = input_alterNome.value;
-        var alterarTelefone = input_alterTelefone.value;
-        var cpfUser = sessionStorage.CPF_USUARIO;
-        
-
-        // Enviando o valor da nova input
-        fetch(`/usuarios/updateUsuario/${cpfUser}`, {
-            method: "put",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                // crie um atributo que recebe o valor recuperado aqui
-                // Agora vá para o arquivo routes/usuario.js
-                alterarNomeServer: alterarNome,
-                alterarTelefoneServer: alterarTelefone
-            }),
-        })
-
-        
-    }
-
+    // excluir funcionario
     function excluirUser() {
-        var cpfvar = cpf_usuario;
+        var cpfvar = sessionStorage.CPF_USUARIO;
+        var cnpjvar = sessionStorage.CNPJ_ORGANIZACAO;
 
         // Enviando o valor da nova input
-        fetch("/relatorio/excluirUser", {
+        fetch("/usuarios/excluirUser", {
             method: "delete",
             headers: {
                 "Content-Type": "application/json",
@@ -273,6 +381,8 @@
             body: JSON.stringify({
 
                 cpfServer: cpfvar,
+                cnpjServer: cnpjvar,
+
             }),
         }).then(function (resposta) {
             console.log("resposta: ", resposta);
@@ -288,21 +398,272 @@
                         check_error.checked = false;
                     }, 1500);
                 });
+            } else {
+                check_confirm.checked = true;
+                texto_sucesso.innerHTML = "Usuário apagado com sucesso !";
+
+                setTimeout(function () {
+                    window.location = "../../login-cadastro/Login.html";
+                    check_confirm.checked = false;
+                }, 1500);
             }
-        })
-            .catch(function (resposta) {
-                console.log(`#ERRO: ${resposta}`);
-            });
-        check_confirm.checked = true;
-        texto_sucesso.innerHTML = "Usuário apagado com sucesso !";
-
-        setTimeout(function () {
-            window.location = "relatorio.html";
-            check_confirm.checked = false;
-        }, 1500);
-
-
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+        });
         return false;
     }
 
+    // atualizar dados
+    function updateUser() {
+        var cpfVar = sessionStorage.CPF_USUARIO;
+        var nomeVar = nomeinput.value;
+        var telefoneVar = input_telefone.value.replace(/\D/g, "");;
+        var senhaVar = senhainput.value;
+
+        if (cpfVar == "" || nomeVar == "" || senhaVar == "" || telefoneVar == "") {
+
+            check_error.checked = true;
+            texto_erro.innerHTML = "Campos Inválidos";
+
+            setTimeout(function () {
+                check_error.checked = false;
+            }, 1500);
+
+        } else {
+
+            sessionStorage.setItem('NOME_USUARIO', nomeVar);
+
+            // Enviando o valor da nova input
+            fetch("/usuarios/updateUser", {
+                method: "put",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    // crie um atributo que recebe o valor recuperado aqui
+                    // Agora vá para o arquivo routes/usuario.js
+                    cpfServer: cpfVar,
+                    nomeServer: nomeVar,
+                    telefoneServer: telefoneVar,
+                    senhaServer: senhaVar
+                }),
+            })
+                .then(function (resposta) {
+                    console.log("resposta: ", resposta);
+                    if (!resposta.ok) {
+
+                        resposta.json().then(function (data) {
+                            var erro = data.mensagem;
+
+                            check_error.checked = true;
+                            texto_erro.innerHTML = erro;
+
+                            setTimeout(function () {
+                                check_error.checked = false;
+                            }, 1500);
+                        });
+                    }
+                })
+                .catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`);
+                });
+            check_confirm.checked = true;
+            texto_sucesso.innerHTML = "Dados atualizados com sucesso !";
+
+            setTimeout(function () {
+                window.location = "usuario.html";
+                check_confirm.checked = false;
+            }, 1500);
+
+            return false;
+        }
+    }
+
+    function listar() {
+        cpf = sessionStorage.CPF_USUARIO;
+        cnpj = sessionStorage.CNPJ_ORGANIZACAO;
+
+        // listar dados do usuario
+        fetch(`/usuarios/plotar_dados/${cpf}`, {
+            method: "GET", cache: 'no-store'
+        }).then(function (resposta) {
+            console.log("resposta: ", resposta);
+            if (!resposta.ok) {
+
+                resposta.json().then(function (data) {
+                    var erro = data.mensagem;
+
+                    nomeUser.innerHTML = `<p style="color: var(--link-color)">${erro}</p>`;
+                });
+            } else {
+                resposta.json().then((eventos) => {
+                    eventos.forEach((registro) => {
+                        nomeUser.innerHTML = registro.nome;
+                        orgUser.innerHTML = registro.org;
+                        cargoUser.innerHTML = registro.cargo;
+                        cpfUser.innerHTML = mascaraCpf(registro.cpf);
+                        telefoneUser.innerHTML = mascaraTelefone(registro.telefone);
+                        senhaUser.value = registro.senha;
+
+                        nomeinput.value = registro.nome;
+                        input_telefone.value = mascaraTelefone(registro.telefone);
+                        senhainput.value = registro.senha;
+                    });
+                });
+            }
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+        });
+
+        // listar chamados do usuario
+        fetch(`/usuarios/plotar_gerente/${cnpj}`, {
+            method: "GET", cache: 'no-store'
+        }).then(function (resposta) {
+            console.log("resposta: ", resposta);
+            if (!resposta.ok) {
+
+                resposta.json().then(function (data) {
+                    var erro = data.mensagem;
+
+                    usuarios_gerentes.innerHTML = `<p style="color: var(--link-color)">${erro}</p>`;
+                });
+            } else {
+                resposta.json().then((eventos) => {
+                    eventos.forEach((registro) => {
+                        usuarios_gerentes.innerHTML += `
+                                        <tr>
+                                            <td>${registro.nome}</td>
+                                            <td>${mascaraTelefone(registro.telefone)} </td> 
+                                            <td>${registro.statusServico}</td>
+                                        </tr>`
+                    });
+                });
+            }
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+        });
+
+        // listar chamados do usuario
+        fetch(`/usuarios/plotar_chamado/${cnpj}/${cpf}`, {
+            method: "GET", cache: 'no-store'
+        }).then(function (resposta) {
+            console.log("resposta: ", resposta);
+            if (!resposta.ok) {
+
+                resposta.json().then(function (data) {
+                    var erro = data.mensagem;
+
+                    chamado.innerHTML = `<p style="color: var(--link-color)">${erro}</p>`;
+                });
+            } else {
+                resposta.json().then((eventos) => {
+                    eventos.forEach((registro) => {
+                        const dataAtual = new Date(registro.hora);
+                        const opcoesDeFormato = {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: 'numeric',
+                            minute: 'numeric',
+                            second: 'numeric',
+                            hour12: false // Usar formato de 24 horas 
+                        };
+                        const dataFormatada = dataAtual.toLocaleDateString('pt-BR', opcoesDeFormato);
+
+                        if (registro.status == "Pendente") {
+                            chamado.innerHTML += `<div class="messages">
+                                <div class="message-box">
+                                    <span class="material-symbols-outlined">
+                                        report
+                                    </span>
+                                    <div class="message-content">
+                                        <div class="message-header">
+                                            <div class="name">${registro.apelidoComputador}</div>
+                                            <div class="star-checkbox">
+                                            </div>
+                                        </div>
+                                        <p class="message-line">
+                                            Operador : ${registro.nome}
+                                        </p>
+                                        <p class="message-line">
+                                            Descrição : ${registro.descricao}
+                                        </p>
+                                        <p class="message-line time" style="color:red;">
+                                            ${registro.status}
+                                        </p>
+                                        <p class="message-line time">
+                                            ${dataFormatada}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>`
+                        } else if (registro.status == "Em andamento") {
+                            chamado.innerHTML += `<div class="messages">
+                                <div class="message-box">
+                                    <span class="material-symbols-outlined">
+                                        report
+                                    </span>
+                                    <div class="message-content">
+                                        <div class="message-header">
+                                            <div class="name">${registro.apelidoComputador}</div>
+                                            <div class="star-checkbox">
+                                            </div>
+                                        </div>
+                                        <p class="message-line">
+                                            Operador : ${registro.nome}
+                                        </p>
+                                        <p class="message-line">
+                                            Descrição : ${registro.descricao}
+                                        </p>
+                                        <p class="message-line time" style="color: orange">
+                                            ${registro.status}
+                                        </p>
+                                        <p class="message-line time">
+                                            ${dataFormatada}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>`
+                        } else {
+                            chamado.innerHTML += `<div class="messages">
+                                <div class="message-box">
+                                    <span class="material-symbols-outlined">
+                                        report
+                                    </span>
+                                    <div class="message-content">
+                                        <div class="message-header">
+                                            <div class="name">${registro.apelidoComputador}</div>
+                                            <div class="star-checkbox">
+                                            </div>
+                                        </div>
+                                        <p class="message-line">
+                                            Operador : ${registro.nome}
+                                        </p>
+                                        <p class="message-line">
+                                            Descrição : ${registro.descricao}
+                                        </p>
+                                        <p class="message-line time" style="color: green">
+                                            ${registro.status}
+                                        </p>
+                                        <p class="message-line time">
+                                            ${dataFormatada}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>`
+                        }
+                    });
+                });
+            }
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+        });
+    }
+
+    // iniciar tabela
+    setTimeout(() => {
+        let table = new DataTable('#myTable', {
+            responsive: true
+        });
+    }, 500);
 </script>

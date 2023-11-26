@@ -1,24 +1,5 @@
 var usuarioModel = require("../models/usuarioModel");
 
-
-// pegar cnpj
-function pegarCnpj(req, res) {
-    var cnpj = req.body.cnpjServer;
-
-    usuarioModel.pegarCnpj(cnpj).then((resultado) => {
-        res.status(201).json(resultado);
-    });
-}
-
-// pegar cpf
-function pegarCpf(req, res) {
-    var cpf = req.body.cpfServer;
-
-    usuarioModel.pegarCpf(cpf).then((resultado) => {
-        res.status(201).json(resultado);
-    });
-}
-
 // Buscar por cpf
 function buscarPorCpf(req, res) {
     var cpf = req.query.cpf;
@@ -105,38 +86,6 @@ function cadastrar(req, res) {
     }
 }
 
-function trazerLider(req, res) {
-    usuarioModel.trazerLider().then(function (resultado) {
-        if (resultado.length > 0) {
-            res.status(200).json(resultado);
-        } else {
-            res.status(204).send("Nenhum resultado encontrado!")
-        }
-    });
-}  
-
-function trazerUsuario(req, res) {
-    var cpf = req.params.cpfUser;
-     usuarioModel.trazerUsuario(cpf).then(function (resultado) {
-        if (resultado.length > 0) {
-            res.status(200).json(resultado);
-        } else {
-            res.status(204).send("Nenhum resultado encontrado!")
-        }
-    });
-} 
-
-function alterarNome(req, res) {
-    // Crie uma variável que vá recuperar os valores
-    var cpf = req.params.cpfUser;
-    var altNome = req.body.alterarNomeServer;
-    var altTelefone = req.body.alterarTelefoneServer;
-
-    relatorioModel.alterarNome(altNome, altTelefone, cpf).then((resultado) => {
-        res.status(200).json(resultado);
-    });
-}
-
 // Trocar senha
 function renovarSenha(req, res) {
     var cpf = req.body.cpfServer;
@@ -166,14 +115,138 @@ function renovarSenha(req, res) {
     }
 }
 
+//Funções da tela de usuario
+
+// meotodo delete
+
+// excluir usuario
+function excluirUser(req, res) {
+    // Crie uma variável que vá recuperar os valores
+    var cpf = req.body.cpfServer;
+    var cnpj = req.body.cnpjServer;
+
+    if (cnpj == 'undefined') {
+        return null;
+    } else if (cpf == 'undefined') {
+        return null;
+    } else {
+        usuarioModel.buscarPorChamados(cpf, cnpj).then((result) => {
+            usuarioModel.buscarPorUser(cnpj).then((resultado) => {
+                if (resultado.length == 1) {
+                    res
+                        .status(401)
+                        .json({ mensagem: `É necessário ter pelo menos um integrante na organização` });
+
+                } else if (result.length > 0) {
+                    res
+                        .status(401)
+                        .json({ mensagem: `Não é possível excluir esse usuário, pois ele já lidou com solicitações.` });
+                } else {
+                    usuarioModel.excluirUser(cpf).then((resultado) => {
+                        res.status(200).json(resultado);
+                    });
+                }
+            });
+        });
+    }
+}
+
+// meotodo put
+
+// atualizar dados
+function updateUser(req, res) {
+    // Crie uma variável que vá recuperar os valores
+    var cpf = req.body.cpfServer;
+    var nome = req.body.nomeServer;
+    var telefone = req.body.telefoneServer;
+    var senha = req.body.senhaServer;
+
+    usuarioModel.updateUser(cpf, nome, telefone, senha).then((resultado) => {
+        res.status(200).json(resultado);
+    });
+}
+
+// meotodo get
+function plotar_dados(req, res) {
+    var cpf = req.params.cpf;
+
+    if (cpf == 'undefined') {
+        console.log("Sistema finalizado")
+    } else {
+        usuarioModel.plotar_dados(cpf).then(function (resultado) {
+            if (resultado.length > 0) {
+                res.status(200).json(resultado);
+            } else {
+                res
+                    .status(401)
+                    .json({ mensagem: `Erro ao capturar dados` });
+            }
+        });
+    }
+}
+
+function plotar_gerente(req, res) {
+    var cnpj = req.params.cnpj;
+
+    if (cnpj == 'undefined') {
+        console.log("Sistema finalizado")
+    } else {
+        usuarioModel.plotar_gerente(cnpj).then(function (resultado) {
+            if (resultado.length > 0) {
+                res.status(200).json(resultado);
+            } else {
+                res
+                    .status(401)
+                    .json({ mensagem: `Erro ao capturar dados` });
+            }
+        });
+    }
+}
+
+
+function plotar_chamado(req, res) {
+    var cpf = req.params.cpf;
+    var cnpj = req.params.cnpj;
+
+    const plotarPromise = usuarioModel.plotar_chamado(cpf, cnpj);
+
+    if (plotarPromise && typeof plotarPromise.then === 'function') {
+        plotarPromise.then(function (resultado) {
+            if (resultado.length > 0) {
+                res.status(200).json(resultado);
+            } else {
+                res.status(401).json({ mensagem: `Você não tem chamados no momento` });
+            }
+        });
+    } else {
+        res.status(500).json({ mensagem: `Erro ao obter dados do chamado` });
+    }
+}
+
+function buscarPorUser(req, res) {
+
+    relatorioModel.buscarPorUser(cnpj).then((resultado) => {
+        res.status(200).json(resultado);
+    });
+}
+
+function buscarPorChamados(req, res) {
+
+    relatorioModel.buscarPorChamados(cpf, cnpj).then((resultado) => {
+        res.status(200).json(resultado);
+    });
+}
+
 module.exports = {
     autenticar,
     cadastrar,
+    plotar_chamado,
     renovarSenha,
     buscarPorCpf,
-    trazerLider,
-    trazerUsuario,
-    pegarCnpj,
-    pegarCpf,
-    alterarNome
+    plotar_gerente,
+    plotar_dados,
+    buscarPorChamados,
+    buscarPorUser,
+    excluirUser,
+    updateUser
 }

@@ -29,6 +29,10 @@ function pesquisarTelasPath() {
       window.location.href = `./chamados.html`;
       break;
 
+      case "usuário":
+      window.location.href = `./usuario.html`;
+      break;
+
     case "desktops":
     case "computadores":
       window.location.href = `./computadores.html`;

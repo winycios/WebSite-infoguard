@@ -44,11 +44,11 @@ function validarTelaInicial() {
 
 
 function limparSessao() {
-    sessionStorage.clear();
     window.location = "../login-cadastro/Login.html";
+    sessionStorage.clear();
 }
 
 function limparSessaoTelas() {
-    sessionStorage.clear();
     window.location = "../../login-cadastro/Login.html";
+    sessionStorage.clear();
 }
