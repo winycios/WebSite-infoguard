@@ -72,7 +72,3 @@ Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICE
 ## 📧 Contato
 
 Se você tiver alguma dúvida, sugestão ou feedback, sinta-se à vontade para me contatar em [winyciosnascimento31@gmail.com](mailto:winyciosnascimento31@gmail.com).
-
----
-
-**Nota**: Personalize as seções conforme necessário, incluindo o link para o repositório, seu nome de usuário, email de contato e outros detalhes específicos do projeto.
